@@ -1,0 +1,5 @@
+<div class="toggleWrapper">
+	<BsTooltip @title="Switch to {{if (eq @theme "dark") "light" "dark"}} theme"/>
+	<input type="checkbox" name="toggle1" id="toggle1" class="mobileToggle" checked={{if (eq @theme "dark") "checked"}}>
+	<label for="toggle1" {{action "toggleTheme"}}></label>
+</div>

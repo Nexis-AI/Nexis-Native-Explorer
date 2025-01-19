@@ -1,0 +1,102 @@
+<div id="validator-top-stats">
+	<div class="container">
+		<div class="box">
+			<div class="section count" style={{delay 1}}>
+				<h6>Validators</h6>
+				<YieldOnLoad @loaded={{this.validators}}>
+					<h2>{{this.validators.count}}</h2>
+					Halt Count: {{this.validators.count_halt}}
+				</YieldOnLoad>
+			</div>
+			<div class="section apy" style={{delay 2}}>
+				<h6>Staking APR</h6>
+				<YieldOnLoad @loaded={{this.yield}}>
+					<h2>{{this.yield.apy}}%</h2>
+					Adj: {{this.yield.apy_adjusted}}%
+					<Tooltip @text="Adjusted for inflation"/>
+				</YieldOnLoad>
+			</div>
+			<div class="section versions d-none d-md-inline-block" style={{delay 3}}>
+				<h6>Node Versions</h6>
+				<YieldOnLoad @loaded={{this.validators}}>
+					<ol>
+						{{#each this.validators.versions as |v|}}
+							<li>
+								<span class="version badge">{{v.version}}</span>
+								<span class="percent">{{v.percent}}%</span>
+							</li>
+						{{/each}}
+					</ol>
+				</YieldOnLoad>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-list">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="validator">Validator</div>
+					<div class="stake">Stake</div>
+					<div class="cumulative-stake">
+						<span class="d-block d-md-none">Cumul.</span>
+						<span class="d-none d-md-block">Cumulative Stake</span>
+					</div>
+					<div class="commission">Commission</div>
+					<div class="commission">Skip Percent</div>
+					<div class="vote">Last Vote</div>
+				</li>
+				{{#each this.validators.list as |v i|}}
+					<li style={{v.style}}>
+						<LinkTo @route="validator" @model={{v.vote_pubkey}}>
+							<div class="validator">
+								<div class="heading">
+									{{#let (shorten v.vote_pubkey) as |short_key|}}
+										<h5 class={{unless v.name 'text-gray' ''}}>
+											<span class="rank d-inline d-md-none">#{{sum i 1}}</span>
+											{{or v.name short_key}}
+										</h5>
+									{{/let}}
+									{{#if (eq v.vote_pubkey this.vote_key)}}
+										<span class="icon">
+											<BsTooltip @title="Creator of this site." />
+											<this.StarFourPoints/>
+										</span>
+									{{/if}}
+								</div>
+								<div class="tags">
+									{{#if v.version}}
+										<span class="badge d-none d-md-flex">v{{v.version}}</span>
+									{{/if}}
+									{{#if v.score}}
+										<StarRating @score={{v.score.total}} />
+									{{/if}}
+									{{#if v.delinquent}}
+										<span class="badge error"><BsTooltip @title="Validator is not operational" />Delinquent</span>
+									{{/if}}
+								</div>
+							</div>
+							<div class="stake">{{v.activated_stake}}</div>
+							<div class="cumulative-stake">
+								<div class="cumulative" style={{v.cumulative_width}}></div>
+								<div class="own" style={{v.own_width_w_offset}}></div>
+								<span class="percentage">{{v.activated_stake_percent}}%</span>
+							</div>
+							<div class="commission">{{v.commission}}%</div>
+							<div class="skip">
+								{{#unless (eq v.skip_percent null)}}
+									{{v.skip_percent}}%
+								{{/unless}}
+							</div>
+							<div class="vote">{{v.last_vote}}</div>
+						</LinkTo>
+					</li>
+					{{#if v.halt_warning}}
+						<li style={{this.validators.delay_halt}} class="warning"><strong>Cumulative stake above can halt the network</strong>&nbsp;- Vote for validators listed below to improve decentralization</li>
+					{{/if}}
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>

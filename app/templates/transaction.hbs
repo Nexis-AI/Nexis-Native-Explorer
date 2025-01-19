@@ -1,0 +1,93 @@
+<div id="transaction-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>Type: <span class="value">Transaction</span></li>
+				<li>Signature: <CopyButton @hash={{this.model.transaction.signatures.firstObject}}/></li>
+				<li>Timesamp: <span class="value">{{ago this.model.blockTime}}</span></li>
+				<li>Recent Block Hash: <CopyButton @hash={{this.model.transaction.message.recentBlockhash}}/></li>
+				<li>Block:&nbsp;<LinkTo @route="block" @model={{this.model.slot}}>{{this.model.slot}}</LinkTo></li>
+				<li>Fee: <span class="value">{{from_lamport this.model.meta.fee}} VLX</span></li>
+				<li>Status:&nbsp;
+					{{#if t.meta.status.err}}
+						<span class="badge error">Failed</span>
+					{{else}}
+						<span class="badge success">Success</span>
+					{{/if}}
+				</li>
+				{{!-- <li>Confirmations: 0</li> --}}
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="transaction-actions">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="account">Account Inputs</div>
+					<div class="change">Change (VLX)</div>
+					<div class="post">Post Balance (VLX)</div>
+					<div class="details">Details</div>
+				</li>
+				{{#let this.model.transaction.message.accountKeys as |keys|}}
+					{{#let this.model.meta.postBalances as |postBals|}}
+						{{#let this.model.meta.preBalances as |preBals|}}
+							{{#let this.model.transaction.message.instructions as |instructions|}}
+								{{#each keys as |key index|}}
+									<li>
+										<div class="account">
+											<CopyButton @short={{true}} @route="address" @hash={{key.pubkey}}/>
+										</div>
+										<div class="change">
+											{{#let (from_lamport (sub (object-at index postBals) (object-at index preBals))) as |change|}}
+												{{#if (gt change 0)}}
+													<span class="badge success">{{change}}</span>
+												{{else if (eq change 0)}}
+													<span class="badge">{{change}}</span>
+												{{else}}
+													<span class="badge error">{{change}}</span>
+												{{/if}}
+											{{/let}}
+										</div>
+										<div class="post">{{from_lamport (object-at index postBals)}}</div>
+										<div class="details">
+											<div class="badges">
+												{{#unless key.writable}}
+													<span class="badge">Readonly</span>
+												{{/unless}}
+												{{#if key.signer}}
+													<span class="badge">Signer</span>
+													<span class="badge">Fee Payer</span>
+												{{/if}}
+												{{#each instructions as |inst|}}
+													{{#if (eq key.index inst.programIdIndex)}}
+														<span class="badge">Program</span>
+													{{/if}}
+												{{/each}}
+											</div>
+										</div>
+									</li>
+								{{/each}}
+							{{/let}}
+						{{/let}}
+					{{/let}}
+				{{/let}}
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="transaction-log">
+	<div class="container">
+		<div class="box">
+			<div class="heading">
+				Program Log
+			</div>
+			<div class="log">
+				{{#each this.model.meta.logMessages as |message|}}
+					<p>{{message}}</p>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</div>
