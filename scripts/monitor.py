@@ -3,11 +3,11 @@ import json
 import psycopg2
 import psycopg2.extras
 
-stakes = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis stakes --output json -u https://api.testnet.nexis.network", shell=True))
-production = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis block-production --output json -u https://api.testnet.nexis.network | jq '.leaders'", shell=True))
-slot = int(subprocess.check_output("/root/nexis-release/bin/nexis slot -u https://api.testnet.nexis.network", shell=True).decode('utf-8').strip('\n'))
-validators = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis validators --output json -u https://api.testnet.nexis.network", shell=True))
-validator_info = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis validator-info get --output json -u https://api.testnet.nexis.network", shell=True))
+stakes = json.loads(subprocess.check_output("/usr/bin/nexis stakes --output json -u https://api.testnet.nexis.network", shell=True))
+production = json.loads(subprocess.check_output("/usr/bin/nexis block-production --output json -u https://api.testnet.nexis.network | jq '.leaders'", shell=True))
+slot = int(subprocess.check_output("/usr/bin/nexis slot -u https://api.testnet.nexis.network", shell=True).decode('utf-8').strip('\n'))
+validators = json.loads(subprocess.check_output("/usr/bin/nexis validators --output json -u https://api.testnet.nexis.network", shell=True))
+validator_info = json.loads(subprocess.check_output("/usr/bin/nexis validator-info get --output json -u https://api.testnet.nexis.network", shell=True))
 
 staking = {}
 
