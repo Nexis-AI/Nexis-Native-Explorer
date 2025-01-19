@@ -3,11 +3,11 @@ import json
 import psycopg2
 import psycopg2.extras
 
-stakes = json.loads(subprocess.check_output("/root/velas-release/bin/velas stakes --output json -u https://explorer.velas.com/rpc", shell=True))
-production = json.loads(subprocess.check_output("/root/velas-release/bin/velas block-production --output json -u https://explorer.velas.com/rpc | jq '.leaders'", shell=True))
-slot = int(subprocess.check_output("/root/velas-release/bin/velas slot -u https://explorer.velas.com/rpc", shell=True).decode('utf-8').strip('\n'))
-validators = json.loads(subprocess.check_output("/root/velas-release/bin/velas validators --output json -u https://explorer.velas.com/rpc", shell=True))
-validator_info = json.loads(subprocess.check_output("/root/velas-release/bin/velas validator-info get --output json -u https://explorer.velas.com/rpc", shell=True))
+stakes = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis stakes --output json -u https://api.testnet.nexis.network", shell=True))
+production = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis block-production --output json -u https://api.testnet.nexis.network | jq '.leaders'", shell=True))
+slot = int(subprocess.check_output("/root/nexis-release/bin/nexis slot -u https://api.testnet.nexis.network", shell=True).decode('utf-8').strip('\n'))
+validators = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis validators --output json -u https://api.testnet.nexis.network", shell=True))
+validator_info = json.loads(subprocess.check_output("/root/nexis-release/bin/nexis validator-info get --output json -u https://api.testnet.nexis.network", shell=True))
 
 staking = {}
 
