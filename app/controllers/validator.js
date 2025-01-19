@@ -32,7 +32,7 @@ export default class ValidatorsController extends Controller {
         }
 
         if (data[i].value > 1000000) {
-          value = (data[i].value / 1000000000).toLocaleString() + ' VLX';
+          value = (data[i].value / 1000000000).toLocaleString() + ' NZT';
         } else {
           value = valueFormat(data[i].value, data[i].ratio, data[i].id, data[i].index).toFixed(3);
         }

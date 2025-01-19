@@ -7,7 +7,7 @@
 				<li>Timesamp: <span class="value">{{ago this.model.blockTime}}</span></li>
 				<li>Recent Block Hash: <CopyButton @hash={{this.model.transaction.message.recentBlockhash}}/></li>
 				<li>Block:&nbsp;<LinkTo @route="block" @model={{this.model.slot}}>{{this.model.slot}}</LinkTo></li>
-				<li>Fee: <span class="value">{{from_lamport this.model.meta.fee}} VLX</span></li>
+				<li>Fee: <span class="value">{{from_lamport this.model.meta.fee}} NZT</span></li>
 				<li>Status:&nbsp;
 					{{#if t.meta.status.err}}
 						<span class="badge error">Failed</span>
@@ -26,8 +26,8 @@
 			<ul>
 				<li class="heading">
 					<div class="account">Account Inputs</div>
-					<div class="change">Change (VLX)</div>
-					<div class="post">Post Balance (VLX)</div>
+					<div class="change">Change (NZT)</div>
+					<div class="post">Post Balance (NZT)</div>
 					<div class="details">Details</div>
 				</li>
 				{{#let this.model.transaction.message.accountKeys as |keys|}}
