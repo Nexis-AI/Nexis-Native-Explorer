@@ -34,7 +34,7 @@
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
     "@mdi/svg": "^7.2.96",
-    "bootstrap": "^5.2.3",
+    "bootstrap": "5.2.3",
     "broccoli-asset-rev": "^3.0.0",
     "concurrently": "^8.0.1",
     "ember-auto-import": "^2.6.3",
@@ -82,7 +82,7 @@
     "webpack": "^5.78.0"
   },
   "engines": {
-    "node": "14.* || 16.* || >= 18"
+    "node": "16.* || >= 18"
   },
   "ember": {
     "edition": "octane"
