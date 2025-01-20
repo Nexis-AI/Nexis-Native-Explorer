@@ -2,7 +2,7 @@
 
 module.exports = function (environment) {
   const ENV = {
-    modulePrefix: 'velasity',
+    modulePrefix: 'nexscan',
     environment,
     rootURL: '/',
     locationType: 'history',
@@ -16,10 +16,10 @@ module.exports = function (environment) {
 
     APP: {
       api: {
-        stats: 'https://wlal2jacbk.execute-api.us-east-1.amazonaws.com/v1/velasity/stats',
-        search: 'https://wlal2jacbk.execute-api.us-east-1.amazonaws.com/v1/velasity/search',
+        stats: 'http://localhost:3001/v1/nexscan/stats',
+        search: 'http://localhost:3001/v1/nexscan/search',
       },
-      vote_key: 'eon93Yhg7bjKgdwnt79TRfeLbePqddLEFP9H1iQBufN',
+      vote_key: '4vgrbGuRrAw5XUhDn6zQzq9UX7eGTe29TFKhDwcUMoNR',
     },
   };
 

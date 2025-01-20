@@ -1,5 +1,5 @@
-import Application from 'velasity/app';
-import config from 'velasity/config/environment';
+import Application from 'nexscan/app';
+import config from 'nexscan/config/environment';
 import * as QUnit from 'qunit';
 import { setApplication } from '@ember/test-helpers';
 import { setup } from 'qunit-dom';

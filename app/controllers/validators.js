@@ -1,6 +1,6 @@
 import Controller from '@ember/controller';
 import { htmlSafe } from '@ember/template';
-import ENV from 'velasity/config/environment';
+import ENV from 'nexscan/config/environment';
 import { StarFourPoints } from 'ember-mdi';
 
 export default class ValidatorsController extends Controller {

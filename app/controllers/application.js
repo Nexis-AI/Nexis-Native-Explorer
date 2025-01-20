@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import ENV from 'velasity/config/environment';
+import ENV from 'nexscan/config/environment';
 import { action } from '@ember/object';
 import { tracked } from '@glimmer/tracking';
 import { Twitter } from 'ember-mdi';

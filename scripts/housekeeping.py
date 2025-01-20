@@ -3,8 +3,8 @@ import psycopg2.extras
 
 conn = psycopg2.connect(
         host="",
-        database="velasity",
-        user="velasity",
+        database="nexscan",
+        user="nexscan",
         password="")
 
 cursor = conn.cursor()

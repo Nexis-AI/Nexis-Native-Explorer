@@ -1,5 +1,5 @@
 import Route from '@ember/routing/route';
-import ENV from 'velasity/config/environment';
+import ENV from 'nexscan/config/environment';
 import axios from 'axios';
 
 export default class AddressRoute extends Route {

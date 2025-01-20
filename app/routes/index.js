@@ -1,6 +1,6 @@
 import Route from '@ember/routing/route';
 import { cancel, later } from '@ember/runloop';
-import ENV from 'velasity/config/environment';
+import ENV from 'nexscan/config/environment';
 import { inject as service } from '@ember/service';
 import axios from 'axios';
 

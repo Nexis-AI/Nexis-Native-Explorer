@@ -1,5 +1,5 @@
 import Controller from '@ember/controller';
-import ENV from 'velasity/config/environment';
+import ENV from 'nexscan/config/environment';
 
 export default class ValidatorsController extends Controller {
   api_url = ENV.APP.api_url;
