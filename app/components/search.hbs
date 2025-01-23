@@ -1,0 +1,14 @@
+<div id="search">
+	<div class="container">
+		<div class="box">
+			<form {{action "do_search" on="submit"}}>
+				<Input
+					@tabindex="1"
+					@type="text"
+					@value={{this.search}}
+					placeholder="Search Nexis Network for blocks, transactions or accounts"
+				/>
+			</form>
+		</div>
+	</div>
+</div>

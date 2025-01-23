@@ -1,0 +1,118 @@
+<div id="validator-id">
+	<div class="container">
+		<div class="box">
+			{{#let (shorten this.model.validator.vote_pubkey) as |short_key|}}
+				<h2>{{or this.model.validator.name short_key}}</h2>{{#if this.model.validator.delinquent}}<span class="badge error"><BsTooltip @title="Validator is not operational" />Delinquent</span>{{/if}}
+			{{/let}}
+		</div>
+	</div>
+</div>
+<div id="validator-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>
+					Vote Key: <CopyButton @route="address" @hash={{this.model.validator.vote_pubkey}}/>
+				</li>
+				<li>
+					Identity: <CopyButton @route="address" @hash={{this.model.validator.node_pubkey}}/>
+				</li>
+				<li>Website:&nbsp; 
+					{{#if this.model.validator.website }}
+						<a href={{this.model.validator.website}} rel="noopener noreferrer" target="_blank">{{this.model.validator.website}}</a>
+					{{else}}
+						<span class="value">N/A</span>
+					{{/if}}
+				</li>
+				<li>Commission: <span class="value">{{this.model.validator.commission}}%</span></li>
+				<li>Stake: <span class="value">{{from_lamport this.model.validator.activated_stake}} NZT</span></li>
+				<li>Overall Rating:&nbsp;<StarRating @score={{this.validator_score.total}} /></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="validator-ratings">
+	<div class="container">
+		<div class="box">
+			<div class="section vote">
+				<div class="score-wrap">
+					<h6>Vote Distance<Tooltip @text="Validator mean should be at or below network level"/></h6>
+					<StarRating @score={{this.validator_score.vote}} />
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_performance.vote}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section root">
+				<div class="score-wrap">
+					<h6>Root Distance<Tooltip @text="Validator mean should be at or below network level"/></h6>
+					<StarRating @score={{this.validator_score.root}} />
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_performance.root}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section skip">
+				<div class="score-wrap">
+					<h6>Skipped Slot<Tooltip @text="Validator mean should be at or below network level"/></h6>
+					<StarRating @score={{this.validator_score.skip}} />
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_performance.skip}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-stats">
+	<div class="container">
+		<div class="box">
+			<div class="section stakers">
+				<div class="score-wrap">
+					<h6>Stake<Tooltip @text="Total stake over the last 90 days"/></h6>
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_stats.stake}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.green_color}} @grid={{this.stats_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section stake">
+				<div class="score-wrap">
+					<h6>Stakers<Tooltip @text="Number of stakers over the last 90 days"/></h6>
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_stats.stakers}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.green_color}} @grid={{this.stats_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-stakers">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="account">Stake Account</div>
+					<div class="d-none d-md-block">Activation Epoch</div>
+					<div class="amount">Amount</div>
+					<div class="share d-none d-md-block">Share</div>
+				</li>
+				{{#each this.stakers as |s|}}
+					<li>
+						<div class="account">
+							<CopyButton @short={{true}} @route="address" @hash={{s.staker}}/>
+						</div>
+						<div class="epoch d-none d-md-block">
+							{{s.activation_epoch}}
+						</div>
+						<div class="amount">
+							{{from_lamport s.active_stake}} NZT
+						</div>
+						<div class="share d-none d-md-block">
+							{{s.share}}%
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>

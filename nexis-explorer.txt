@@ -1,0 +1,4487 @@
+Directory structure:
+└── nexis-ai-nexis-native-explorer/
+    ├── README.md
+    ├── ember-cli-build.js
+    ├── package.json
+    ├── testem.js
+    ├── .editorconfig
+    ├── .ember-cli
+    ├── .eslintignore
+    ├── .eslintrc.js
+    ├── .prettierignore
+    ├── .prettierrc.js
+    ├── .stylelintignore
+    ├── .stylelintrc.js
+    ├── .template-lintrc.js
+    ├── .watchmanconfig
+    ├── app/
+    │   ├── app.js
+    │   ├── index.html
+    │   ├── router.js
+    │   ├── components/
+    │   │   ├── bar-chart.hbs
+    │   │   ├── bar-chart.js
+    │   │   ├── copy-button.hbs
+    │   │   ├── copy-button.js
+    │   │   ├── line-chart.hbs
+    │   │   ├── line-chart.js
+    │   │   ├── loading.hbs
+    │   │   ├── search.hbs
+    │   │   ├── search.js
+    │   │   ├── star-rating.hbs
+    │   │   ├── star-rating.js
+    │   │   ├── theme-switcher.hbs
+    │   │   ├── theme-switcher.js
+    │   │   ├── timestamp.hbs
+    │   │   ├── timestamp.js
+    │   │   ├── tooltip.hbs
+    │   │   ├── tooltip.js
+    │   │   ├── yield-on-load.hbs
+    │   │   └── .gitkeep
+    │   ├── controllers/
+    │   │   ├── application.js
+    │   │   ├── index.js
+    │   │   ├── validator.js
+    │   │   ├── validators.js
+    │   │   └── .gitkeep
+    │   ├── helpers/
+    │   │   ├── ago.js
+    │   │   ├── delay.js
+    │   │   ├── from-lamport.js
+    │   │   ├── shorten.js
+    │   │   ├── sub.js
+    │   │   ├── sum.js
+    │   │   └── .gitkeep
+    │   ├── models/
+    │   │   └── .gitkeep
+    │   ├── routes/
+    │   │   ├── address.js
+    │   │   ├── application.js
+    │   │   ├── block.js
+    │   │   ├── index.js
+    │   │   ├── transaction.js
+    │   │   ├── validator.js
+    │   │   ├── validators.js
+    │   │   └── .gitkeep
+    │   ├── styles/
+    │   │   ├── app.css
+    │   │   └── app.sass
+    │   └── templates/
+    │       ├── address.hbs
+    │       ├── application.hbs
+    │       ├── block.hbs
+    │       ├── index.hbs
+    │       ├── transaction.hbs
+    │       ├── validator.hbs
+    │       └── validators.hbs
+    ├── config/
+    │   ├── ember-cli-update.json
+    │   ├── environment.js
+    │   ├── optional-features.json
+    │   └── targets.js
+    ├── public/
+    │   ├── robots.txt
+    │   └── assets/
+    │       └── images/
+    ├── scripts/
+    │   ├── api.py
+    │   ├── housekeeping.py
+    │   ├── monitor.py
+    │   └── requirements.txt
+    ├── tests/
+    │   ├── index.html
+    │   ├── test-helper.js
+    │   ├── helpers/
+    │   │   └── index.js
+    │   ├── integration/
+    │   │   └── .gitkeep
+    │   └── unit/
+    │       └── .gitkeep
+    ├── video/
+    │   └── delegating_script.docx
+    └── .github/
+        └── workflows/
+            └── ci.yml
+
+
+Files Content:
+
+================================================
+File: README.md
+================================================
+# velasity
+
+This README outlines the details of collaborating on this Ember application.
+A short introduction of this app could easily go here.
+
+## Prerequisites
+
+You will need the following things properly installed on your computer.
+
+* [Git](https://git-scm.com/)
+* [Node.js](https://nodejs.org/) (with npm)
+* [Ember CLI](https://cli.emberjs.com/release/)
+* [Google Chrome](https://google.com/chrome/)
+
+## Installation
+
+* `git clone <repository-url>` this repository
+* `cd velasity`
+* `npm install`
+
+## Running / Development
+
+* `ember serve`
+* Visit your app at [http://localhost:4200](http://localhost:4200).
+* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
+
+### Code Generators
+
+Make use of the many generators for code, try `ember help generate` for more details
+
+### Running Tests
+
+* `ember test`
+* `ember test --server`
+
+### Linting
+
+* `npm run lint`
+* `npm run lint:fix`
+
+### Building
+
+* `ember build` (development)
+* `ember build --environment production` (production)
+
+### Deploying
+
+Specify what it takes to deploy your app.
+
+## Further Reading / Useful Links
+
+* [ember.js](https://emberjs.com/)
+* [ember-cli](https://cli.emberjs.com/release/)
+* Development Browser Extensions
+  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
+  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+
+
+================================================
+File: ember-cli-build.js
+================================================
+'use strict';
+
+const EmberApp = require('ember-cli/lib/broccoli/ember-app');
+
+module.exports = function (defaults) {
+  let app = new EmberApp(defaults, {
+    sassOptions: {
+      extension: 'sass',
+    },
+    'ember-bootstrap': {
+      bootstrapVersion: 4,
+      importBootstrapCSS: false,
+      whitelist: ['bs-tooltip'],
+    },
+    'ember-cli-page-progress': {
+      includeCss: false,
+    },
+    'ember-composable-helpers': {
+      only: ['object-at'],
+    },
+    'ember-mdi': {
+      icons: ['heart', 'star', 'star-four-points', 'content-copy', 'information', 'twitter'],
+    },
+  });
+
+  return app.toTree();
+};
+
+
+================================================
+File: package.json
+================================================
+{
+  "name": "velasity",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Small description for velasity goes here",
+  "repository": "",
+  "license": "MIT",
+  "author": "",
+  "directories": {
+    "doc": "doc",
+    "test": "tests"
+  },
+  "scripts": {
+    "build": "ember build --environment=production",
+    "lint": "concurrently \"npm:lint:*(!fix)\" --names \"lint:\"",
+    "lint:css": "stylelint \"**/*.css\"",
+    "lint:css:fix": "concurrently \"npm:lint:css -- --fix\"",
+    "lint:fix": "concurrently \"npm:lint:*:fix\" --names \"fix:\"",
+    "lint:hbs": "ember-template-lint .",
+    "lint:hbs:fix": "ember-template-lint . --fix",
+    "lint:js": "eslint . --cache",
+    "lint:js:fix": "eslint . --fix",
+    "start": "ember serve",
+    "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
+    "test:ember": "ember test"
+  },
+  "devDependencies": {
+    "@babel/eslint-parser": "^7.21.3",
+    "@babel/plugin-proposal-decorators": "^7.21.0",
+    "@ember/optional-features": "^2.0.0",
+    "@ember/string": "^3.0.1",
+    "@ember/test-helpers": "^2.9.3",
+    "@ember/test-waiters": "^3.0.2",
+    "@glimmer/component": "^1.1.2",
+    "@glimmer/tracking": "^1.1.2",
+    "@mdi/svg": "^7.2.96",
+    "bootstrap": "5.2.3",
+    "broccoli-asset-rev": "^3.0.0",
+    "concurrently": "^8.0.1",
+    "ember-auto-import": "^2.6.3",
+    "ember-bootstrap": "^5.1.1",
+    "ember-c3": "^4.0.2",
+    "ember-cli": "^4.12.0",
+    "ember-cli-app-version": "^6.0.0",
+    "ember-cli-babel": "^7.26.11",
+    "ember-cli-dependency-checker": "^3.3.1",
+    "ember-cli-htmlbars": "^6.2.0",
+    "ember-cli-inject-live-reload": "^2.1.0",
+    "ember-cli-sass": "^11.0.1",
+    "ember-cli-sri": "^2.1.1",
+    "ember-cli-terser": "^4.0.2",
+    "ember-cli-update": "^1.0.1",
+    "ember-composable-helpers": "^5.0.0",
+    "ember-concurrency": "^3.0.0",
+    "ember-data": "~4.12.0",
+    "ember-fetch": "^8.1.2",
+    "ember-load-initializers": "^2.1.2",
+    "ember-mdi": "^2.0.0",
+    "ember-modifier": "^4.1.0",
+    "ember-page-title": "^7.0.0",
+    "ember-qunit": "^6.2.0",
+    "ember-resolver": "^10.0.0",
+    "ember-source": "~4.12.0",
+    "ember-template-lint": "^5.7.2",
+    "ember-truth-helpers": "^3.1.1",
+    "eslint": "^8.38.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-ember": "^11.5.1",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-qunit": "^7.3.4",
+    "loader.js": "^4.7.0",
+    "prettier": "^2.8.7",
+    "qunit": "^2.19.4",
+    "qunit-dom": "^2.0.0",
+    "sass": "^1.61.0",
+    "stylelint": "^14.16.1",
+    "stylelint-config-prettier": "^9.0.5",
+    "stylelint-config-standard": "^29.0.0",
+    "stylelint-prettier": "^3.0.0",
+    "tracked-built-ins": "^3.1.1",
+    "webpack": "^5.78.0"
+  },
+  "engines": {
+    "node": "16.* || >= 18"
+  },
+  "ember": {
+    "edition": "octane"
+  },
+  "dependencies": {
+    "animejs": "^3.2.1",
+    "axios": "^1.6.0",
+    "copy-to-clipboard": "^3.3.3",
+    "ember-cli-bundle-analyzer": "^1.0.0",
+    "ember-notify": "^6.0.3",
+    "ember-router-scroll": "^4.1.2",
+    "timeago.js": "^4.0.2"
+  }
+}
+
+
+================================================
+File: testem.js
+================================================
+'use strict';
+
+module.exports = {
+  test_page: 'tests/index.html?hidepassed',
+  disable_watching: true,
+  launch_in_ci: ['Chrome'],
+  launch_in_dev: ['Chrome'],
+  browser_start_timeout: 120,
+  browser_args: {
+    Chrome: {
+      ci: [
+        // --no-sandbox is needed when running Chrome inside a container
+        process.env.CI ? '--no-sandbox' : null,
+        '--headless',
+        '--disable-dev-shm-usage',
+        '--disable-software-rasterizer',
+        '--mute-audio',
+        '--remote-debugging-port=0',
+        '--window-size=1440,900',
+      ].filter(Boolean),
+    },
+  },
+};
+
+
+================================================
+File: .editorconfig
+================================================
+# EditorConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs
+# editorconfig.org
+
+root = true
+
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+indent_style = space
+indent_size = 2
+
+[*.hbs]
+insert_final_newline = false
+
+[*.{diff,md}]
+trim_trailing_whitespace = false
+
+
+================================================
+File: .ember-cli
+================================================
+{
+  /**
+    Ember CLI sends analytics information by default. The data is completely
+    anonymous, but there are times when you might want to disable this behavior.
+
+    Setting `disableAnalytics` to true will prevent any data from being sent.
+  */
+  "disableAnalytics": false,
+
+  /**
+    Setting `isTypeScriptProject` to true will force the blueprint generators to generate TypeScript
+    rather than JavaScript by default, when a TypeScript version of a given blueprint is available.
+  */
+  "isTypeScriptProject": false
+}
+
+
+================================================
+File: .eslintignore
+================================================
+# unconventional js
+/blueprints/*/files/
+/vendor/
+
+# compiled output
+/dist/
+/tmp/
+
+# dependencies
+/bower_components/
+/node_modules/
+
+# misc
+/coverage/
+!.*
+.*/
+.eslintcache
+
+# ember-try
+/.node_modules.ember-try/
+/bower.json.ember-try
+/npm-shrinkwrap.json.ember-try
+/package.json.ember-try
+/package-lock.json.ember-try
+/yarn.lock.ember-try
+
+
+================================================
+File: .eslintrc.js
+================================================
+'use strict';
+
+module.exports = {
+  root: true,
+  parser: '@babel/eslint-parser',
+  parserOptions: {
+    ecmaVersion: 'latest',
+    sourceType: 'module',
+    requireConfigFile: false,
+    babelOptions: {
+      plugins: [
+        ['@babel/plugin-proposal-decorators', { decoratorsBeforeExport: true }],
+      ],
+    },
+  },
+  plugins: ['ember'],
+  extends: [
+    'eslint:recommended',
+    'plugin:ember/recommended',
+    'plugin:prettier/recommended',
+  ],
+  env: {
+    browser: true,
+  },
+  rules: {},
+  overrides: [
+    // node files
+    {
+      files: [
+        './.eslintrc.js',
+        './.prettierrc.js',
+        './.stylelintrc.js',
+        './.template-lintrc.js',
+        './ember-cli-build.js',
+        './testem.js',
+        './blueprints/*/index.js',
+        './config/**/*.js',
+        './lib/*/index.js',
+        './server/**/*.js',
+      ],
+      parserOptions: {
+        sourceType: 'script',
+      },
+      env: {
+        browser: false,
+        node: true,
+      },
+      extends: ['plugin:n/recommended'],
+    },
+    {
+      // test files
+      files: ['tests/**/*-test.{js,ts}'],
+      extends: ['plugin:qunit/recommended'],
+    },
+  ],
+};
+
+
+================================================
+File: .prettierignore
+================================================
+# unconventional js
+/blueprints/*/files/
+/vendor/
+
+# compiled output
+/dist/
+/tmp/
+
+# dependencies
+/bower_components/
+/node_modules/
+
+# misc
+/coverage/
+!.*
+.eslintcache
+.lint-todo/
+
+# ember-try
+/.node_modules.ember-try/
+/bower.json.ember-try
+/npm-shrinkwrap.json.ember-try
+/package.json.ember-try
+/package-lock.json.ember-try
+/yarn.lock.ember-try
+
+
+================================================
+File: .prettierrc.js
+================================================
+'use strict';
+
+module.exports = {
+  printWidth: 140,
+  overrides: [
+    {
+      files: '*.{js,ts}',
+      options: {
+        singleQuote: true,
+      },
+    },
+  ],
+};
+
+
+================================================
+File: .stylelintignore
+================================================
+# unconventional files
+/blueprints/*/files/
+
+# compiled output
+/dist/
+
+# addons
+/.node_modules.ember-try/
+
+
+================================================
+File: .stylelintrc.js
+================================================
+'use strict';
+
+module.exports = {
+  extends: ['stylelint-config-standard', 'stylelint-prettier/recommended'],
+};
+
+
+================================================
+File: .template-lintrc.js
+================================================
+'use strict';
+
+module.exports = {
+  extends: 'recommended',
+};
+
+
+================================================
+File: .watchmanconfig
+================================================
+{
+  "ignore_dirs": ["tmp", "dist"]
+}
+
+
+================================================
+File: app/app.js
+================================================
+import Application from '@ember/application';
+import Resolver from 'ember-resolver';
+import loadInitializers from 'ember-load-initializers';
+import config from 'velasity/config/environment';
+
+export default class App extends Application {
+  modulePrefix = config.modulePrefix;
+  podModulePrefix = config.podModulePrefix;
+  Resolver = Resolver;
+}
+
+loadInitializers(App, config.modulePrefix);
+
+
+================================================
+File: app/index.html
+================================================
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="icon" type="image/x-icon" href="{{rootURL}}assets/images/favicon.ico">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Nexis">
+    <meta property="og:description" content="Block explorer and statistics for the Nexis Network blockchain.">
+    <meta property="og:image" content="{{rootURL}}assets/images/preview.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nexis">
+    <meta name="twitter:description" content="Block explorer and statistics for the Nexis Network blockchain.">
+    <meta name="twitter:image" content="{{rootURL}}assets/images/preview.png">
+
+    <title>Nexis</title>
+    <meta name="description" content="Block explorer and statistics for the Nexis Network blockchain.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{content-for "head"}}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/velasity.css">
+
+    <script src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="74bf9850-e764-49d0-9ab2-22fb73748a46" async></script>
+
+    {{content-for "head-footer"}}
+  </head>
+  <body>
+
+    <div id="loading" class="loader-wrap"><div class="loader"></div></div>
+
+    {{content-for "body"}}
+
+    <script src="{{rootURL}}assets/vendor.js"></script>
+    <script src="{{rootURL}}assets/velasity.js"></script>
+
+    {{content-for "body-footer"}}
+  </body>
+</html>
+
+
+================================================
+File: app/router.js
+================================================
+import EmberRouter from '@ember/routing/router';
+import config from 'velasity/config/environment';
+
+export default class Router extends EmberRouter {
+  location = config.locationType;
+  rootURL = config.rootURL;
+}
+
+Router.map(function () {
+  this.route('validators');
+  this.route('block', { path: '/block/:block_id' });
+  this.route('address', { path: '/address/:address_id' });
+  this.route('transaction', { path: '/transaction/:transaction_id' });
+  this.route('validator', { path: '/validator/:vote_key' });
+});
+
+
+================================================
+File: app/components/bar-chart.hbs
+================================================
+<C3Chart @data={{this.chart_data}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.grid}} @tooltip={{this.tooltip}} @bar={{this.bar}}/>
+
+================================================
+File: app/components/bar-chart.js
+================================================
+import Component from '@glimmer/component';
+import c3 from 'c3';
+
+export default class BarChartComponent extends Component {
+  bar = { width: { ratio: 0.5 } };
+  point = { show: false };
+  color = { pattern: ['#e49f1d'] };
+  axis = {
+    x: { show: false },
+    y: { show: false },
+  };
+  legend = { show: false };
+  size = { height: 100 };
+  tooltip = {
+    contents: function (data, defaultTitleFormat, defaultValueFormat) {
+      var $$ = this,
+        config = $$.config,
+        titleFormat = config.tooltip_format_title || defaultTitleFormat,
+        valueFormat = config.tooltip_format_value || defaultValueFormat,
+        text,
+        i,
+        title,
+        value;
+
+      for (i = 0; i < data.length; i++) {
+        if (!(data[i] && (data[i].value || data[i].value === 0))) {
+          continue;
+        }
+
+        if (!text) {
+          title = titleFormat ? titleFormat(data[i].x) : data[i].x;
+          text = "<div id='tooltip' class='d3-tip'>";
+        }
+        value = valueFormat(data[i].value, data[i].ratio, data[i].id, data[i].index);
+        text += `<span class='value'>${value}</span>`;
+        text += `</div>`;
+      }
+
+      return text;
+    },
+  };
+  get chart_data() {
+    if (this.args.data) {
+      let performance = this.get_average(this.args.data);
+
+      return {
+        columns: [performance],
+        type: 'bar',
+      };
+    } else {
+      return [];
+    }
+  }
+  get grid() {
+    if (this.args.data) {
+      const lines = this.get_average(this.args.data).map((e, i) => {
+        return { value: i };
+      });
+
+      return {
+        lines: {
+          front: false,
+        },
+        x: {
+          lines: lines,
+        },
+      };
+    } else {
+      return [];
+    }
+  }
+  array_chunk(array, chunk_size) {
+    return Array(Math.ceil(array.length / chunk_size))
+      .fill()
+      .map((_, index) => index * chunk_size)
+      .map((begin) => array.slice(begin, begin + chunk_size));
+  }
+
+  get_average(data) {
+    let performance = data.sort((a, b) => (a.slot < b.slot ? 1 : -1));
+    let chunked = this.array_chunk(performance, 3);
+    return [
+      'TPS',
+      ...chunked.map((p) => {
+        const total_txs = p.map((e) => e.numTransactions).reduce((a, b) => a + b);
+        const total_secs = p.map((e) => e.samplePeriodSecs).reduce((a, b) => a + b);
+        return Math.round(total_txs / total_secs);
+      }),
+    ];
+  }
+}
+
+
+================================================
+File: app/components/copy-button.hbs
+================================================
+{{#if @short}}
+	<span class="key">
+		<button {{action "copy" @hash}}><this.ContentCopy/></button>
+		<LinkTo @route={{@route}} @model={{@hash}}>{{shorten @hash}}</LinkTo>
+	</span>
+{{else}}
+	<span class="key d-none d-md-inline-flex">
+		<button {{action "copy" @hash}}><this.ContentCopy/></button>
+		<LinkTo @route={{@route}} @model={{@hash}}>{{@hash}}</LinkTo>
+	</span>
+	<span class="key d-inline-flex d-md-none">
+		<button {{action "copy" @hash}}><this.ContentCopy/></button>
+		<LinkTo @route={{@route}} @model={{@hash}}>{{shorten @hash}}</LinkTo>
+	</span>
+{{/if}}
+
+================================================
+File: app/components/copy-button.js
+================================================
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+import copy from 'copy-to-clipboard';
+import { ContentCopy } from 'ember-mdi';
+
+export default class CopyButtonComponent extends Component {
+  @tracked hash;
+  @tracked short = false;
+  @service notify;
+  ContentCopy = ContentCopy;
+
+  @action
+  copy(hash) {
+    copy(hash);
+    this.notify.info('Copied to clipboard.');
+  }
+}
+
+
+================================================
+File: app/components/line-chart.hbs
+================================================
+<C3Chart @data={{this.chart_data}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.grid}} @tooltip={{this.tooltip}}/>
+
+================================================
+File: app/components/line-chart.js
+================================================
+import Component from '@glimmer/component';
+
+export default class LineChartComponent extends Component {
+  point = { show: false };
+  color = { pattern: ['#63b941'] };
+  axis = {
+    x: { show: false, tick: { format: '%Y-%m-%d %H:%M:%S' }, type: 'timeseries' },
+    y: { show: false },
+  };
+  legend = { show: false };
+  size = { height: 100 };
+  tooltip = {
+    contents: function (data, defaultTitleFormat, defaultValueFormat) {
+      var $$ = this,
+        config = $$.config,
+        titleFormat = config.tooltip_format_title || defaultTitleFormat,
+        valueFormat = config.tooltip_format_value || defaultValueFormat,
+        text,
+        i,
+        title,
+        value;
+
+      for (i = 0; i < data.length; i++) {
+        if (!(data[i] && (data[i].value || data[i].value === 0))) {
+          continue;
+        }
+
+        if (!text) {
+          title = titleFormat ? titleFormat(data[i].x) : data[i].x;
+          text = "<div id='tooltip' class='d3-tip'>";
+        }
+        value = valueFormat(data[i].value, data[i].ratio, data[i].id, data[i].index);
+        text += `<span class='title'>${title}</span>`;
+        text += `<span class='value'>$${value.toFixed(3)}</span>`;
+        text += `</div>`;
+      }
+
+      return text;
+    },
+  };
+  get chart_data() {
+    if (this.args.data) {
+      const price = ['USD', ...this.args.data.map((p) => p.median_price)];
+      const x = ['x', ...this.args.data.map((p) => new Date(Date.parse(p.timestamp)))];
+
+      return {
+        x: 'x',
+        columns: [x, price],
+        type: 'spline',
+      };
+    } else {
+      return [];
+    }
+  }
+  get grid() {
+    if (this.args.data) {
+      const lines = this.args.data.map((p) => {
+        return { value: new Date(Date.parse(p.timestamp)) };
+      });
+
+      return {
+        lines: {
+          front: false,
+        },
+        x: {
+          lines: lines,
+        },
+      };
+    } else {
+      return [];
+    }
+  }
+}
+
+
+================================================
+File: app/components/loading.hbs
+================================================
+<div class="loader-wrap"><div class="loader"></div></div>
+
+================================================
+File: app/components/search.hbs
+================================================
+<div id="search">
+	<div class="container">
+		<div class="box">
+			<form {{action "do_search" on="submit"}}>
+				<Input
+					@tabindex="1"
+					@type="text"
+					@value={{this.search}}
+					placeholder="Search Nexis Network for blocks, transactions or accounts"
+				/>
+			</form>
+		</div>
+	</div>
+</div>
+
+================================================
+File: app/components/search.js
+================================================
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { inject as service } from '@ember/service';
+
+export default class SearchComponent extends Component {
+  @tracked search;
+  @service router;
+  @service notify;
+
+  @action
+  do_search() {
+    const search = this.search.replaceAll(',', '');
+    const length = search.length;
+    const numeric = /^\d+$/;
+
+    if (length >= 32 && length <= 44) {
+      this.router.transitionTo('address', search);
+    } else if (length >= 80) {
+      this.router.transitionTo('transaction', search);
+    } else if (length < 32 && numeric.test(parseInt(search))) {
+      this.router.transitionTo('block', search);
+    } else {
+      this.notify.info('Unable to process this search.');
+    }
+  }
+}
+
+
+================================================
+File: app/components/star-rating.hbs
+================================================
+<span class="badge score">
+	<BsTooltip @title="Validator performance score for the last 3 days" />
+	<div class="top" style={{this.safe_width}}>
+		<this.Star/>
+		<this.Star/>
+		<this.Star/>
+		<this.Star/>
+		<this.Star/>
+	</div>
+	<div class="bottom">
+		<this.Star/>
+		<this.Star/>
+		<this.Star/>
+		<this.Star/>
+		<this.Star/>
+	</div>
+</span>
+
+================================================
+File: app/components/star-rating.js
+================================================
+import Component from '@glimmer/component';
+import { htmlSafe } from '@ember/template';
+import { Star } from 'ember-mdi';
+
+export default class StarRatingComponent extends Component {
+  Star = Star;
+  
+  get safe_width() {
+    const width = (this.args.score / 5) * 100;
+    return htmlSafe(`width: ${width}%`);
+  }
+}
+
+
+================================================
+File: app/components/theme-switcher.hbs
+================================================
+<div class="toggleWrapper">
+	<BsTooltip @title="Switch to {{if (eq @theme "dark") "light" "dark"}} theme"/>
+	<input type="checkbox" name="toggle1" id="toggle1" class="mobileToggle" checked={{if (eq @theme "dark") "checked"}}>
+	<label for="toggle1" {{action "toggleTheme"}}></label>
+</div>
+
+================================================
+File: app/components/theme-switcher.js
+================================================
+import Component from '@glimmer/component';
+import { action } from '@ember/object';
+
+export default class ThemeSwitcherComponent extends Component {
+  @action
+  toggleTheme() {
+    this.args.toggle();
+  }
+}
+
+
+================================================
+File: app/components/timestamp.hbs
+================================================
+<span class="ago">
+	<BsTooltip @title={{this.date}} />
+	{{ago @timestamp}}
+</span>
+
+================================================
+File: app/components/timestamp.js
+================================================
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+
+export default class AgoComponent extends Component {
+  @tracked timestamp;
+
+  get date() {
+    return new Date(this.args.timestamp * 1000);
+  }
+}
+
+
+================================================
+File: app/components/tooltip.hbs
+================================================
+<span class="help">
+	<span class="icon-wrap">
+		<BsTooltip @title={{@text}} />
+		<this.Information/>
+	</span>
+</span>
+
+================================================
+File: app/components/tooltip.js
+================================================
+import Component from '@glimmer/component';
+import { tracked } from '@glimmer/tracking';
+import { Information } from 'ember-mdi';
+
+export default class AgoComponent extends Component {
+  Information = Information;
+}
+
+================================================
+File: app/components/yield-on-load.hbs
+================================================
+{{#if @loaded }}
+	<div class="yielded">
+		{{yield}}
+	</div>
+{{else}}
+	<Loading/>
+{{/if}}
+
+================================================
+File: app/controllers/application.js
+================================================
+import Controller from '@ember/controller';
+import ENV from 'velasity/config/environment';
+import { action } from '@ember/object';
+import { tracked } from '@glimmer/tracking';
+import { Twitter } from 'ember-mdi';
+
+export default class ApplicationController extends Controller {
+  @tracked theme;
+  vote_key = ENV.APP.vote_key;
+  Twitter = Twitter;
+
+  constructor() {
+    super(...arguments);
+
+    if (localStorage.getItem('theme') === null) {
+      localStorage.setItem('theme', 'dark');
+      this.theme = 'dark';
+    } else {
+      this.theme = localStorage.getItem('theme');
+    }
+
+    document.body.classList.add(this.theme);
+  }
+
+  get theme() {
+    return localStorage.getItem('theme');
+  }
+
+  didInsertElement() {
+    document.querySelector('#loading').classList.add('done');
+  }
+
+  @action
+  toggleTheme() {
+    if (this.theme === 'dark') {
+      localStorage.setItem('theme', 'light');
+      this.theme = 'light';
+      document.body.classList.remove('dark');
+    } else {
+      localStorage.setItem('theme', 'dark');
+      this.theme = 'dark';
+      document.body.classList.remove('light');
+    }
+
+    document.body.classList.add(this.theme);
+  }
+}
+
+
+================================================
+File: app/controllers/index.js
+================================================
+import Controller from '@ember/controller';
+import { htmlSafe } from '@ember/template';
+import { tracked } from '@glimmer/tracking';
+
+const precision = 1000000000;
+const billion = 1000000000;
+const million = 1000000;
+
+export default class IndexController extends Controller {
+  @tracked seconds_remaining = false;
+  @tracked countdown = false;
+
+  init() {
+    super.init(...arguments);
+
+    setInterval(() => {
+      if(this.seconds_remaining){
+        this.seconds_remaining = this.seconds_remaining - 1;
+      } else {
+        this.seconds_remaining = this.epoch_seconds_remaining();
+      }
+
+      this.countdown = this.to_time(this.seconds_remaining);
+    }, 1000);
+  }
+
+  safe_width(width) {
+    return htmlSafe(`width: ${width}%`);
+  }
+
+  to_time(seconds) {
+    const h = `${Math.floor(seconds / 3600)}`.padStart(2, '0');
+    const m = `${Math.floor(seconds % 3600 / 60)}`.padStart(2, '0');
+    const s = `${Math.floor(seconds % 3600 % 60)}`.padStart(2, '0');
+    return `${h}:${m}:${s}`; 
+  }
+
+  get tps_range() {
+    if (this.model.performance_history) {
+      const min = this.model.performance_history.reduce((prev, current) => {
+        return prev.numTransactions < current.numTransactions ? prev : current;
+      });
+      const max = this.model.performance_history.reduce((prev, current) => {
+        return prev.numTransactions > current.numTransactions ? prev : current;
+      });
+      return {
+        min: Math.round(min.numTransactions / min.samplePeriodSecs),
+        max: Math.round(max.numTransactions / max.samplePeriodSecs),
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get current_tps() {
+    if (this.model.performance_history) {
+      const current = this.model.performance_history.reduce((prev, current) => {
+        return prev.slot > current.slot ? prev : current;
+      });
+      return {
+        tps: Math.round(current.numTransactions / current.samplePeriodSecs),
+        slot: current.slot.toLocaleString(),
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get current_num_txs() {
+    if (this.model.performance_history) {
+      const current = this.model.performance_history.reduce((prev, current) => {
+        return prev.slot > current.slot ? prev : current;
+      });
+
+      return {
+        num: current.numTransactions.toLocaleString(),
+        slot: current.slot.toLocaleString(),
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get transactions() {
+    if (this.model.epoch) {
+      const count = this.model.performance_history.length;
+      const total_txs = this.model.performance_history.map((e) => e.numTransactions).reduce((a, b) => a + b);
+      return {
+        full: this.model.epoch.transactionCount.toLocaleString(),
+        compact: (this.model.epoch.transactionCount / million).toFixed(1) + 'M',
+        average: Math.round(total_txs / (count * 60)).toLocaleString(),
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get rank() {
+    if (this.model.epoch) {
+      return this.model.price.cmc_rank;
+    } else {
+      return false;
+    }
+  }
+
+  get circulating_percent() {
+    if (this.circulating_supply) {
+      return ((this.circulating_supply / this.total_supply) * 100).toFixed(0);
+    } else {
+      return false;
+    }
+  }
+
+  get staked_percent() {
+    if (this.model.epoch) {
+      const active_stake = this.model.validators.map((v) => Math.round(v.activated_stake / precision)).reduce((acc, curr) => acc + curr);
+      return ((active_stake / this.model.supply?.total) * 100).toFixed(1);
+    } else {
+      return false;
+    }
+  }
+
+  get total_supply() {
+    if (this.model.epoch) {
+      return (Math.round(this.model.supply?.total) / billion).toFixed(2);
+    } else {
+      return false;
+    }
+  }
+
+  get circulating_supply() {
+    if (this.model.epoch) {
+      return (Math.round(this.model.supply?.circulating) / billion).toFixed(2);
+    } else {
+      return false;
+    }
+  }
+
+  get active_stake() {
+    if (this.model.epoch) {
+      return (this.model.supply.effective / billion).toFixed(2);
+    } else {
+      return false;
+    }
+  }
+
+  get price() {
+    if (this.model.epoch) {
+      return parseFloat(this.model.price?.price).toFixed(3);
+    } else {
+      return false;
+    }
+  }
+
+  get volume_24h() {
+    if (this.model.epoch) {
+      return {
+        full: Math.round(this.model.price?.volume_24h).toLocaleString(),
+        compact: (this.model.price?.volume_24h / million).toFixed(1) + 'M',
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get market_cap() {
+    if (this.model.epoch) {
+      return {
+        full: Math.round(this.model.price?.market_cap).toLocaleString(),
+        compact: (this.model.price?.market_cap / million).toFixed(1) + 'M',
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get slot_height() {
+    return this.model.epoch?.absoluteSlot.toLocaleString() || false;
+  }
+
+  get block_height() {
+    return this.model.epoch?.blockHeight.toLocaleString() || false;
+  }
+
+  get epoch_progress() {
+    if (this.model.epoch) {
+      return this.safe_width(Math.round((this.model.epoch.slotIndex / this.model.epoch.slotsInEpoch) * 100));
+    } else {
+      return false;
+    }
+  }
+
+  epoch_seconds_remaining() {
+    if (this.model?.epoch) {
+      return Math.round((this.model.epoch.slotsInEpoch - this.model.epoch.slotIndex) * this.slot_time);
+    } else {
+      return false;
+    }
+  }
+
+  get epoch_number() {
+    return this.model.epoch?.epoch || false;
+  }
+
+  get slot_time() {
+    if (this.model.performance_history) {
+      const count = this.model.performance_history.length;
+
+      return (
+        this.model.performance_history
+          .filter((e) => e.numSlots !== 0)
+          .map((e) => e.samplePeriodSecs / e.numSlots)
+          .reduce((acc, curr) => acc + curr) / count
+      ).toFixed(2);
+    } else {
+      return false;
+    }
+  }
+}
+
+
+================================================
+File: app/controllers/validator.js
+================================================
+import Controller from '@ember/controller';
+import ENV from 'velasity/config/environment';
+
+export default class ValidatorsController extends Controller {
+  api_url = ENV.APP.api_url;
+  vote_key = ENV.APP.vote_key;
+
+  point = { show: false };
+  color = { pattern: ['#6b6d82', '#606dff'] };
+  green_color = { pattern: ['#63b941'] };
+  axis = {
+    x: { show: false, tick: { format: '%Y-%m-%d %H:%M:%S %Z' }, type: 'timeseries' },
+    y: { show: false },
+  };
+  legend = { show: false };
+  size = { height: 100 };
+  tooltip = {
+    contents: function (data, defaultTitleFormat, defaultValueFormat) {
+      var $$ = this,
+        config = $$.config,
+        valueFormat = config.tooltip_format_value || defaultValueFormat,
+        text = "<div id='tooltip' class='d3-tip'>",
+        i,
+        value;
+
+      for (i = 0; i < data.length; i++) {
+        if (!(data[i] && (data[i].value || data[i].value === 0))) {
+          continue;
+        }
+        if (i === 0) {
+          text += `<span class='label'>${data[i].x}</span>`;
+        }
+
+        if (data[i].value > 1000000) {
+          value = (data[i].value / 1000000000).toLocaleString() + ' NZT';
+        } else {
+          value = valueFormat(data[i].value, data[i].ratio, data[i].id, data[i].index).toFixed(3);
+        }
+
+        text += `<span class='title' style="color: ${config.data_colors[data[i].id]}">${data[i].id}</span>`;
+        text += `<span class='value'>${value}</span>`;
+      }
+
+      text += `</div>`;
+
+      return text;
+    },
+    position: function (data, width, height, thisElement) {
+      var containerWidth, tooltipWidth, x, y;
+      const element = thisElement.parentElement.parentElement.parentElement.parentElement.parentElement;
+      containerWidth = element.clientWidth;
+      tooltipWidth = element.querySelector('.c3-tooltip-container').clientWidth;
+      x = parseInt(thisElement.getAttribute('x'));
+      if (x + tooltipWidth > containerWidth) {
+        x = containerWidth - tooltipWidth - 2;
+      }
+      y = thisElement.getAttribute('y');
+      y = y - height;
+      return {
+        top: y - 10,
+        left: x,
+      };
+    },
+  };
+
+  get performance_grid() {
+    if (this.model.performance) {
+      const lines = this.model.performance.map((p) => {
+        return { value: new Date(p.timestamp) };
+      });
+
+      return {
+        lines: {
+          front: false,
+        },
+        x: {
+          lines: lines,
+        },
+      };
+    } else {
+      return [];
+    }
+  }
+
+  get stats_grid() {
+    if (this.model.digested) {
+      const lines = this.model.digested.map((p) => {
+        return { value: new Date(p.timestamp) };
+      });
+
+      return {
+        lines: {
+          front: false,
+        },
+        x: {
+          lines: lines,
+        },
+      };
+    } else {
+      return [];
+    }
+  }
+
+  get stakers() {
+    if (this.model.stakers) {
+      let stakers = [];
+      const filtered_stakers = this.model.stakers.filter((e) => e.active_stake);
+      const total_stake = filtered_stakers.map((e) => parseInt(e.active_stake)).reduce((acc, curr) => acc + curr);
+
+      for (var j = 0; j < filtered_stakers.length; j++) {
+        const staker = filtered_stakers[j];
+        staker.share = ((parseInt(staker.active_stake) / parseInt(total_stake)) * 100).toFixed(1);
+        stakers.push(staker);
+      }
+
+      stakers = stakers.sort((a, b) => (parseInt(a.active_stake) < parseInt(b.active_stake) ? 1 : -1));
+
+      return stakers;
+    } else {
+      return false;
+    }
+  }
+
+  get validator_score() {
+    if (this.model.performance) {
+      const performance = this.model.performance;
+      let output = [];
+
+      const cluster_median_vote_distance = performance.reduce((acc, curr) => acc + parseInt(curr.cluster_median_vote_distance), 0);
+      const median_vote_distance = performance.reduce((acc, curr) => acc + parseInt(curr.median_vote_distance), 0);
+      const cluster_average_vote_distance = performance.reduce((acc, curr) => acc + parseInt(curr.cluster_average_vote_distance), 0);
+      const average_vote_distance = performance.reduce((acc, curr) => acc + parseInt(curr.average_vote_distance), 0);
+      const cluster_median_vote = cluster_median_vote_distance >= median_vote_distance;
+      const cluster_average_vote = cluster_average_vote_distance >= average_vote_distance;
+      const vote_score = cluster_median_vote ? 2 : cluster_average_vote ? 1 : 0;
+
+      const cluster_median_root_distance = performance.reduce((acc, curr) => acc + parseInt(curr.cluster_median_root_distance), 0);
+      const median_root_distance = performance.reduce((acc, curr) => acc + parseInt(curr.median_root_distance), 0);
+      const cluster_average_root_distance = performance.reduce((acc, curr) => acc + parseInt(curr.cluster_average_root_distance), 0);
+      const average_root_distance = performance.reduce((acc, curr) => acc + parseInt(curr.average_root_distance), 0);
+      const cluster_median_root = cluster_median_root_distance >= median_root_distance;
+      const cluster_average_root = cluster_average_root_distance >= average_root_distance;
+      const root_score = cluster_median_root ? 2 : cluster_average_root ? 1 : 0;
+
+      const cluster_median_skip_rate = performance.reduce((acc, curr) => acc + parseInt(curr.cluster_median_skip_rate), 0);
+      const median_skip_rate = performance.reduce((acc, curr) => acc + parseInt(curr.median_skip_rate), 0);
+      const cluster_average_skip_rate = performance.reduce((acc, curr) => acc + parseInt(curr.cluster_average_skip_rate), 0);
+      const average_skip_rate = performance.reduce((acc, curr) => acc + parseInt(curr.average_skip_rate), 0);
+      const cluster_median_skip = cluster_median_skip_rate >= median_skip_rate;
+      const cluster_average_skip = cluster_average_skip_rate >= average_skip_rate;
+      const skip_score = cluster_median_skip ? 2 : cluster_average_skip ? 1 : 0;
+
+      const total_score = (vote_score * 2.5 + root_score * 2.5 + skip_score * 2.5) / 3;
+
+      output = {
+        vote: vote_score * 2.5,
+        root: root_score * 2.5,
+        skip: skip_score * 2.5,
+        total: total_score,
+      };
+
+      return output;
+    } else {
+      return false;
+    }
+  }
+
+  get validator_performance() {
+    if (this.model.performance) {
+      const validator_vote = ['Validator Median', ...this.model.performance.map((e) => e.median_vote_distance)];
+      const validator_root = ['Validator Median', ...this.model.performance.map((e) => e.median_root_distance)];
+      const validator_skip = ['Validator Median', ...this.model.performance.map((e) => e.median_skip_rate)];
+      const cluster_vote = ['Network Median', ...this.model.performance.map((e) => e.cluster_median_vote_distance)];
+      const cluster_root = ['Network Median', ...this.model.performance.map((e) => e.cluster_median_root_distance)];
+      const cluster_skip = ['Network Median', ...this.model.performance.map((e) => e.cluster_median_skip_rate)];
+
+      const x = ['x', ...this.model.performance.map((p) => new Date(p.timestamp))];
+
+      return {
+        xFormat: '%Y-%m-%d %H:%M:%S %Z',
+        vote: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, cluster_vote, validator_vote],
+          type: 'spline',
+        },
+        root: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, cluster_root, validator_root],
+          type: 'spline',
+        },
+        skip: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, cluster_skip, validator_skip],
+          type: 'spline',
+        },
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get validator_stats() {
+    if (this.model.digested) {
+      const stake = ['Total Stake', ...this.model.digested.map((e) => e.stake)];
+      const stakers = ['Number of Stakers', ...this.model.digested.map((e) => e.stakers)];
+
+      const x = ['x', ...this.model.digested.map((p) => new Date(p.timestamp))];
+
+      return {
+        xFormat: '%Y-%m-%d %H:%M:%S %Z',
+        stake: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, stake],
+          type: 'spline',
+        },
+        stakers: {
+          x: 'x',
+          xFormat: '%Y-%m-%d %H:%M:%S %Z',
+          columns: [x, stakers],
+          type: 'spline',
+        },
+      };
+    } else {
+      return false;
+    }
+  }
+}
+
+
+================================================
+File: app/controllers/validators.js
+================================================
+import Controller from '@ember/controller';
+import { htmlSafe } from '@ember/template';
+import ENV from 'velasity/config/environment';
+import { StarFourPoints } from 'ember-mdi';
+
+export default class ValidatorsController extends Controller {
+  api_url = ENV.APP.api_url;
+  vote_key = ENV.APP.vote_key;
+  StarFourPoints = StarFourPoints;
+
+  safe_width(width) {
+    return htmlSafe(`width: ${width}%`);
+  }
+
+  safe_width_w_offset(width, offset) {
+    return htmlSafe(`width: ${width}%; left: ${offset}%`);
+  }
+
+  safe_delay(value) {
+    value = (value / 10).toFixed(2);
+    return htmlSafe(`--delay: ${value}s;`);
+  }
+
+  get validators() {
+    if (this.model.validators) {
+      const count = this.model.validators.length;
+      const validator_scores = this.validator_scores();
+
+      let validators = this.model.validators;
+      let halt_warning_set = false;
+      let count_halt;
+      let versions = [];
+      let top_two_versions = [];
+      let other_versions = [];
+      let other_versions_parent = {};
+
+      for (var i = validators.length - 1; i >= 0; i--) {
+        validators[i].activated_stake = Math.round(validators[i].activated_stake / 1000000000);
+      }
+
+      validators = validators.sort((a, b) => (a.activated_stake < b.activated_stake ? 1 : -1));
+
+      const cumulative_sum = ((sum) => (value) => (sum += value))(0);
+      const cumulative_stake = validators.map((e) => e.activated_stake).map(cumulative_sum);
+      const total_stake = validators.map((e) => e.activated_stake).reduce((acc, curr) => acc + curr);
+
+      for (var j = 0; j < validators.length; j++) {
+        // assign calculated properties
+        validators[j].score = validator_scores[validators[j].vote_pubkey];
+        validators[j].activated_stake_percent = Math.round((validators[j].activated_stake / total_stake) * 100);
+        validators[j].cumulative_stake = cumulative_stake[j];
+        validators[j].cumulative_stake_percent = Math.round((cumulative_stake[j] / total_stake) * 100);
+        validators[j].activated_stake = validators[j].activated_stake.toLocaleString();
+        validators[j].last_vote = validators[j].last_vote.toLocaleString();
+        validators[j].cumulative_width = this.safe_width(validators[j].cumulative_stake_percent);
+        validators[j].own_width_w_offset = this.safe_width_w_offset(
+          validators[j].activated_stake_percent,
+          Math.abs(validators[j].activated_stake_percent - validators[j].cumulative_stake_percent)
+        );
+        validators[j].halt_warning = false;
+        validators[j].style = halt_warning_set ? this.safe_delay(j + 2) : this.safe_delay(j + 1);
+
+        if (validators[j].skip_percent) {
+          validators[j].skip_percent = validators[j].skip_percent.toFixed(2);
+        }
+
+        // set halt warning
+        if (validators[j].cumulative_stake_percent > 33 && !halt_warning_set) {
+          count_halt = j + 1;
+          validators[j].halt_warning = true;
+          halt_warning_set = true;
+        }
+
+        const version = validators[j].version ? validators[j].version : 'other';
+
+        // calculate node version stats
+        if (version in versions) {
+          versions[version].count++;
+        } else {
+          versions[version] = { version: version, count: 1 };
+        }
+      }
+
+      versions = Object.values(versions).sort((a, b) => (a.count < b.count ? 1 : -1));
+      other_versions_parent = versions.filter((o) => o.version === 'other')[0];
+      top_two_versions = versions.filter((o) => o.version !== 'other').slice(0, 2);
+      other_versions = versions.filter((o) => o.version !== 'other').slice(2);
+
+      for (let i = 0; i < other_versions.length; i++) {
+        other_versions_parent.count += other_versions[i].count;
+      }
+
+      versions = top_two_versions.concat(other_versions_parent);
+
+      versions.forEach((v) => {
+        v.percent = ((v.count / count) * 100).toFixed(1);
+      });
+
+      const delay_halt = this.safe_delay(count_halt + 1);
+
+      return {
+        count: count,
+        count_halt: count_halt,
+        delay_halt: delay_halt,
+        list: validators,
+        versions: versions,
+      };
+    } else {
+      return false;
+    }
+  }
+
+  get yield() {
+    if (this.model.inflation && this.model.validators) {
+      const inflation = this.model.inflation.total;
+      const total_supply = this.model.supply.total;
+      const activated_stake = this.model.supply.activating + this.model.supply.effective;
+      const apy = (inflation * total_supply) / activated_stake;
+      const apy_adjusted = apy - inflation;
+
+      return {
+        apy: (apy * 100).toFixed(1),
+        apy_adjusted: (apy_adjusted * 100).toFixed(1),
+      };
+    } else {
+      return false;
+    }
+  }
+
+  validator_scores() {
+    if (this.model.validator_performance) {
+      const performance = this.validator_performance();
+      let output = [];
+
+      for (const [key, value] of Object.entries(performance)) {
+        const cluster_median_vote_distance = value.reduce((acc, curr) => acc + parseInt(curr.cluster_median_vote_distance), 0);
+        const median_vote_distance = value.reduce((acc, curr) => acc + parseInt(curr.median_vote_distance), 0);
+        const cluster_average_vote_distance = value.reduce((acc, curr) => acc + parseInt(curr.cluster_average_vote_distance), 0);
+        const average_vote_distance = value.reduce((acc, curr) => acc + parseInt(curr.average_vote_distance), 0);
+        const cluster_median_vote = cluster_median_vote_distance >= median_vote_distance;
+        const cluster_average_vote = cluster_average_vote_distance >= average_vote_distance;
+        const vote_score = cluster_median_vote ? 2 : cluster_average_vote ? 1 : 0;
+
+        const cluster_median_root_distance = value.reduce((acc, curr) => acc + parseInt(curr.cluster_median_root_distance), 0);
+        const median_root_distance = value.reduce((acc, curr) => acc + parseInt(curr.median_root_distance), 0);
+        const cluster_average_root_distance = value.reduce((acc, curr) => acc + parseInt(curr.cluster_average_root_distance), 0);
+        const average_root_distance = value.reduce((acc, curr) => acc + parseInt(curr.average_root_distance), 0);
+        const cluster_median_root = cluster_median_root_distance >= median_root_distance;
+        const cluster_average_root = cluster_average_root_distance >= average_root_distance;
+        const root_score = cluster_median_root ? 2 : cluster_average_root ? 1 : 0;
+
+        const cluster_median_skip_rate = value.reduce((acc, curr) => acc + parseInt(curr.cluster_median_skip_rate), 0);
+        const median_skip_rate = value.reduce((acc, curr) => acc + parseInt(curr.median_skip_rate), 0);
+        const cluster_average_skip_rate = value.reduce((acc, curr) => acc + parseInt(curr.cluster_average_skip_rate), 0);
+        const average_skip_rate = value.reduce((acc, curr) => acc + parseInt(curr.average_skip_rate), 0);
+        const cluster_median_skip = cluster_median_skip_rate >= median_skip_rate;
+        const cluster_average_skip = cluster_average_skip_rate >= average_skip_rate;
+        const skip_score = cluster_median_skip ? 2 : cluster_average_skip ? 1 : 0;
+
+        const total_score = (vote_score * 2.5 + root_score * 2.5 + skip_score * 2.5) / 3;
+
+        output[key] = {
+          vote: vote_score,
+          root: root_score,
+          skip: skip_score,
+          total: total_score,
+        };
+      }
+
+      return output;
+    } else {
+      return false;
+    }
+  }
+
+  validator_performance() {
+    if (this.model.validator_performance) {
+      let output = [];
+
+      for (let i = 0; i < this.model.validator_performance.length; i++) {
+        const row = this.model.validator_performance[i];
+        const key = row.voteAccountPubkey;
+
+        if (key in output) {
+          output[key].push(row);
+        } else {
+          output[key] = [];
+          output[key].push(row);
+        }
+      }
+
+      output.map((o) => {
+        o.sort(function (a, b) {
+          return a.timestamp - b.timestamp;
+        });
+      });
+
+      return output;
+    } else {
+      return false;
+    }
+  }
+}
+
+
+================================================
+File: app/helpers/ago.js
+================================================
+import { helper } from '@ember/component/helper';
+import { format } from 'timeago.js';
+
+export function ago([value]) {
+  return format(value * 1000);
+}
+
+export default helper(ago);
+
+
+================================================
+File: app/helpers/delay.js
+================================================
+import { helper } from '@ember/component/helper';
+import { htmlSafe } from '@ember/template';
+
+export function delay([value]) {
+  value = (value / 10).toFixed(2);
+  return htmlSafe(`--delay: ${value}s;`);
+}
+
+export default helper(delay);
+
+
+================================================
+File: app/helpers/from-lamport.js
+================================================
+import { helper } from '@ember/component/helper';
+
+export function from_lamport([value]) {
+  let result = (value / 1000000000).toFixed(9);
+  result = Math.abs(result).toString().slice(0, 1) === '0' ? parseFloat(result) : parseInt(result, 10).toLocaleString();
+  return result;
+}
+
+export default helper(from_lamport);
+
+
+================================================
+File: app/helpers/shorten.js
+================================================
+import { helper } from '@ember/component/helper';
+
+export function shorten([text]) {
+  if(text === undefined) {
+    return text;
+  } else {
+    return text.substr(0, 4) + '...' + text.substr(text.length - 4);
+  }
+}
+
+export default helper(shorten);
+
+
+================================================
+File: app/helpers/sub.js
+================================================
+import { helper } from '@ember/component/helper';
+
+export function sub(params) {
+  return params.reduce((a, b) => {
+    return a - b;
+  });
+}
+
+export default helper(sub);
+
+
+================================================
+File: app/helpers/sum.js
+================================================
+import { helper } from '@ember/component/helper';
+
+export function sum(params) {
+  return params.reduce((a, b) => {
+    return a + b;
+  });
+}
+
+export default helper(sum);
+
+
+================================================
+File: app/routes/address.js
+================================================
+import Route from '@ember/routing/route';
+import ENV from 'velasity/config/environment';
+import axios from 'axios';
+
+export default class AddressRoute extends Route {
+  api_url = ENV.APP.api.search;
+
+  model(params) {
+    return this.loadData(params.address_id);
+  }
+
+  loadData(address_id) {
+    return axios({ method: 'get', url: this.api_url, params: { type: 'address', search: address_id } })
+      .then((response) => {
+        if (response.data.error || response.data === '') {
+          this.notify.info('Failed to find address.');
+          this.router.transitionTo('index');
+        }
+        const result = response.data.result.value;
+        result.addressId = address_id;
+        return result;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
+}
+
+
+================================================
+File: app/routes/application.js
+================================================
+import Route from '@ember/routing/route';
+import { action } from '@ember/object';
+import copy from 'copy-to-clipboard';
+import { inject as service } from '@ember/service';
+
+export default class ApplicationRoute extends Route {
+  @service notify;
+
+  @action
+  async loading(transition) {
+    if (!transition.from || transition.from.name !== transition.to.name) {
+      document.querySelector('#loading').classList.remove('done');
+      transition.promise.finally(() => {
+        document.querySelector('#loading').classList.add('done');
+      });
+    } else {
+      transition.promise.finally(() => {});
+    }
+    return true;
+  }
+
+  @action
+  copy(key) {
+    copy(key);
+    this.notify.info('Copied to clipboard.');
+  }
+}
+
+
+================================================
+File: app/routes/block.js
+================================================
+import Route from '@ember/routing/route';
+import ENV from 'velasity/config/environment';
+import axios from 'axios';
+import { inject as service } from '@ember/service';
+
+export default class BlockRoute extends Route {
+  @service notify;
+  @service router;
+
+  api_url = ENV.APP.api.search;
+
+  model(params) {
+    return this.loadData(params.block_id);
+  }
+
+  loadData(block_id) {
+    return axios({ method: 'get', url: this.api_url, params: { type: 'block', search: block_id } })
+      .then((response) => {
+        if (response.data.error || response.data === '') {
+          this.notify.info('Failed to find block.');
+          this.router.transitionTo('index');
+        }
+        const result = response.data.result;
+        result.blockId = parseInt(block_id);
+        return result;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
+}
+
+
+================================================
+File: app/routes/index.js
+================================================
+import Route from '@ember/routing/route';
+import { cancel, later } from '@ember/runloop';
+import ENV from 'velasity/config/environment';
+import { inject as service } from '@ember/service';
+import axios from 'axios';
+
+export default class IndexRoute extends Route {
+  @service notify;
+
+  api_url = ENV.APP.api.stats;
+
+  model() {
+    this.poll();
+    return this.loadData();
+  }
+
+  poll() {
+    return later(async () => {
+      this.refresh();
+    }, 1000 * 10);
+  }
+
+  loadData() {
+    return axios({ method: 'get', url: this.api_url })
+      .then((response) => {
+        if (response.data.error || response.data === '') {
+          this.notify.info('Failed to load data.');
+        }
+        return response.data;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
+
+  deactivate() {
+    cancel(this.poll);
+  }
+}
+
+
+================================================
+File: app/routes/transaction.js
+================================================
+import Route from '@ember/routing/route';
+import ENV from 'velasity/config/environment';
+import axios from 'axios';
+
+export default class TransactionRoute extends Route {
+  api_url = ENV.APP.api.search;
+
+  model(params) {
+    return this.loadData(params.transaction_id);
+  }
+
+  loadData(transaction_id) {
+    return axios({ method: 'get', url: this.api_url, params: { type: 'transaction', search: transaction_id } })
+      .then((response) => {
+        if (response.data.error || response.data === '') {
+          this.notify.info('Failed to find transaction.');
+          this.router.transitionTo('index');
+        }
+        return response.data.result;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
+}
+
+
+================================================
+File: app/routes/validator.js
+================================================
+import Route from '@ember/routing/route';
+import ENV from 'velasity/config/environment';
+import axios from 'axios';
+import { inject as service } from '@ember/service';
+
+export default class ValidatorRoute extends Route {
+  @service notify;
+  @service router;
+
+  api_url = ENV.APP.api.search;
+
+  model(params) {
+    return this.loadData(params.vote_key);
+  }
+
+  loadData(vote_key) {
+    return axios({ method: 'get', url: this.api_url, params: { type: 'validator', search: vote_key } })
+      .then((response) => {
+        if (response.data.error || response.data === '') {
+          this.notify.info('Failed to find validator.');
+          this.router.transitionTo('index');
+        }
+
+        return response.data;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
+}
+
+
+================================================
+File: app/routes/validators.js
+================================================
+import Route from '@ember/routing/route';
+import ENV from 'velasity/config/environment';
+import { inject as service } from '@ember/service';
+import axios from 'axios';
+
+export default class ValidatorsRoute extends Route {
+  @service notify;
+
+  api_url = ENV.APP.api.stats;
+
+  model() {
+    return this.loadData();
+  }
+
+  loadData() {
+    return axios({ method: 'get', url: this.api_url })
+      .then((response) => {
+        if (response.data.error || response.data === '') {
+          this.notify.info('Failed to load data.');
+        }
+        return response.data;
+      })
+      .catch(() => {
+        return false;
+      });
+  }
+}
+
+
+================================================
+File: app/styles/app.css
+================================================
+/* Ember supports plain CSS out of the box. More info: https://cli.emberjs.com/release/advanced-use/stylesheets/ */
+
+
+================================================
+File: app/styles/app.sass
+================================================
+@import "ember-bootstrap/bootstrap"
+
+body, body.dark
+	transition: all 0.3s
+	--purple: #B1FF69
+	--green: #B1FF69
+	--orange: #1e281a
+	--red: #e82e72
+	--bg_color: #07090B
+	--grid_line: #181F25
+	--highlight: #131517
+	--border_color: #181F25
+	--badge_bg: #131517
+	--badge_bg_success: #2a3327
+	--badge_bg_error: #402931
+	--text_dark: #FFFFFF
+	--text_medium: #e4e4e4
+	--plus_img: url("/assets/images/plus_light.svg")
+	--pixel_img: url(/assets/images/pixel_light.svg)
+	--logo_color: #fff
+	--search_text_color: #000000
+	--search_text_color_focus: #fff2
+	--loader_a: rgba(255,255,255,0.2)
+	--loader_b: rgba(255,255,255,0.8)
+
+body.light
+	transition: all 0.3s
+	--purple: #B1FF69
+	--green: #B1FF69
+	--orange: #1e281a
+	--red: #e82e72
+	--bg_color: #FFFFFF
+	--grid_line: #575757
+	--highlight: #c6cbda
+	--border_color: #bbbed4
+	--badge_bg: #e8eaf1
+	--badge_bg_success: #e1e8db
+	--badge_bg_error: #ffeaec
+	--text_dark: #9294ad
+	--text_medium: #6b6d82
+	--plus_img: url("/assets/images/plus_dark.svg")
+	--pixel_img: url(/assets/images/pixel_dark.svg)
+	--logo_color: #9fa6c7
+	--search_text_color: var(--text_medium)
+	--search_text_color_focus: #fff
+	--loader_a: #a7aeff
+	--loader_b: var(--purple)
+
+.tooltip
+	pointer-events: none
+
+#loading
+	position: absolute
+	top: 50%
+	left: 50%
+	transform: translate(-50%, -50%)
+	z-index: 1000
+	box-shadow: 0 0 1rem 0 rgb(0 0 0 / 20%)
+	pointer-events: none
+	animation: slide-fade-in-from-top 0.3s ease-in forwards
+	&.done
+		animation: slide-fade-out-from-bottom 0.3s ease-in forwards
+
+.yielded
+	color: var(--text_medium)
+
+a
+	text-decoration: none
+	color: #A2D970
+	&:hover
+		text-decoration: none
+		color: #4952bb
+		transition: all 0.3s
+
+span.ago
+	display: inline-block
+	color: var(--text_medium)
+
+span.help
+	cursor: pointer
+	opacity: 0.5
+	fill: var(--text_dark)
+	transition: all 0.3s
+	width: 1.5rem
+	display: inline-flex
+	justify-content: center
+	height: 1rem
+	align-items: center
+	&:hover
+		transition: all 0.3s
+		opacity: 1
+	.icon-wrap
+		margin: 0.25rem 0 0 0
+		position: absolute
+		svg
+			width: 1.25rem
+			height: auto
+
+.text-gray
+	color: #efefef
+	transition: all 0.3s
+
+.badges
+	display: flex
+	justify-content: start
+	flex: 1
+	.badge:not(:last-of-type)
+		margin: 0 0.5rem 0 0
+
+.badge
+	border-radius: 0.25rem
+	display: flex
+	height: 1.4rem
+	color: var(--text_medium)
+	justify-content: center
+	align-items: center
+	background: var(--badge_bg)
+	padding: 0.4rem
+	font-size: 0.8rem
+	text-transform: uppercase
+	font-weight: normal
+	line-height: 0.8
+	&.success
+		color: var(--green)
+		background: var(--badge_bg_success)
+	&.error
+		color: var(--red)
+		background: var(--badge_bg_error)
+	&.score
+		position: relative
+		cursor: pointer
+		.top
+			position: absolute
+			display: flex
+			justify-content: start
+			align-items: center
+			top: 0
+			left: 0
+			padding: 0 0 0 0.4rem
+			height: 100%
+			overflow: hidden
+			svg
+				transition: all 0.3s
+				fill: var(--orange)
+		.bottom
+			display: flex
+			justify-content: start
+			align-items: center
+			svg
+				transition: all 0.3s
+				fill: var(--highlight)
+		svg
+			width: 1rem
+			flex-shrink: 0
+
+.box
+	display: flex
+	border-right: 1px solid var(--border_color)
+	border-left: 1px solid var(--border_color)
+	padding: 2rem
+	justify-content: center
+	align-items: stretch
+	position: relative
+	transition: all 0.3s
+	&::before
+		position: absolute
+		left: -3px
+		bottom: -3px
+		content: ""
+		width: 5px
+		height: 5px
+		z-index: 10
+		background: var(--plus_img)
+	&::after
+		position: absolute
+		right: -3px
+		bottom: -3px
+		content: ""
+		width: 5px
+		height: 5px
+		z-index: 10
+		background: var(--plus_img)
+
+	.yielded, .charts
+		opacity: 0
+		animation: slide-fade-in-from-left 0.3s ease-in forwards
+		animation-delay: var(--delay)
+
+.section
+	flex: 1
+	display: flex
+	flex-direction: column
+	.heading
+		display: flex
+		.help
+			margin: 0 0 0 0.25rem
+
+span.key
+	flex-direction: row
+	color: var(--text_dark)
+	display: inline-flex
+	justify-content: center
+	align-items: center
+	border-radius: 0.25rem
+	font-size: 0.9rem
+	transition: all 0.3s
+	max-width: 100%
+	button
+		background: transparent
+		display: flex
+		justify-content: center
+		align-items: center
+		border: none
+		svg
+			width: 1.25rem
+			fill: var(--text_medium)
+			opacity: 1
+		&:hover
+			svg
+				opacity: 0.5
+				transition: all 0.3s
+	a
+		max-width: 100%
+		text-overflow: ellipsis
+		overflow: hidden
+
+body
+	background: var(--bg_color)
+	color: var(--text_medium)
+	font-family: 'Roboto Mono', monospace
+
+header
+	border-bottom: 1px solid var(--border_color)
+	transition: all 0.3s
+	svg
+		width: 4rem
+		height: auto
+		transform: rotateY(0deg)
+		opacity: 1
+		transition: all 0.3s
+		path
+			fill: var(--logo_color)
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+		justify-content: space-between
+		align-items: center
+		ul
+			list-style: none
+			margin: 0
+			padding: 0
+			display: flex
+			border-radius: 0.25rem
+			border: 2px solid var(--highlight)
+			background: var(--highlight)
+			overflow: hidden
+			transition: all 0.3s
+			li
+				display: flex
+				background: var(--bg_color)
+				transition: all 0.3s
+				&:hover
+					background: var(--highlight)
+					transition: all 0.3s
+				a
+					color: var(--text_medium)
+					padding: 1rem
+					transition: all 0.3s
+					&:not(.active):hover
+						transform: scale(0.95)
+						transition: all 0.3s
+					&.active
+						background: rgba(190, 255, 129, 0.3)
+						color: #C2FF75
+						transition: all 0.3s
+					&:hover, &:active
+						text-decoration: none
+		.toggleWrapper
+			margin: 0 0 0 14px
+
+#search
+	display: flex
+	.box
+		padding: 0
+		form
+			flex: 1
+			input
+				padding: 1rem
+				background: var(--bg_color)
+				width: 100%
+				height: 100%
+				border: none
+				outline: none
+				flex: 1
+				transition: all 0.3s
+				color: var(--search_text_color)
+				text-overflow: ellipsis
+				&::-webkit-input-placeholder
+					color: var(--text_dark)
+				&:-ms-input-placeholder 
+					color: var(--text_dark)
+				&::placeholder
+					color: var(--text_dark)
+				&:hover
+					background: #0C1013
+					transition: all 0.3s
+				&:focus
+					color: var(--search_text_color_focus)
+					background: #0C1013
+					transition: all 0.3s
+					&::-webkit-input-placeholder
+						color: #adb3f1
+					&:-ms-input-placeholder 
+						color: #adb3f1
+					&::placeholder
+						color: #adb3f1
+#epoch
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+		em
+			font-style: normal
+			color: var(--text_medium)
+	h2
+		color: var(--purple)
+		margin: 0
+		width: fit-content
+		line-height: 2rem
+		// background: linear-gradient(90deg, rgba(118,93,243,1) 0%, rgba(93,105,243,1) 100%)
+		// -webkit-background-clip: text
+		// -webkit-text-fill-color: transparent
+	.box
+		.section
+			.heading
+				display: flex
+				.help
+					margin: 0 0 0 0.25rem
+				.badge
+					background: var(--highlight)
+					margin: -0.25rem 0 0 auto
+					svg
+						width: 0.75rem
+						height: auto
+						margin: 0 0.5rem
+						fill: var(--text_dark)
+					.next
+						color: var(--text_dark)
+			.bar
+				&.outer
+					margin: 1rem 0 0 0
+					height: 0.5rem
+					width: 100%
+					border-radius: 0.25rem
+					background: var(--highlight)
+					overflow: hidden
+					transition: all 0.3s
+				&.inner
+					width: 0%
+					height: 100%
+					background: var(--purple)
+					border-radius: 0.25rem
+
+#tokenomics
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+	h2
+		color: var(--green)
+		margin: 0
+		width: fit-content
+		line-height: 2rem
+		//background: linear-gradient(90deg, rgba(118,93,243,1) 0%, rgba(93,105,243,1) 100%)
+		//-webkit-background-clip: text
+		//-webkit-text-fill-color: transparent
+	.box
+		padding: 0
+		.top-level
+			background: var(--pixel_img)
+			background-size: 4px 4px
+			color: var(--text_medium)
+			width: 14rem
+			border-right: 1px solid var(--border_color)
+			display: flex
+			flex-direction: column
+			transition: all 0.3s
+			.supply
+				padding: 2rem 2rem 2rem 2rem
+				flex: 1
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+			.stake
+				flex: 1
+				padding: 2rem 2rem 2rem 2rem
+		.financial
+			flex: 1
+			flex-shrink: 1
+			min-width: 0
+			padding: 2rem 2rem 2rem 2rem
+			.statistics
+				display: flex
+				justify-content: space-between
+				padding: 0 0 2rem 0
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				.heading
+					display: flex
+					.badge
+						background: var(--highlight)
+						margin: 0 0 0 0.5rem
+						font-size: 0.7rem
+						line-height: 0.7rem
+						padding: 0.3rem
+						align-self: center
+			.charts
+				position: relative
+				background: var(--highlight)
+				border-radius: 0.25rem
+				margin: 2rem 0 0 0
+				transition: all 0.3s
+				.loader-wrap
+					height: 6.25rem
+					display: flex
+					justify-content: center
+					width: 100%
+					align-items: center
+				label
+					transform: translateX(-50%)
+					pointer-events: none
+					z-index: 10
+					position: absolute
+					bottom: 0
+					left: 50%
+					background: var(--bg_color)
+					color: var(--text_dark)
+					border-radius: 0.25rem
+					padding: 0.25rem
+					display: flex
+					line-height: 0.9
+					font-size: 0.8rem
+					margin: 0 0 0.25rem 0
+					transition: all 0.3s
+				.c3-line
+					stroke-width: 3px
+					stroke-linecap: round
+				.c3-xgrid-line line
+					stroke: var(--grid_line)
+					transition: all 0.3s
+				#tooltip
+					display: flex
+					flex-direction: column
+					background: var(--bg_color)
+					border-radius: 0.25rem
+					padding: 0.25rem 0.5rem
+					.title
+						font-size: 0.8rem
+						color: var(--text_dark)
+
+#tps
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+	h2
+		color: var(--orange)
+		margin: 0
+		width: fit-content
+		line-height: 2rem
+		//background: linear-gradient(90deg, rgba(118,93,243,1) 0%, rgba(93,105,243,1) 100%)
+		//-webkit-background-clip: text
+		//-webkit-text-fill-color: transparent
+	.box
+		padding: 0
+		.stats
+			transition: all 0.3s
+			background: var(--pixel_img)
+			background-size: 4px 4px
+			color: var(--text_medium)
+			width: 14rem
+			border-right: 1px solid var(--border_color)
+			display: flex
+			flex-direction: column
+			.tps
+				padding: 2rem 2rem 2rem 2rem
+				flex: 1
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+			.txs
+				flex: 1
+				padding: 2rem 2rem 2rem 2rem
+		.chart-wrap
+			flex: 1
+			flex-shrink: 1
+			min-width: 0
+			padding: 2rem 2rem 2rem 2rem
+			.statistics
+				display: flex
+				justify-content: space-between
+				padding: 0 0 2rem 0
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				.total
+					flex: 2
+			.charts
+				position: relative
+				background: var(--highlight)
+				border-radius: 0.25rem
+				margin: 2rem 0 0 0
+				transition: all 0.3s
+				.loader-wrap
+					height: 6.25rem
+					display: flex
+					justify-content: center
+					width: 100%
+					align-items: center
+				label
+					transform: translateX(-50%)
+					pointer-events: none
+					z-index: 10
+					position: absolute
+					bottom: 0
+					left: 50%
+					background: var(--bg_color)
+					color: var(--text_dark)
+					border-radius: 0.25rem
+					padding: 0.25rem
+					display: flex
+					line-height: 0.9
+					font-size: 0.8rem
+					margin: 0 0 0.25rem 0
+					transition: all 0.3s
+				.c3-line
+					stroke-width: 3px
+					stroke-linecap: round
+					transition: all 0.3s
+				.c3-xgrid-line line
+					stroke: var(--grid_line)
+					transition: all 0.3s
+				#tooltip
+					display: flex
+					flex-direction: column
+					background: var(--bg_color)
+					border-radius: 0.25rem
+					padding: 0.25rem 0.5rem
+					.title
+						font-size: 0.8rem
+						color: var(--text_dark)
+#validator-top-stats
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+	h2
+		color: var(--purple)
+		margin: 0
+		width: fit-content
+		line-height: 3rem
+		font-size: 2.6rem
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+		.section
+			&.versions
+				ol
+					list-style: none
+					padding: 0
+					margin: 0
+					span.version.badge
+						border-radius: 0.25rem
+						font-size: 0.75rem
+						line-height: 0.75rem
+						padding: 0.25rem 0.25rem
+						color: var(--text_medium)
+						display: inline-flex
+						margin: 0
+						justify-content: center
+						align-items: center
+					span.percent
+						color: var(--text_medium)
+			.yielded
+				opacity: 0
+				animation: slide-fade-in-from-left 0.3s ease-in forwards
+				animation-delay: var(--delay)
+#validator-list
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	.box
+		padding: 0
+		ul
+			width: 100%
+			padding: 0
+			list-style: none
+			margin: 0
+			li
+				display: flex
+				justify-content: space-between
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				width: 100%
+				content: counter(list)
+				&.heading
+					background: var(--pixel_img)
+					background-size: 4px 4px
+					text-transform: uppercase
+					white-space: nowrap
+					font-size: 0.7rem
+					color: var(--text_dark)
+					font-weight: bold
+				&.warning
+					width: 100%
+					padding: 0.5rem
+					justify-content: center
+					color: var(--green)
+					background: rgba(106, 210, 68, 0.1)
+					text-transform: uppercase
+					white-space: nowrap
+					font-size: 0.7rem
+				&:not(.heading)
+					opacity: 0
+					animation: slide-fade-in-from-top 0.3s ease-in forwards
+					animation-delay: var(--delay)
+				&:not(.heading):not(.warning)
+					counter-increment: rank
+				.validator
+					padding: 1rem
+					width: 35%
+					max-width: 35%
+					overflow: hidden
+					.heading
+						display: flex
+						align-items: center
+						margin: 0 0 0.5rem 0
+						h5
+							white-space: nowrap
+							margin: 0
+							font-size: 1rem
+							text-overflow: ellipsis
+							overflow: hidden
+						span.icon
+							margin: -0.2rem 0 -0.2rem 0.5rem
+							svg
+								fill: var(--green)
+								width: 1.25rem
+								height: auto
+								margin: -0.25rem 0 0 0
+					.tags
+						display: flex
+						span
+							margin: 0 0.5rem 0 0
+					.key
+						margin: 0 0 0 -0.4rem
+				.stake
+					padding: 1rem
+					width: 15%
+					display: flex
+					justify-content: center
+					align-items: center
+				.cumulative-stake
+					padding: 1rem
+					position: relative
+					width: 20%
+					display: flex
+					justify-content: center
+					align-items: center
+					.cumulative, .own
+						position: absolute
+						top: 0
+						left: 0
+						height: 100%
+						z-index: 1
+						background: rgba(93, 105, 243, 0.5)
+						color: #fff
+					.own
+						background: rgba(93, 105, 243, 1)
+					.percentage
+						color: #d3d7ff
+					span
+						width: 100%
+						z-index: 2
+						position: absolute
+						top: 0
+						left: 0
+						height: 100%
+						display: flex
+						padding: 1rem
+						justify-content: left
+						align-items: center
+				.commission
+					padding: 1rem
+					width: 10%
+					display: flex
+					justify-content: center
+					align-items: center
+				.skip
+					padding: 1rem
+					width: 10%
+					display: flex
+					justify-content: center
+					align-items: center
+				.vote
+					padding: 1rem
+					width: 10%
+					display: flex
+					justify-content: center
+					align-items: center
+				> a
+					display: flex
+					justify-content: space-between
+					width: 100%
+					color: var(--text_medium)
+					transition: all 0.3s
+					&:hover
+						background: var(--highlight)
+						transition: all 0.3s
+					&::before
+						content: counter(rank)
+						display: flex
+						justify-content: center
+						align-items: center
+						transition: all 0.3s
+						background: var(--highlight)
+						color: var(--text_dark)
+						width: 4rem
+
+#block-overview, #block-stats, #block-transactions, #transaction-overview, #transaction-actions, #transaction-log, #address-overview, #address-transactions, #validator-stakers
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+
+#block-overview, #transaction-overview, #address-overview, #validator-overview
+	.box
+		padding: 0
+		ul
+			color: var(--text_dark)
+			flex: 1
+			display: flex
+			flex-direction: column
+			list-style: none
+			padding: 0
+			margin: 0
+			li 
+				display: flex
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				padding: 1rem
+				span.value
+					color: var(--text_medium)
+					margin: 0 0 0 0.5rem
+				button
+					margin: 0 0 0 0.5rem
+				&:last-of-type
+					border-bottom: none
+
+#block-stats
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+
+#block-transactions, #transaction-actions, #transaction-log, #address-transactions, #validator-stakers
+	.box
+		padding: 0
+		.heading
+			background: var(--pixel_img)
+			background-size: 4px 4px
+			text-transform: uppercase
+			white-space: nowrap
+			font-size: 0.7rem
+			color: var(--text_dark)
+			font-weight: bold
+		ul
+			padding: 0
+			margin: 0
+			display: flex
+			width: 100%
+			flex-direction: column
+			list-style: none
+			li
+				display: flex
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				transition: all 0.3s
+				&:not(.heading):hover
+					background: var(--highlight)
+					transition: all 0.3s
+				> div
+					padding: 1rem
+					width: 25%
+					display: flex
+					justify-content: center
+					align-items: center
+				&:last-of-type
+					border-bottom: none
+
+#transaction-log
+	.box
+		flex-direction: column
+		.heading
+			padding: 1rem
+			text-align: center
+	.log
+		margin: 1rem
+		padding: 1rem
+		background: var(--highlight)
+		p
+			color: var(--text_medium)
+			margin: 0
+			&:not(:last-of-type)
+				margin: 0 0 1rem 0
+
+#transaction-actions .box ul li > div
+	width: 25%
+
+#validator-id
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h2
+		color: var(--purple)
+		margin: 0
+	.box
+		flex-direction: row
+		background: var(--pixel_img)
+		background-size: 4px 4px
+		justify-content: flex-start
+		align-items: center
+		span
+			margin: 0 0 0 1rem
+#validator-overview
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+#validator-ratings, #validator-stats
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+	.section
+		&:not(:last-of-type)
+			margin: 0 1rem 0 0
+		.score-wrap
+			display: flex
+			margin: 0 0 1rem 0
+			justify-content: space-between
+		.chart-wrap
+			position: relative
+			background: var(--highlight)
+			border-radius: 0.25rem
+			transition: all 0.3s
+			margin: 0
+			.loader-wrap
+				height: 6.25rem
+				display: flex
+				justify-content: center
+				width: 100%
+				align-items: center
+			label
+				transform: translateX(-50%)
+				pointer-events: none
+				z-index: 10
+				position: absolute
+				bottom: 0
+				left: 50%
+				background: var(--bg_color)
+				color: var(--text_dark)
+				border-radius: 0.25rem
+				padding: 0.25rem
+				display: flex
+				line-height: 0.9
+				font-size: 0.8rem
+				margin: 0 0 0.25rem 0
+			.c3-line
+				stroke-width: 2px
+				stroke-linecap: round
+				transition: all 0.3s
+				&.c3-line-Network-Median
+					stroke-dasharray: 0.3rem 0.5rem
+			.c3-xgrid-line line
+				transition: all 0.3s
+				stroke: var(--grid_line)
+			#tooltip
+				display: flex
+				flex-direction: column
+				background: var(--bg_color)
+				border-radius: 0.25rem
+				padding: 0.25rem 0.5rem
+				box-shadow: 0 0 1rem 0 var(--highlight)
+				.label
+					border-bottom: 1px solid var(--border_color)
+					transition: all 0.3s
+					margin: 0 0 0.5rem 0
+					padding: 0 0 0.5rem 0
+				.title
+					font-size: 0.8rem
+					color: var(--text_dark)
+
+footer
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	color: var(--text_dark)
+	.toggleWrapper
+		display: none
+	button
+		margin: 0 auto 1rem auto
+		border: none
+		background: var(--highlight)
+		border-radius: 0.25rem
+		color: var(--text_dark)
+		font-size: 0.9rem
+		line-height: 0.9rem
+		transform: scale(1)
+		transition: all 0.3s
+		display: flex
+		justify-content: center
+		align-items: center
+		padding: 0.5rem
+		&:hover
+			transform: scale(0.99)
+			transition: all 0.3s
+	a
+		svg
+			opacity: 1
+			fill: var(--text_dark)
+			transition: all 0.3s
+		&:hover
+			svg
+				opacity: 0.5
+				transition: all 0.3s
+	p
+		margin: 0
+		em
+			font-style: normal
+			color: var(--text_medium)
+	.box
+		&::before, &::after
+			display: none
+
+.toggleWrapper
+	padding: 0
+	width: 55px
+	height: 30px
+	margin-top: 0
+	background: transparent
+	input
+		&.mobileToggle
+			opacity: 0 // hides checkbox
+			position: absolute
+			& + label
+				cursor: pointer
+				margin: 0
+				position: relative
+				display: inline-block
+				user-select: none
+				transition: .4s ease
+				height: 30px
+				width: 50px
+				border-radius: 60px
+				&:before
+					content: ""
+					position: absolute
+					display: block
+					background: var(--highlight)
+					transition: .3s cubic-bezier(.24, 0, .5, 1)
+					height: 30px
+					width: 51px
+					top: 0
+					left: 0
+					border-radius: 30px
+				&:after
+					content: ""
+					position: absolute
+					display: block
+					transition: .3s cubic-bezier(.54, 1.60, .5, 1)
+					background: #9CFC5B
+					height: 28px
+					width: 28px
+					top: 1px
+					left: 0px
+					border-radius: 60px
+			&:checked
+				& + label:before
+					background: rgba(190, 255, 129, 0.3)
+					transition: width .2s cubic-bezier(0, 0, 0, .1)
+				& + label:after
+					left: 54px - 30px
+.ember-notify-cn
+	position: absolute
+	top: 0
+	right: 0
+	padding: 0
+	.callout.info
+		border: none
+		background: #5d69f3
+		border-radius: 0.25rem
+		a.close
+			display: inline-flex
+			text-shadow: none
+			color: rgba(0,0,0,0.5)
+			font-size: 1.5rem
+			height: 1.5rem
+			line-height: 1.5rem
+			transition: 0.5s all
+			&:hover
+				color: rgba(0,0,0,0.25)
+				transition: 0.5s all
+		.message
+			color: #fff
+
+.page-progress
+	position: fixed
+	top: 0
+	left: 0
+	z-index: 1031
+	pointer-events: none
+ 
+.page-progress .bar
+	position: fixed
+	top: 0
+	left: 0
+	width: 0
+	height: 3px
+	background: #27c4f5 linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5)
+	transition: none
+	animation: 2s linear infinite progress-circles
+
+.loader-wrap
+	background: var(--badge_bg)
+	border-radius: 0.25rem
+	width: 5rem
+	height: 2rem
+	display: inline-flex
+	justify-content: center
+	align-items: center
+.loader, .loader:before, .loader:after
+	border-radius: 50%
+	width: 0.5rem
+	background: transparent
+	height: 0.5rem
+	animation-fill-mode: both
+	animation: loading 1.8s infinite ease-in-out
+.loader
+	position: relative
+	animation-delay: -0.16s
+.loader:before, .loader:after
+	content: ''
+	position: absolute
+	top: 0
+.loader:before
+	left: -1.25rem
+	animation-delay: -0.32s
+.loader:after
+	left: 1.25rem
+ 
+@keyframes loading
+	0%,
+	80%,
+	100%
+		box-shadow: 0 0 0 0.1rem var(--loader_a)
+	40%
+		box-shadow: 0 0 0 0.1rem var(--loader_b)
+ 
+
+@keyframes progress-circles
+	0%
+		background-position: 0% 0
+	to
+		background-position: 125% 0
+
+@keyframes slide-fade-in-from-top
+	0%
+		opacity: 0
+		transform: translateY(-0.25rem)
+	100%
+		opacity: 1
+		transform: translateY(0)
+
+@keyframes slide-fade-in-from-left
+	0%
+		opacity: 0
+		transform: translateX(-0.25rem)
+	100%
+		opacity: 1
+		transform: translateX(0)
+
+@keyframes slide-fade-in-from-top
+	0%
+		opacity: 0
+		margin: -1rem 0 0 0
+	100%
+		opacity: 1
+		margin: 0
+
+@keyframes slide-fade-out-from-bottom
+	0%
+		opacity: 1
+		margin: 0
+	100%
+		opacity: 0
+		margin: -1rem 0 0 0
+
+@include media-breakpoint-down(sm)
+	h2
+		font-size: 1.4rem
+		line-height: 1.4rem
+	.section
+		.heading
+			h6
+				font-size: 0.9rem
+			span.help .icon-wrap
+				margin: 0
+	.box
+		padding: 1rem
+		.yielded
+			font-size: 0.9rem
+	.badges
+		flex-direction: column
+		.badge:not(:last-of-type)
+			margin: 0 0 0.5rem 0
+	header
+		svg, .toggleWrapper
+			display: none
+		ul
+			width: 100%
+			justify-content: space-between
+			li
+				flex: 1
+				a
+					width: 100%
+					text-align: center
+	#epoch
+		.box
+			flex-wrap: wrap
+		.section
+			min-width: 50%
+			&.slot, &.block
+				padding: 0 0 1rem 0
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				margin: 0 0 1rem 0
+	#tokenomics
+		.box
+			flex-direction: column
+			.top-level
+				width: 100%
+				flex-direction: row
+				.section
+					padding: 1rem
+					border-bottom: 1px solid var(--border_color)
+					transition: all 0.3s
+					span
+						white-space: nowrap
+			.financial
+				padding: 1rem
+				.statistics
+					padding: 0 0 1rem 0
+				.charts
+					margin: 1rem 0 0 0
+	#tps
+		.box
+			flex-direction: column
+			.stats
+				width: 100%
+				flex-direction: row
+				.tps, .txs
+					padding: 1rem
+					border-bottom: 1px solid var(--border_color)
+					transition: all 0.3s
+			.chart-wrap
+				padding: 1rem
+				.statistics
+					padding: 0 0 1rem 0
+					.total
+						flex: 1
+				.charts
+					margin: 1rem 0 0 0
+	.ember-notify-default.ember-notify-cn
+		padding: 0
+		width: inherit
+	#validator-list
+		.box
+			ul
+				li
+					&:not(.heading):not(.warning)
+						&::before
+							width: 2rem
+					&.warning
+						flex-direction: column
+						text-align: center
+						white-space: break-spaces
+					.stake
+						width: 35%
+					.cumulative-stake
+						width: 20%
+					.commission, .skip, .vote
+						display: none
+					> a
+						&::before
+							display: none
+					.validator
+						width: 45%
+	#validator-id
+		.box
+			flex-direction: column
+			align-items: flex-start
+			span
+				margin: 1rem 0 0 0
+	#validator-ratings, #validator-stats
+		.box
+			flex-direction: column
+			.section:not(:last-of-type)
+				margin: 0 0 1rem 0
+	#validator-stakers
+		.box ul li > div.account, .box ul li > div.amount
+			flex: 1
+	footer
+		.toggleWrapper
+			display: block
+			margin: 1rem auto 0 auto
+		button
+			font-size: 0.7rem
+
+@include media-breakpoint-down(md)
+
+
+================================================
+File: app/templates/address.hbs
+================================================
+<div id="address-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>Type: <span class="value">Account</span></li>
+				<li>Address: <CopyButton @hash={{this.model.addressId}}/></li>
+				<li>Balance: <span class="value">{{from_lamport this.model.lamports}}</span></li>
+				<li>Data: <span class="value">{{this.model.data.firstObject.length}}</span></li>
+				<li>Owner: <CopyButton @route="address" @hash={{this.model.owner}}/></li>
+				<li>Executable: <span class="value">{{if this.model.executable 'Yes' 'No'}}</span></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="address-transactions">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="block">Block</div>
+					<div class="timestamp">Timestamp</div>
+					<div class="result">Result</div>
+					<div class="signature">Signature</div>
+				</li>
+				{{#each this.model.transactions as |t|}}
+					<li>
+						<div class="block">
+							<LinkTo @route="block" @model={{t.slot}}>
+								{{t.slot}}
+							</LinkTo>
+						</div>
+						<div class="timestamp">
+							<Timestamp @timestamp={{t.blockTime}}/>
+						</div>
+						<div class="result">
+							{{#if t.err}}
+								<span class="badge error">Error</span>
+							{{else}}
+								<span class="badge success">Success</span>
+							{{/if}}
+						</div>
+						<div class="signature">
+							<CopyButton @route="transaction" @hash={{t.signature}} @short={{true}}/>
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>
+
+================================================
+File: app/templates/application.hbs
+================================================
+<EmberNotify @closeAfter={{4000}} />
+{{!-- <PageProgress @background={{"#27c4f5 linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5)"}} /> --}}
+<header>
+	<div class="container">
+		<div class="box">
+			<svg width="85" height="11" viewBox="0 0 68 9" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path d="M2.03831 0.249236C2.23433 0.387599 2.42016 0.535946 2.60505 0.688597C2.7275 0.789616 2.85106 0.889243 2.97457 0.988964C3.03812 1.0403 3.10161 1.09172 3.16504 1.14321C3.3659 1.30617 3.56839 1.46679 3.77263 1.62552C4.07789 1.8628 4.37841 2.10563 4.67861 2.3492C4.81351 2.45863 4.949 2.56727 5.08509 2.67523C5.25284 2.8083 5.41942 2.94272 5.58569 3.07762C5.88083 3.31706 6.17759 3.55399 6.4777 3.78723C6.71979 3.97584 6.95805 4.16895 7.19623 4.36242C7.39711 4.5253 7.59954 4.68592 7.80376 4.84463C8.07285 5.05376 8.33806 5.26733 8.60254 5.48221C8.80231 5.64422 9.00378 5.80375 9.20703 5.9614C9.45359 6.15277 9.69569 6.34902 9.9365 6.54749C10.2835 6.83338 10.6351 7.11265 10.9912 7.38725C11.0299 7.41768 11.0686 7.44811 11.1085 7.47947C11.1413 7.50485 11.1741 7.53022 11.2079 7.55637C11.2347 7.57718 11.2614 7.59799 11.2889 7.61943C11.3788 7.68043 11.3788 7.68043 11.5536 7.71383C11.5536 5.18893 11.5536 2.66403 11.5536 0.0626214C11.9558 0.0626214 12.358 0.0626214 12.7724 0.0626214C12.7767 1.06352 12.78 2.06441 12.7821 3.06531C12.783 3.53008 12.7843 3.99484 12.7865 4.45961C12.7884 4.86485 12.7896 5.27008 12.79 5.67532C12.7902 5.88976 12.7908 6.10419 12.7922 6.31862C12.7935 6.52078 12.7938 6.72291 12.7936 6.92506C12.7936 6.99895 12.794 7.07284 12.7947 7.14673C12.7991 7.62333 12.7769 8.08143 12.4794 8.47778C12.1812 8.76105 11.8599 8.92412 11.4423 8.9414C10.7283 8.9186 10.21 8.35341 9.69097 7.92432C9.51728 7.78116 9.34112 7.64164 9.16309 7.50389C8.91741 7.3136 8.6763 7.11836 8.43655 6.92072C8.16977 6.70084 7.90063 6.48476 7.62743 6.27285C7.41841 6.11041 7.21234 5.9446 7.00691 5.7777C6.77431 5.58876 6.54044 5.40176 6.3038 5.21786C6.03474 5.00875 5.76959 4.79519 5.50512 4.58038C5.30425 4.4175 5.10181 4.25687 4.8976 4.09817C4.62854 3.88907 4.36338 3.6755 4.09892 3.46069C3.89804 3.29781 3.69561 3.13719 3.49139 2.97848C3.22264 2.76962 2.95775 2.55635 2.69364 2.34172C2.45689 2.14968 2.21754 1.96123 1.97646 1.77463C1.83385 1.66385 1.69554 1.55025 1.56079 1.43016C1.4393 1.30746 1.4393 1.30746 1.28834 1.32227C1.27287 3.83177 1.2574 6.34128 1.24146 8.92683C0.839288 8.92683 0.437113 8.92683 0.0227505 8.92683C0.0184056 7.91904 0.0150619 6.91126 0.013036 5.90347C0.0120702 5.43551 0.0107541 4.96756 0.00860603 4.4996C0.00673414 4.09161 0.00552686 3.68363 0.00510944 3.27563C0.00486553 3.05971 0.00429443 2.8438 0.00292672 2.62788C0.00164827 2.42439 0.00126269 2.22091 0.00154346 2.01742C0.00149214 1.94298 0.00112269 1.86855 0.000400162 1.79412C-0.00396452 1.32103 0.0227261 0.905883 0.31571 0.514579C0.804483 0.0391551 1.43477 -0.0904083 2.03831 0.249236Z" fill="white"/>
+				<path d="M19.4103 0.0568487C19.4537 0.0567689 19.4971 0.0566892 19.5419 0.0566071C19.6863 0.0564543 19.8308 0.0569652 19.9752 0.0574765C20.0792 0.0575029 20.1831 0.0574881 20.2871 0.0574353C20.5686 0.0574085 20.8501 0.0579564 21.1316 0.0586085C21.4261 0.0591926 21.7205 0.0592467 22.015 0.0593573C22.509 0.0596142 23.003 0.0601967 23.497 0.0610302C24.0056 0.0618877 24.5143 0.0625477 25.0229 0.0629438C25.07 0.0629805 25.07 0.0629805 25.118 0.0630181C25.2755 0.0631398 25.433 0.0632577 25.5905 0.0633737C26.8956 0.0643485 28.2006 0.0660081 29.5057 0.0680693C29.5057 0.468358 29.5057 0.868647 29.5057 1.28107C29.31 1.28132 29.31 1.28132 29.1103 1.28158C27.8812 1.28327 26.6521 1.28599 25.423 1.28965C25.2972 1.29002 25.1714 1.29038 25.0455 1.29075C25.0142 1.29084 24.983 1.29093 24.9507 1.29102C24.4449 1.29247 23.939 1.29326 23.4331 1.29381C22.9137 1.29439 22.3943 1.29569 21.8749 1.29761C21.5833 1.29866 21.2917 1.2994 21.0001 1.29935C20.7255 1.29931 20.4509 1.30015 20.1762 1.30165C20.0756 1.30204 19.975 1.30213 19.8743 1.30186C19.7365 1.30155 19.5988 1.30239 19.461 1.30351C19.4018 1.30296 19.4018 1.30296 19.3414 1.30241C18.9742 1.30764 18.6314 1.41152 18.3557 1.66013C17.8133 2.32952 18.0009 3.00965 17.9748 3.89367C21.78 3.89367 25.5852 3.89367 29.5057 3.89367C29.5057 4.29396 29.5057 4.69425 29.5057 5.10667C25.7005 5.10667 21.8953 5.10667 17.9748 5.10667C17.9211 6.32794 17.9211 6.32794 18.3088 7.31397C18.6783 7.65779 19.0822 7.7261 19.5681 7.72666C19.6319 7.727 19.6319 7.727 19.6969 7.72736C19.8393 7.72807 19.9818 7.72846 20.1242 7.72886C20.2263 7.7293 20.3284 7.72977 20.4305 7.73026C20.7077 7.73152 20.985 7.7325 21.2622 7.73343C21.5519 7.73445 21.8416 7.73573 22.1313 7.73698C22.68 7.73931 23.2286 7.7414 23.7773 7.74341C24.4019 7.74571 25.0265 7.74828 25.6511 7.75086C26.9359 7.75617 28.2208 7.76115 29.5057 7.76593C29.5057 8.15082 29.5057 8.53572 29.5057 8.93227C28.1579 8.93443 26.81 8.9361 25.4621 8.93711C24.8363 8.93759 24.2104 8.93824 23.5846 8.93931C23.039 8.94024 22.4934 8.94084 21.9478 8.94105C21.659 8.94117 21.3702 8.94146 21.0814 8.94214C20.8094 8.94277 20.5374 8.94297 20.2653 8.94283C20.1657 8.94285 20.066 8.94304 19.9664 8.9434C19.0077 8.94668 18.1941 8.85931 17.4521 8.18782C16.9383 7.65882 16.7411 7.00509 16.7432 6.28433C16.743 6.24148 16.7428 6.19863 16.7425 6.15448C16.7419 6.0143 16.7419 5.87413 16.742 5.73394C16.7418 5.63554 16.7416 5.53713 16.7414 5.43872C16.7411 5.23301 16.7411 5.02729 16.7413 4.82158C16.7416 4.5592 16.7408 4.29684 16.7397 4.03447C16.739 3.83138 16.739 3.6283 16.7391 3.4252C16.7391 3.32853 16.7389 3.23185 16.7384 3.13517C16.7343 2.17993 16.8621 1.4352 17.553 0.721221C18.0904 0.262363 18.7104 0.0520701 19.4103 0.0568487Z" fill="white"/>
+				<path d="M33.4491 0.0722869C35.2489 -0.0467993 35.2489 -0.0467993 35.6382 0.28937C35.7425 0.403626 35.8376 0.520122 35.925 0.647713C35.9979 0.750204 36.0845 0.824873 36.1824 0.903306C36.4405 1.12466 36.692 1.35328 36.9448 1.58051C37.1223 1.73983 37.3 1.89877 37.4802 2.05507C37.7422 2.28234 37.9994 2.51503 38.2573 2.74686C38.4965 2.96155 38.7372 3.17421 38.9802 3.3847C39.0505 3.44592 39.1208 3.50715 39.1911 3.5684C39.2225 3.59576 39.2539 3.62313 39.2863 3.65132C39.309 3.6711 39.3318 3.69089 39.3552 3.71128C39.5694 3.65311 39.6811 3.53553 39.8298 3.38087C39.9444 3.26413 40.0673 3.15891 40.1914 3.05229C40.3839 2.88598 40.5722 2.71497 40.7614 2.54493C41.2061 2.14518 41.2061 2.14518 41.4147 1.96468C41.6113 1.79425 41.8035 1.61909 41.9962 1.4442C42.1285 1.32487 42.2628 1.20795 42.3975 1.09138C42.5174 0.986291 42.6355 0.879248 42.7535 0.772092C43.1888 0.37731 43.1888 0.37731 43.3863 0.212248C43.4105 0.188019 43.4347 0.163791 43.4597 0.138828C43.6278 0.0407753 43.7925 0.0550213 43.9817 0.0586188C44.0406 0.0589159 44.0406 0.0589159 44.1007 0.0592189C44.2259 0.0600009 44.351 0.0617573 44.4761 0.0635393C44.5611 0.0642415 44.646 0.0648801 44.731 0.0654529C44.939 0.0669941 45.147 0.0694091 45.355 0.0722869C45.2447 0.211374 45.14 0.337497 45.0034 0.451348C44.8361 0.593685 44.673 0.740159 44.5112 0.888727C44.3566 1.03052 44.2014 1.17152 44.0425 1.30861C43.8607 1.46552 43.6837 1.62741 43.5066 1.78952C43.2805 1.99639 43.0524 2.20087 42.8238 2.40497C42.7457 2.47494 42.6675 2.54492 42.5894 2.61491C42.2769 2.89484 41.9645 3.17476 41.652 3.45468C41.6132 3.48944 41.5744 3.5242 41.5344 3.56002C41.4576 3.62884 41.3807 3.6976 41.3037 3.76631C40.996 4.04131 40.6909 4.31912 40.3864 4.5977C40.5743 4.78725 40.7678 4.97018 40.9635 5.15171C40.9948 5.1808 41.0262 5.20989 41.0585 5.23986C41.24 5.40787 41.423 5.57362 41.6108 5.7347C41.8399 5.93245 42.0633 6.13688 42.2884 6.33919C42.4649 6.4976 42.6416 6.65562 42.8209 6.81083C43.0175 6.98121 43.2096 7.15631 43.4022 7.33113C43.5358 7.45162 43.6712 7.56984 43.8072 7.68759C43.9158 7.78226 44.0232 7.87814 44.1304 7.97426C44.1698 8.00956 44.2092 8.04486 44.2498 8.08123C44.3306 8.15399 44.4112 8.22701 44.4915 8.30029C44.703 8.49237 44.9154 8.67353 45.1488 8.83881C45.1812 8.86407 45.1812 8.86407 45.2144 8.88984C45.2144 8.90523 45.2144 8.92063 45.2144 8.93649C44.9652 8.95049 44.7163 8.96056 44.4668 8.96724C44.3822 8.97003 44.2977 8.97384 44.2133 8.97873C43.4372 9.02248 43.4372 9.02248 43.1129 8.74212C42.994 8.62552 42.8857 8.50279 42.7769 8.37665C42.7127 8.31798 42.6476 8.26021 42.5806 8.20461C42.444 8.08707 42.3099 7.96702 42.1764 7.84596C42.0181 7.7035 41.8567 7.56747 41.69 7.43483C41.4057 7.2061 41.1419 6.95732 40.876 6.70787C40.7296 6.57067 40.5803 6.43753 40.4279 6.30694C40.319 6.21291 40.2121 6.11681 40.1051 6.02063C40.0659 5.98563 40.0266 5.95063 39.9861 5.91457C39.9113 5.8472 39.8373 5.77896 39.7642 5.70973C39.7317 5.67954 39.6992 5.64935 39.6657 5.61825C39.6231 5.57765 39.6231 5.57765 39.5796 5.53624C39.4995 5.47563 39.4995 5.47563 39.4053 5.48703C39.2754 5.54559 39.1895 5.62607 39.0856 5.72322C39.0443 5.76135 39.003 5.79947 38.9604 5.83876C38.9205 5.87568 38.8806 5.91261 38.8396 5.95065C38.7773 6.00538 38.7148 6.05984 38.6521 6.11394C38.5101 6.23696 38.3699 6.36168 38.2302 6.48717C38.0607 6.63945 37.8897 6.78986 37.7175 6.93913C37.6063 7.03638 37.4964 7.13493 37.3865 7.23363C37.2169 7.3859 37.046 7.53632 36.8738 7.68559C36.7626 7.78284 36.6526 7.88138 36.5427 7.98009C36.2056 8.28289 36.2056 8.28289 36.0332 8.42623C35.9305 8.51475 35.9305 8.51475 35.8457 8.62348C35.6717 8.81877 35.5194 8.94198 35.2553 8.9705C35.0103 8.98293 34.7663 8.97322 34.5213 8.96273C34.4354 8.96062 34.3495 8.95871 34.2635 8.95699C34.0544 8.9524 33.8456 8.94517 33.6366 8.93649C33.7641 8.8089 33.8918 8.68186 34.0242 8.55925C34.0511 8.53431 34.0781 8.50937 34.1058 8.48367C34.1337 8.45797 34.1616 8.43228 34.1903 8.40581C34.234 8.36546 34.234 8.36546 34.2786 8.3243C34.4541 8.16278 34.6312 8.00361 34.8121 7.84815C34.9214 7.75347 35.029 7.65689 35.1365 7.56021C35.3061 7.40793 35.477 7.25752 35.6492 7.10825C35.7604 7.01099 35.8704 6.91245 35.9803 6.81375C36.1498 6.66147 36.3208 6.51106 36.4929 6.36179C36.6041 6.26454 36.7141 6.16599 36.824 6.06729C36.9935 5.91501 37.1645 5.7646 37.3367 5.61533C37.488 5.48296 37.6372 5.34825 37.7867 5.21385C37.9209 5.09409 38.0567 4.9763 38.1932 4.85921C38.2872 4.77529 38.376 4.68721 38.4646 4.5977C38.256 4.38519 38.0439 4.18094 37.8177 3.98719C37.6957 3.88149 37.5762 3.77318 37.4568 3.66462C37.3106 3.53188 37.1639 3.4 37.0144 3.27098C36.8293 3.11098 36.6492 2.94575 36.4689 2.7805C36.309 2.63426 36.1471 2.49094 35.983 2.34939C35.8183 2.2054 35.6572 2.05758 35.4952 1.91055C35.3932 1.81856 35.2904 1.72786 35.1863 1.6381C35.0013 1.4781 34.8212 1.31287 34.6408 1.14762C34.4813 1.0017 34.3197 0.858698 34.156 0.71742C33.6741 0.296225 33.6741 0.296225 33.4491 0.0722869Z" fill="white"/>
+				<path d="M49.2982 0.0678711C49.7004 0.0678711 50.1026 0.0678711 50.5169 0.0678711C50.5169 2.99306 50.5169 5.91825 50.5169 8.93207C50.1148 8.93207 49.7126 8.93207 49.2982 8.93207C49.2982 6.00689 49.2982 3.0817 49.2982 0.0678711Z" fill="white"/>
+				<path d="M57.102 0.059827C57.1669 0.0597672 57.1669 0.0597672 57.2331 0.0597062C57.3781 0.0596294 57.5231 0.0598861 57.6681 0.060141C57.7721 0.0601541 57.876 0.0601467 57.9799 0.0601203C58.2622 0.0601069 58.5445 0.0603815 58.8268 0.0607069C59.1218 0.0609983 59.4167 0.061026 59.7117 0.0610814C60.2068 0.0612099 60.7019 0.0615015 61.197 0.0619178C61.707 0.0623462 62.2169 0.0626763 62.7268 0.0628746C62.774 0.062893 62.774 0.062893 62.8221 0.0629117C62.9798 0.0629726 63.1376 0.0630316 63.2953 0.0630896C64.6035 0.0635774 65.9117 0.0644075 67.2199 0.0654373C67.2199 0.465726 67.2199 0.866015 67.2199 1.27843C67.0242 1.27869 67.0242 1.27869 66.8245 1.27895C65.5954 1.28064 64.3663 1.28335 63.1373 1.28701C63.0114 1.28738 62.8856 1.28775 62.7597 1.28812C62.7285 1.28821 62.6972 1.2883 62.665 1.28839C62.1591 1.28984 61.6532 1.29063 61.1473 1.29118C60.6279 1.29176 60.1085 1.29306 59.5891 1.29498C59.2975 1.29603 59.0059 1.29676 58.7143 1.29672C58.4397 1.29668 58.1651 1.29752 57.8905 1.29902C57.7898 1.29941 57.6892 1.29949 57.5885 1.29923C57.4508 1.29892 57.313 1.29976 57.1752 1.30087C57.116 1.30033 57.116 1.30033 57.0556 1.29978C56.6977 1.30487 56.3655 1.39318 56.1109 1.65166C56.08 1.65166 56.049 1.65166 56.0172 1.65166C55.997 1.69226 55.997 1.69226 55.9765 1.73367C55.9437 1.79839 55.9095 1.86248 55.8732 1.92539C55.7053 2.24355 55.6877 2.55786 55.7359 2.91131C55.7972 3.07944 55.8782 3.22498 55.9703 3.37785C55.9857 3.42404 56.0012 3.47022 56.0172 3.51781C56.103 3.57013 56.103 3.57013 56.2046 3.61112C56.2519 3.63502 56.2519 3.63502 56.3 3.65941C56.3471 3.68314 56.3471 3.68314 56.3951 3.70734C56.4423 3.73125 56.4423 3.73125 56.4905 3.75564C56.6822 3.84618 56.8362 3.85041 57.0466 3.85083C57.08 3.85096 57.1134 3.85109 57.1478 3.85123C57.2601 3.85162 57.3723 3.85168 57.4846 3.85175C57.565 3.85196 57.6454 3.8522 57.7257 3.85246C57.8991 3.85299 58.0724 3.85338 58.2457 3.85368C58.5202 3.85418 58.7946 3.85513 59.0691 3.85616C59.8496 3.85905 60.6301 3.86157 61.4106 3.86311C61.8415 3.86397 62.2724 3.86532 62.7033 3.86722C62.9312 3.8682 63.1591 3.86892 63.387 3.86903C63.6017 3.86913 63.8164 3.86988 64.0312 3.8711C64.1096 3.87143 64.1881 3.87153 64.2665 3.87137C65.1087 3.86994 65.8322 4.02236 66.4582 4.62146C66.9386 5.11951 67.2127 5.70418 67.2346 6.39868C67.2198 7.04135 67.0013 7.67898 66.5531 8.15457C65.7453 8.88591 64.9003 8.94397 63.8625 8.94023C63.7599 8.94021 63.6573 8.94022 63.5547 8.94027C63.2774 8.9403 63 8.93975 62.7227 8.9391C62.4324 8.93852 62.1422 8.93846 61.8519 8.93835C61.3028 8.93806 60.7536 8.9373 60.2045 8.93636C59.5791 8.93532 58.9537 8.9348 58.3283 8.93434C57.0423 8.93336 55.7563 8.9317 54.4703 8.92964C54.4703 8.54475 54.4703 8.15985 54.4703 7.7633C54.5991 7.76302 54.7278 7.76275 54.8604 7.76247C56.073 7.75983 57.2855 7.75642 58.498 7.7523C59.1214 7.7502 59.7448 7.74837 60.3682 7.74714C60.9116 7.74606 61.4549 7.7445 61.9983 7.74236C62.286 7.74125 62.5737 7.74037 62.8614 7.74008C63.1323 7.7398 63.4032 7.73887 63.6741 7.73744C63.7734 7.73703 63.8727 7.73686 63.972 7.73694C64.1079 7.73702 64.2438 7.73623 64.3797 7.73525C64.4187 7.73547 64.4576 7.7357 64.4977 7.73593C64.8871 7.73129 65.2385 7.65524 65.5325 7.39007C65.5634 7.39007 65.5944 7.39007 65.6262 7.39007C65.6397 7.36319 65.6532 7.3363 65.6671 7.30861C65.7007 7.24181 65.7345 7.1751 65.7685 7.10851C65.7844 7.07729 65.8003 7.04608 65.8166 7.01392C65.8327 6.98259 65.8487 6.95126 65.8652 6.91898C66.0075 6.62032 66.0068 6.29051 65.9047 5.97898C65.7273 5.59576 65.5255 5.40392 65.1529 5.21834C64.8308 5.10068 64.4756 5.13138 64.1372 5.13274C64.0573 5.13255 63.9775 5.13229 63.8976 5.13198C63.726 5.13143 63.5545 5.13132 63.383 5.13153C63.1112 5.13185 62.8395 5.13111 62.5678 5.13021C61.9906 5.12844 61.4135 5.12784 60.8363 5.12736C60.2139 5.12685 59.5916 5.12612 58.9692 5.12407C58.6996 5.12321 58.43 5.12303 58.1604 5.12336C57.9919 5.12343 57.8235 5.12293 57.6551 5.12227C57.5776 5.12209 57.5001 5.12213 57.4225 5.12245C56.5483 5.1257 55.8024 4.97122 55.1522 4.35029C54.6429 3.78429 54.4526 3.17489 54.4604 2.42874C54.5005 1.73836 54.8106 1.14124 55.314 0.671935C55.8213 0.234533 56.4426 0.0576067 57.102 0.059827Z" fill="white"/>
+			</svg>
+			<ul>
+				<li><LinkTo @route="index">Statistics</LinkTo></li>
+				<li><LinkTo @route="validators">Validators</LinkTo></li>
+			</ul>
+
+			<ThemeSwitcher @theme={{this.theme}} @toggle={{action "toggleTheme"}} />
+		</div>
+	</div>
+</header>
+
+<main>
+	<Search/>
+	{{outlet}}
+</main>
+
+<footer>
+	<div class="container">
+		<div class="box">
+			<div class="row">
+				<div class="col-12 text-center">
+					<button {{action "copy" this.vote_key}}><BsTooltip @title="Copy our vote key"/>{{this.vote_key}}</button>
+					<ThemeSwitcher @theme={{this.theme}} @toggle={{action "toggleTheme"}} />
+				</div>
+			</div>
+		</div>
+	</div>
+</footer>
+
+================================================
+File: app/templates/block.hbs
+================================================
+<div id="block-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>Type: <span class="value">Block</span></li>
+				<li>Block: <span class="value">{{this.model.blockId}}</span></li>
+				<li>Slot: <span class="value">{{this.model.parentSlot}}</span></li>
+				<li>Block Hash: <CopyButton @hash={{this.model.blockhash}}/></li>
+				<li>Previous Block Hash: <CopyButton @hash={{this.model.previousBlockhash}}/></li>
+			</ul>
+		</div>
+	</div>
+</div>
+{{!-- <div id="block-stats">
+	<div class="container">
+		<div class="box">
+
+		</div>
+	</div>
+</div> --}}
+<div id="block-transactions">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="hash">Transaction hash</div>
+					<div class="instructions">Instructions</div>
+					<div class="status">Status</div>
+					<div class="fee">Fee</div>
+					<div class="timestamp">Timestamp</div>
+				</li>
+				{{#each this.model.transactions as |t|}}
+					<li>
+						<div class="hash">
+							<CopyButton @short={{true}} @route="transaction" @hash={{t.transaction.signatures.firstObject}}/>
+						</div>
+						<div class="instructions">
+							{{t.transaction.message.instructions.length}}
+						</div>
+						<div class="status">
+							{{#if t.meta.status.err}}
+								<span class="badge error">Error</span>
+							{{else}}
+								<span class="badge success">Success</span>
+							{{/if}}
+						</div>
+						<div class="fee">
+							{{from_lamport t.meta.fee}} NZT
+						</div>
+						<div class="timestamp">
+							<Timestamp @timestamp={{this.model.blockTime}}/>
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>
+
+
+
+================================================
+File: app/templates/index.hbs
+================================================
+<div id="epoch">
+	<div class="container">
+		<div class="box">
+			<div class="section slot" style={{delay 1}}>
+				<h6>Slot Height</h6>
+				<YieldOnLoad @loaded={{this.slot_height}}>
+					<h2>{{this.slot_height}}</h2>
+				</YieldOnLoad>
+			</div>
+			<div class="section block" style={{delay 2}}>
+				<h6>Block Height</h6>
+				<YieldOnLoad @loaded={{this.block_height}}>
+					<h2>{{this.block_height}}</h2>
+				</YieldOnLoad>
+			</div>
+			<div class="section time" style={{delay 3}}>
+				<div class="heading">
+					<h6>
+						Slot Time
+					</h6>
+					<Tooltip @text="3 hour average"/>
+				</div>
+				<YieldOnLoad @loaded={{this.slot_time}}>
+					<h2>{{this.slot_time}}s</h2>
+				</YieldOnLoad>
+			</div>
+			<div class="section epoch" style={{delay 4}}>
+				<div class="heading">
+					<h6>Epoch <span class="d-none d-md-inline">#</span><em>{{if this.epoch_number this.epoch_number '0'}}</em></h6>
+					<span class="badge">
+						<span class="current">{{if this.seconds_remaining this.countdown '0'}}</span>
+					</span>
+				</div>
+				<YieldOnLoad @loaded={{this.epoch_progress}}>
+					<div class="bar outer">
+						<div class="bar inner" style={{this.epoch_progress}}></div>
+					</div>
+				</YieldOnLoad>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="tokenomics">
+	<div class="container">
+		<div class="box">
+			<div class="top-level">
+				<div class="section supply" style={{delay 1}}>
+					<h6>Circ. Supply</h6>
+					<YieldOnLoad @loaded={{this.circulating_supply}}>
+						<h2>{{this.circulating_supply}}B</h2>
+						<span>of {{this.total_supply}}B: {{this.circulating_percent}}%</span>
+					</YieldOnLoad>
+				</div>
+				<div class="section stake" style={{delay 1}}>
+					<h6>Active Stake</h6>
+					<YieldOnLoad @loaded={{this.active_stake}}>
+						<h2>{{this.active_stake}}B</h2>
+						<span>of {{this.total_supply}}B: {{this.staked_percent}}%</span>
+					</YieldOnLoad>
+				</div>
+			</div>
+			<div class="financial">
+				<div class="statistics">
+					<div class="section price" style={{delay 2}}>
+						<div class="heading">
+							<h6>Price</h6>
+							{{#if this.rank}}
+								<span class="badge"><span class="d-none d-md-inline-block">Rank&nbsp;</span>#{{this.rank}}</span>
+							{{/if}}
+						</div>
+						<YieldOnLoad @loaded={{this.price}}>
+							<h2>${{this.price}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section volume" style={{delay 3}}>
+						<h6>24h Volume</h6>
+						<YieldOnLoad @loaded={{this.volume_24h}}>
+							<h2 class="d-none d-md-block">${{this.volume_24h.full}}</h2>
+							<h2 class="d-block d-md-none">${{this.volume_24h.compact}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section marketcap" style={{delay 4}}>
+						<h6>Market Cap</h6>
+						<YieldOnLoad @loaded={{this.market_cap}}>
+							<h2 class="d-none d-md-block">${{this.market_cap.full}}</h2>
+							<h2 class="d-block d-md-none">${{this.market_cap.compact}}</h2>
+						</YieldOnLoad>
+					</div>
+				</div>
+				<div class="charts" style={{delay 5}}>
+					<YieldOnLoad @loaded={{this.tps_range}}>
+						<label>3 min. avg.</label>
+						<LineChart @data={{this.model.price_history}} />
+					</YieldOnLoad>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="tps">
+	<div class="container">
+		<div class="box">
+			<div class="stats">
+				<div class="section tps" style={{delay 1}}>
+					<h6>Current TPS</h6>
+					<YieldOnLoad @loaded={{this.current_tps}}>
+						<h2>{{this.current_tps.tps}}</h2>
+						slot {{this.current_tps.slot}}
+					</YieldOnLoad>
+				</div>
+				<div class="section txs" style={{delay 1}}>
+					<div class="heading">
+						<h6>Txs in Sample</h6>
+						<Tooltip @text="Last 60 seconds"/>
+					</div>
+					<YieldOnLoad @loaded={{this.current_num_txs}}>
+						<h2>{{this.current_num_txs.num}}</h2>
+						slot {{this.current_num_txs.slot}}
+					</YieldOnLoad>
+				</div>
+			</div>
+			<div class="chart-wrap">
+				<div class="statistics">
+					<div class="section total" style={{delay 2}}>
+						<h6 class="d-none d-md-block">Total Transactions</h6>
+						<h6 class="d-block d-md-none">Tot. Txs</h6>
+						<YieldOnLoad @loaded={{this.transactions}}>
+							<h2 class="d-none d-md-block">{{this.transactions.full}}</h2>
+							<h2 class="d-block d-md-none">{{this.transactions.compact}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section min d-none d-md-block" style={{delay 4}}>
+						<h6>TPS Min</h6>
+						<YieldOnLoad @loaded={{this.tps_range}}>
+							<h2>{{this.tps_range.min}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section avg" style={{delay 3}}>
+						<h6 class="d-none d-md-block">TPS Average</h6>
+						<h6 class="d-block d-md-none">TPS Avg.</h6>
+						<YieldOnLoad @loaded={{this.transactions}}>
+							<h2>{{this.transactions.average}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section max" style={{delay 5}}>
+						<h6>TPS Max</h6>
+						<YieldOnLoad @loaded={{this.tps_range}}>
+							<h2>{{this.tps_range.max}}</h2>
+						</YieldOnLoad>
+					</div>
+				</div>
+				<div class="charts" style={{delay 6}}>
+					<YieldOnLoad @loaded={{this.tps_range}}>
+						<label>3 min. avg.</label>
+						<BarChart @data={{this.model.performance_history}} />
+					</YieldOnLoad>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+================================================
+File: app/templates/transaction.hbs
+================================================
+<div id="transaction-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>Type: <span class="value">Transaction</span></li>
+				<li>Signature: <CopyButton @hash={{this.model.transaction.signatures.firstObject}}/></li>
+				<li>Timesamp: <span class="value">{{ago this.model.blockTime}}</span></li>
+				<li>Recent Block Hash: <CopyButton @hash={{this.model.transaction.message.recentBlockhash}}/></li>
+				<li>Block:&nbsp;<LinkTo @route="block" @model={{this.model.slot}}>{{this.model.slot}}</LinkTo></li>
+				<li>Fee: <span class="value">{{from_lamport this.model.meta.fee}} NZT</span></li>
+				<li>Status:&nbsp;
+					{{#if t.meta.status.err}}
+						<span class="badge error">Failed</span>
+					{{else}}
+						<span class="badge success">Success</span>
+					{{/if}}
+				</li>
+				{{!-- <li>Confirmations: 0</li> --}}
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="transaction-actions">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="account">Account Inputs</div>
+					<div class="change">Change (NZT)</div>
+					<div class="post">Post Balance (NZT)</div>
+					<div class="details">Details</div>
+				</li>
+				{{#let this.model.transaction.message.accountKeys as |keys|}}
+					{{#let this.model.meta.postBalances as |postBals|}}
+						{{#let this.model.meta.preBalances as |preBals|}}
+							{{#let this.model.transaction.message.instructions as |instructions|}}
+								{{#each keys as |key index|}}
+									<li>
+										<div class="account">
+											<CopyButton @short={{true}} @route="address" @hash={{key.pubkey}}/>
+										</div>
+										<div class="change">
+											{{#let (from_lamport (sub (object-at index postBals) (object-at index preBals))) as |change|}}
+												{{#if (gt change 0)}}
+													<span class="badge success">{{change}}</span>
+												{{else if (eq change 0)}}
+													<span class="badge">{{change}}</span>
+												{{else}}
+													<span class="badge error">{{change}}</span>
+												{{/if}}
+											{{/let}}
+										</div>
+										<div class="post">{{from_lamport (object-at index postBals)}}</div>
+										<div class="details">
+											<div class="badges">
+												{{#unless key.writable}}
+													<span class="badge">Readonly</span>
+												{{/unless}}
+												{{#if key.signer}}
+													<span class="badge">Signer</span>
+													<span class="badge">Fee Payer</span>
+												{{/if}}
+												{{#each instructions as |inst|}}
+													{{#if (eq key.index inst.programIdIndex)}}
+														<span class="badge">Program</span>
+													{{/if}}
+												{{/each}}
+											</div>
+										</div>
+									</li>
+								{{/each}}
+							{{/let}}
+						{{/let}}
+					{{/let}}
+				{{/let}}
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="transaction-log">
+	<div class="container">
+		<div class="box">
+			<div class="heading">
+				Program Log
+			</div>
+			<div class="log">
+				{{#each this.model.meta.logMessages as |message|}}
+					<p>{{message}}</p>
+				{{/each}}
+			</div>
+		</div>
+	</div>
+</div>
+
+================================================
+File: app/templates/validator.hbs
+================================================
+<div id="validator-id">
+	<div class="container">
+		<div class="box">
+			{{#let (shorten this.model.validator.vote_pubkey) as |short_key|}}
+				<h2>{{or this.model.validator.name short_key}}</h2>{{#if this.model.validator.delinquent}}<span class="badge error"><BsTooltip @title="Validator is not operational" />Delinquent</span>{{/if}}
+			{{/let}}
+		</div>
+	</div>
+</div>
+<div id="validator-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>
+					Vote Key: <CopyButton @route="address" @hash={{this.model.validator.vote_pubkey}}/>
+				</li>
+				<li>
+					Identity: <CopyButton @route="address" @hash={{this.model.validator.node_pubkey}}/>
+				</li>
+				<li>Website:&nbsp; 
+					{{#if this.model.validator.website }}
+						<a href={{this.model.validator.website}} rel="noopener noreferrer" target="_blank">{{this.model.validator.website}}</a>
+					{{else}}
+						<span class="value">N/A</span>
+					{{/if}}
+				</li>
+				<li>Commission: <span class="value">{{this.model.validator.commission}}%</span></li>
+				<li>Stake: <span class="value">{{from_lamport this.model.validator.activated_stake}} NZT</span></li>
+				<li>Overall Rating:&nbsp;<StarRating @score={{this.validator_score.total}} /></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="validator-ratings">
+	<div class="container">
+		<div class="box">
+			<div class="section vote">
+				<div class="score-wrap">
+					<h6>Vote Distance<Tooltip @text="Validator mean should be at or below network level"/></h6>
+					<StarRating @score={{this.validator_score.vote}} />
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_performance.vote}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section root">
+				<div class="score-wrap">
+					<h6>Root Distance<Tooltip @text="Validator mean should be at or below network level"/></h6>
+					<StarRating @score={{this.validator_score.root}} />
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_performance.root}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section skip">
+				<div class="score-wrap">
+					<h6>Skipped Slot<Tooltip @text="Validator mean should be at or below network level"/></h6>
+					<StarRating @score={{this.validator_score.skip}} />
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_performance.skip}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.color}} @grid={{this.performance_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-stats">
+	<div class="container">
+		<div class="box">
+			<div class="section stakers">
+				<div class="score-wrap">
+					<h6>Stake<Tooltip @text="Total stake over the last 90 days"/></h6>
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_stats.stake}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.green_color}} @grid={{this.stats_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+			<div class="section stake">
+				<div class="score-wrap">
+					<h6>Stakers<Tooltip @text="Number of stakers over the last 90 days"/></h6>
+				</div>
+				<div class="chart-wrap">
+					<C3Chart @data={{this.validator_stats.stakers}} @axis={{this.axis}} @legend={{this.legend}} @size={{this.size}} @point={{this.point}} @color={{this.green_color}} @grid={{this.stats_grid}} @tooltip={{this.tooltip}}/>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-stakers">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="account">Stake Account</div>
+					<div class="d-none d-md-block">Activation Epoch</div>
+					<div class="amount">Amount</div>
+					<div class="share d-none d-md-block">Share</div>
+				</li>
+				{{#each this.stakers as |s|}}
+					<li>
+						<div class="account">
+							<CopyButton @short={{true}} @route="address" @hash={{s.staker}}/>
+						</div>
+						<div class="epoch d-none d-md-block">
+							{{s.activation_epoch}}
+						</div>
+						<div class="amount">
+							{{from_lamport s.active_stake}} NZT
+						</div>
+						<div class="share d-none d-md-block">
+							{{s.share}}%
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>
+
+================================================
+File: app/templates/validators.hbs
+================================================
+<div id="validator-top-stats">
+	<div class="container">
+		<div class="box">
+			<div class="section count" style={{delay 1}}>
+				<h6>Validators</h6>
+				<YieldOnLoad @loaded={{this.validators}}>
+					<h2>{{this.validators.count}}</h2>
+					Halt Count: {{this.validators.count_halt}}
+				</YieldOnLoad>
+			</div>
+			<div class="section apy" style={{delay 2}}>
+				<h6>Staking APR</h6>
+				<YieldOnLoad @loaded={{this.yield}}>
+					<h2>{{this.yield.apy}}%</h2>
+					Adj: {{this.yield.apy_adjusted}}%
+					<Tooltip @text="Adjusted for inflation"/>
+				</YieldOnLoad>
+			</div>
+			<div class="section versions d-none d-md-inline-block" style={{delay 3}}>
+				<h6>Node Versions</h6>
+				<YieldOnLoad @loaded={{this.validators}}>
+					<ol>
+						{{#each this.validators.versions as |v|}}
+							<li>
+								<span class="version badge">{{v.version}}</span>
+								<span class="percent">{{v.percent}}%</span>
+							</li>
+						{{/each}}
+					</ol>
+				</YieldOnLoad>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="validator-list">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="validator">Validator</div>
+					<div class="stake">Stake</div>
+					<div class="cumulative-stake">
+						<span class="d-block d-md-none">Cumul.</span>
+						<span class="d-none d-md-block">Cumulative Stake</span>
+					</div>
+					<div class="commission">Commission</div>
+					<div class="commission">Skip Percent</div>
+					<div class="vote">Last Vote</div>
+				</li>
+				{{#each this.validators.list as |v i|}}
+					<li style={{v.style}}>
+						<LinkTo @route="validator" @model={{v.vote_pubkey}}>
+							<div class="validator">
+								<div class="heading">
+									{{#let (shorten v.vote_pubkey) as |short_key|}}
+										<h5 class={{unless v.name 'text-gray' ''}}>
+											<span class="rank d-inline d-md-none">#{{sum i 1}}</span>
+											{{or v.name short_key}}
+										</h5>
+									{{/let}}
+									{{#if (eq v.vote_pubkey this.vote_key)}}
+										<span class="icon">
+											<BsTooltip @title="Creator of this site." />
+											<this.StarFourPoints/>
+										</span>
+									{{/if}}
+								</div>
+								<div class="tags">
+									{{#if v.version}}
+										<span class="badge d-none d-md-flex">v{{v.version}}</span>
+									{{/if}}
+									{{#if v.score}}
+										<StarRating @score={{v.score.total}} />
+									{{/if}}
+									{{#if v.delinquent}}
+										<span class="badge error"><BsTooltip @title="Validator is not operational" />Delinquent</span>
+									{{/if}}
+								</div>
+							</div>
+							<div class="stake">{{v.activated_stake}}</div>
+							<div class="cumulative-stake">
+								<div class="cumulative" style={{v.cumulative_width}}></div>
+								<div class="own" style={{v.own_width_w_offset}}></div>
+								<span class="percentage">{{v.activated_stake_percent}}%</span>
+							</div>
+							<div class="commission">{{v.commission}}%</div>
+							<div class="skip">
+								{{#unless (eq v.skip_percent null)}}
+									{{v.skip_percent}}%
+								{{/unless}}
+							</div>
+							<div class="vote">{{v.last_vote}}</div>
+						</LinkTo>
+					</li>
+					{{#if v.halt_warning}}
+						<li style={{this.validators.delay_halt}} class="warning"><strong>Cumulative stake above can halt the network</strong>&nbsp;- Vote for validators listed below to improve decentralization</li>
+					{{/if}}
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>
+
+================================================
+File: config/ember-cli-update.json
+================================================
+{
+  "schemaVersion": "1.0.0",
+  "packages": [
+    {
+      "name": "ember-cli",
+      "version": "4.12.0",
+      "blueprints": [
+        {
+          "name": "app",
+          "outputRepo": "https://github.com/ember-cli/ember-new-output",
+          "codemodsSource": "ember-app-codemods-manifest@1",
+          "isBaseBlueprint": true
+        }
+      ]
+    }
+  ]
+}
+
+
+================================================
+File: config/environment.js
+================================================
+'use strict';
+
+module.exports = function (environment) {
+  const ENV = {
+    modulePrefix: 'velasity',
+    environment,
+    rootURL: '/',
+    locationType: 'history',
+    EmberENV: {
+      EXTEND_PROTOTYPES: false,
+      FEATURES: {
+        // Here you can enable experimental features on an ember canary build
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
+      },
+    },
+
+    APP: {
+      api: {
+        stats: 'https://wlal2jacbk.execute-api.us-east-1.amazonaws.com/v1/velasity/stats',
+        search: 'https://wlal2jacbk.execute-api.us-east-1.amazonaws.com/v1/velasity/search',
+      },
+      vote_key: 'eon93Yhg7bjKgdwnt79TRfeLbePqddLEFP9H1iQBufN',
+    },
+  };
+
+  if (environment === 'development') {
+    // ENV.APP.LOG_RESOLVER = true;
+    // ENV.APP.LOG_ACTIVE_GENERATION = true;
+    // ENV.APP.LOG_TRANSITIONS = true;
+    // ENV.APP.LOG_TRANSITIONS_INTERNAL = true;
+    // ENV.APP.LOG_VIEW_LOOKUPS = true;
+  }
+
+  if (environment === 'test') {
+    // Testem prefers this...
+    ENV.locationType = 'none';
+
+    // keep test console output quieter
+    ENV.APP.LOG_ACTIVE_GENERATION = false;
+    ENV.APP.LOG_VIEW_LOOKUPS = false;
+
+    ENV.APP.rootElement = '#ember-testing';
+    ENV.APP.autoboot = false;
+  }
+
+  if (environment === 'production') {
+    // here you can enable a production-specific feature
+  }
+
+  return ENV;
+};
+
+
+================================================
+File: config/optional-features.json
+================================================
+{
+  "application-template-wrapper": false,
+  "default-async-observers": true,
+  "jquery-integration": false,
+  "template-only-glimmer-components": true
+}
+
+
+================================================
+File: config/targets.js
+================================================
+'use strict';
+
+const browsers = ['last 1 Chrome versions', 'last 1 Firefox versions', 'last 1 Safari versions'];
+
+module.exports = {
+  browsers,
+};
+
+
+================================================
+File: public/robots.txt
+================================================
+# http://www.robotstxt.org
+User-agent: *
+Disallow:
+
+
+================================================
+File: scripts/api.py
+================================================
+import json
+import time
+import requests
+from flask import Flask, jsonify
+from flask_cors import CORS
+
+app = Flask(__name__)
+CORS(app)
+
+RPC_ENDPOINT = "https://api.testnet.nexis.network"
+
+def make_rpc_request(method, params=None):
+    headers = {'content-type': 'application/json'}
+    payload = {
+        "jsonrpc": "2.0",
+        "id": str(time.time()),
+        "method": method,
+        "params": params or []
+    }
+    response = requests.post(RPC_ENDPOINT, json=payload, headers=headers)
+    return response.json().get('result')
+
+@app.route('/v1/velasity/stats', methods=['GET'])
+def get_stats():
+    try:
+        # Get epoch info
+        epoch_info = make_rpc_request("getEpochInfo")
+        
+        # Get validators
+        validators_info = make_rpc_request("getVoteAccounts")
+        
+        # Get supply info
+        supply_info = make_rpc_request("getSupply")
+        
+        # Get recent performance
+        performance = make_rpc_request("getRecentPerformanceSamples")
+        
+        # Process validators
+        validators = []
+        for v in validators_info.get('current', []):
+            validator = {
+                "identityPubkey": v.get('nodePubkey'),
+                "voteAccountPubkey": v.get('votePubkey'),
+                "commission": v.get('commission'),
+                "lastVote": v.get('lastVote'),
+                "rootSlot": v.get('rootSlot'),
+                "activated_stake": v.get('activatedStake'),
+                "delinquent": v.get('delinquent', False)
+            }
+            validators.append(validator)
+        
+        # Calculate TPS from performance samples
+        recent_tps = 0
+        if performance and len(performance) > 0:
+            recent = performance[0]
+            recent_tps = round(recent.get('numTransactions', 0) / recent.get('samplePeriodSecs', 1))
+        
+        response = {
+            "epoch": {
+                "epoch": epoch_info.get('epoch'),
+                "slotIndex": epoch_info.get('slotIndex'),
+                "slotsInEpoch": epoch_info.get('slotsInEpoch'),
+                "absoluteSlot": epoch_info.get('absoluteSlot'),
+                "blockHeight": epoch_info.get('blockHeight'),
+                "transactionCount": epoch_info.get('transactionCount', 0)
+            },
+            "supply": {
+                "total": int(supply_info.get('total', 0)),
+                "circulating": int(supply_info.get('circulating', 0)),
+                "effective": int(supply_info.get('effective', 0))
+            },
+            "validators": validators,
+            "performance_history": [{
+                "slot": p.get('slot'),
+                "numTransactions": p.get('numTransactions'),
+                "numSlots": p.get('numSlots'),
+                "samplePeriodSecs": p.get('samplePeriodSecs'),
+            } for p in (performance or [])]
+        }
+        
+        return jsonify(response)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=3001) 
+
+================================================
+File: scripts/housekeeping.py
+================================================
+import psycopg2
+import psycopg2.extras
+
+conn = psycopg2.connect(
+        host="",
+        database="velasity",
+        user="velasity",
+        password="")
+
+cursor = conn.cursor()
+
+cleanup_query = "DELETE FROM stats WHERE created_at < NOW() - INTERVAL '91 days'"
+cursor.execute(cleanup_query)
+
+refresh_stats_stake_query = "REFRESH MATERIALIZED VIEW stats_stake"
+cursor.execute(refresh_stats_stake_query)
+
+refresh_stats_performance_query = "REFRESH MATERIALIZED VIEW stats_performance"
+cursor.execute(refresh_stats_performance_query)
+
+# refresh_stakers_current_query = "REFRESH MATERIALIZED VIEW stakers_current"
+# cursor.execute(refresh_stakers_current_query)
+
+conn.commit()
+
+conn.close()
+
+================================================
+File: scripts/monitor.py
+================================================
+import subprocess
+import json
+import psycopg2
+import psycopg2.extras
+
+stakes = json.loads(subprocess.check_output("/usr/bin/nexis stakes --output json -u https://api.testnet.nexis.network", shell=True))
+production = json.loads(subprocess.check_output("/usr/bin/nexis block-production --output json -u https://api.testnet.nexis.network | jq '.leaders'", shell=True))
+slot = int(subprocess.check_output("/usr/bin/nexis slot -u https://api.testnet.nexis.network", shell=True).decode('utf-8').strip('\n'))
+validators = json.loads(subprocess.check_output("/usr/bin/nexis validators --output json -u https://api.testnet.nexis.network", shell=True))
+validator_info = json.loads(subprocess.check_output("/usr/bin/nexis validator-info get --output json -u https://api.testnet.nexis.network", shell=True))
+
+staking = {}
+
+for s in stakes:
+	if "delegatedVoteAccountAddress" in s:
+		if s["delegatedVoteAccountAddress"] not in staking:
+			staking[s["delegatedVoteAccountAddress"]] = {"stakers": 0, "stake": 0}
+
+		staking[s["delegatedVoteAccountAddress"]]["stakers"] += 1
+		staking[s["delegatedVoteAccountAddress"]]["stake"] += s["delegatedStake"]
+
+rows=[]
+stakers=[]
+validator_infos=[]
+skip_rates=[]
+
+for v in validators["validators"]:
+	row = [slot, v["lastVote"], v["rootSlot"], v["identityPubkey"], v["voteAccountPubkey"], v["commission"], v["skipRate"]]
+
+	if v["voteAccountPubkey"] in staking:
+		row = row + list(staking[v["voteAccountPubkey"]].values())
+	else:
+		row = row + [0,0]
+
+	for p in production:
+		if p["identityPubkey"] == v["identityPubkey"]:
+			row = row + [p["leaderSlots"], p["blocksProduced"], p["skippedSlots"]]
+			rows.append(tuple(row))
+			break
+
+for vi in validator_info:
+	validator_stats = {}
+	info = vi["info"]
+
+	validator_infos.append((info.get("name", None), info.get("website", None), vi["identityPubkey"]))
+
+for v in validators["validators"]:
+	skip_rates.append((v.get("skipRate", None), v["identityPubkey"]))
+
+records_list_template = ','.join(['%s'] * len(rows))
+
+#stakes = filter(lambda stake: stake["activeStake"] != None, stakes)
+stakes = [x for x in stakes if "activeStake" in x and x["activeStake"] != None]
+
+for index in range(len(stakes)):
+	entry = {
+		"stakePubkey": stakes[index]["stakePubkey"] if "stakePubkey" in stakes[index] else None,
+		"stakeType": stakes[index]["stakeType"] if "stakeType" in stakes[index] else None,
+		"accountBalance": stakes[index]["accountBalance"] if "accountBalance" in stakes[index] else None,
+		"creditsObserved": stakes[index]["creditsObserved"] if "creditsObserved" in stakes[index] else None,
+		"delegatedStake": stakes[index]["delegatedStake"] if "delegatedStake" in stakes[index] else None,
+		"delegatedVoteAccountAddress": stakes[index]["delegatedVoteAccountAddress"] if "delegatedVoteAccountAddress" in stakes[index] else None,
+		"activationEpoch": stakes[index]["activationEpoch"] if "activationEpoch" in stakes[index] else None,
+		"staker": stakes[index]["staker"] if "staker" in stakes[index] else None,
+		"withdrawer": stakes[index]["withdrawer"] if "withdrawer" in stakes[index] else None,
+		"rentExemptReserve": stakes[index]["rentExemptReserve"] if "rentExemptReserve" in stakes[index] else None,
+		"activeStake": stakes[index]["activeStake"] if "activeStake" in stakes[index] else None,
+		"activatingStake": stakes[index]["activatingStake"] if "activatingStake" in stakes[index] else None,
+		"deactivationEpoch": stakes[index]["deactivationEpoch"] if "deactivationEpoch" in stakes[index] else None,
+		"deactivatingStake": stakes[index]["deactivatingStake"] if "deactivatingStake" in stakes[index] else None,
+	}
+
+	stakes[index] = tuple(list(entry.values()))
+
+conn = psycopg2.connect(
+        host="",
+        database="velasity",
+        user="velasity",
+        password="")
+
+cursor = conn.cursor()
+
+insert_query = 'insert into stats ("slot", "lastVote", "rootSlot", "identityPubkey", "voteAccountPubkey", "commission", "skipRate", "stakers", "stake", "leaderSlots", "blocksProduced", "skippedSlots") values {}'.format(records_list_template)
+cursor.execute(insert_query, rows)
+
+erase_stakers_query = 'TRUNCATE TABLE stakers RESTART IDENTITY'
+cursor.execute(erase_stakers_query)
+
+stakers_list_template = ','.join(['%s'] * len(stakes))
+insert_stakers_query = 'insert into stakers ("stakePubkey", "stakeType", "accountBalance", "creditsObserved", "delegatedStake", "delegatedVoteAccountAddress", "activationEpoch", "staker", "withdrawer", "rentExemptReserve", "activeStake", "activatingStake", "deactivationEpoch", "deactivatingStake") values {}'.format(stakers_list_template)
+cursor.execute(insert_stakers_query, stakes)
+
+refresh_stakers_current_query = "REFRESH MATERIALIZED VIEW stakers_current"
+cursor.execute(refresh_stakers_current_query)
+#cursor.execute("SELECT active_stake, activation_epoch, staker FROM stakers_current WHERE validator_vote_account = 'eon93Yhg7bjKgdwnt79TRfeLbePqddLEFP9H1iQBufN'")
+
+cursor.executemany("UPDATE validators SET name = %s, website = %s WHERE node_pubkey = %s ", validator_infos)
+cursor.executemany("UPDATE validators SET skip_percent = %s WHERE node_pubkey = %s ", skip_rates)
+
+conn.commit()
+
+conn.close()
+
+================================================
+File: scripts/requirements.txt
+================================================
+flask==3.0.2
+flask-cors==4.0.0
+requests==2.31.0 
+
+================================================
+File: tests/index.html
+================================================
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Nexis Tests</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{content-for "head"}}
+    {{content-for "test-head"}}
+
+    <link rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+    <link rel="stylesheet" href="{{rootURL}}assets/velasity.css">
+    <link rel="stylesheet" href="{{rootURL}}assets/test-support.css">
+
+    {{content-for "head-footer"}}
+    {{content-for "test-head-footer"}}
+  </head>
+  <body>
+    {{content-for "body"}}
+    {{content-for "test-body"}}
+
+    <div id="qunit"></div>
+    <div id="qunit-fixture">
+      <div id="ember-testing-container">
+        <div id="ember-testing"></div>
+      </div>
+    </div>
+
+    <script src="/testem.js" integrity="" data-embroider-ignore></script>
+    <script src="{{rootURL}}assets/vendor.js"></script>
+    <script src="{{rootURL}}assets/test-support.js"></script>
+    <script src="{{rootURL}}assets/velasity.js"></script>
+    <script src="{{rootURL}}assets/tests.js"></script>
+
+    {{content-for "body-footer"}}
+    {{content-for "test-body-footer"}}
+  </body>
+</html>
+
+
+================================================
+File: tests/test-helper.js
+================================================
+import Application from 'velasity/app';
+import config from 'velasity/config/environment';
+import * as QUnit from 'qunit';
+import { setApplication } from '@ember/test-helpers';
+import { setup } from 'qunit-dom';
+import { start } from 'ember-qunit';
+
+setApplication(Application.create(config.APP));
+
+setup(QUnit.assert);
+
+start();
+
+
+================================================
+File: tests/helpers/index.js
+================================================
+import {
+  setupApplicationTest as upstreamSetupApplicationTest,
+  setupRenderingTest as upstreamSetupRenderingTest,
+  setupTest as upstreamSetupTest,
+} from 'ember-qunit';
+
+// This file exists to provide wrappers around ember-qunit's / ember-mocha's
+// test setup functions. This way, you can easily extend the setup that is
+// needed per test type.
+
+function setupApplicationTest(hooks, options) {
+  upstreamSetupApplicationTest(hooks, options);
+
+  // Additional setup for application tests can be done here.
+  //
+  // For example, if you need an authenticated session for each
+  // application test, you could do:
+  //
+  // hooks.beforeEach(async function () {
+  //   await authenticateSession(); // ember-simple-auth
+  // });
+  //
+  // This is also a good place to call test setup functions coming
+  // from other addons:
+  //
+  // setupIntl(hooks); // ember-intl
+  // setupMirage(hooks); // ember-cli-mirage
+}
+
+function setupRenderingTest(hooks, options) {
+  upstreamSetupRenderingTest(hooks, options);
+
+  // Additional setup for rendering tests can be done here.
+}
+
+function setupTest(hooks, options) {
+  upstreamSetupTest(hooks, options);
+
+  // Additional setup for unit tests can be done here.
+}
+
+export { setupApplicationTest, setupRenderingTest, setupTest };
+
+
+================================================
+File: .github/workflows/ci.yml
+================================================
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request: {}
+
+concurrency:
+  group: ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: "Lint"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+      - name: Lint
+        run: npm run lint
+
+  test:
+    name: "Test"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 14.x
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Tests
+        run: npm test
+
+

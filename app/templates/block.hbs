@@ -1,0 +1,59 @@
+<div id="block-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>Type: <span class="value">Block</span></li>
+				<li>Block: <span class="value">{{this.model.blockId}}</span></li>
+				<li>Slot: <span class="value">{{this.model.parentSlot}}</span></li>
+				<li>Block Hash: <CopyButton @hash={{this.model.blockhash}}/></li>
+				<li>Previous Block Hash: <CopyButton @hash={{this.model.previousBlockhash}}/></li>
+			</ul>
+		</div>
+	</div>
+</div>
+{{!-- <div id="block-stats">
+	<div class="container">
+		<div class="box">
+
+		</div>
+	</div>
+</div> --}}
+<div id="block-transactions">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="hash">Transaction hash</div>
+					<div class="instructions">Instructions</div>
+					<div class="status">Status</div>
+					<div class="fee">Fee</div>
+					<div class="timestamp">Timestamp</div>
+				</li>
+				{{#each this.model.transactions as |t|}}
+					<li>
+						<div class="hash">
+							<CopyButton @short={{true}} @route="transaction" @hash={{t.transaction.signatures.firstObject}}/>
+						</div>
+						<div class="instructions">
+							{{t.transaction.message.instructions.length}}
+						</div>
+						<div class="status">
+							{{#if t.meta.status.err}}
+								<span class="badge error">Error</span>
+							{{else}}
+								<span class="badge success">Success</span>
+							{{/if}}
+						</div>
+						<div class="fee">
+							{{from_lamport t.meta.fee}} NZT
+						</div>
+						<div class="timestamp">
+							<Timestamp @timestamp={{this.model.blockTime}}/>
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>
+

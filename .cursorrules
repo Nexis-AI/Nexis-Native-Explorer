@@ -1,0 +1,171 @@
+```
+# .cursorrules for Reverse Engineering and Recreating API Integrations with Axios
+
+## Objective:
+
+The primary goal is to accurately reverse engineer an existing application's API integrations, build robust and equivalent APIs using Axios, ensure identical functionality, and potentially deploy the APIs to a server. This process must be carried out with a focus on accuracy, maintainability, security, and comprehensive documentation.
+
+## Input:
+
+- Access to the application's code base (front-end and/or back-end if available).
+- Network traffic capture (e.g., using browser developer tools or proxies like Charles/Fiddler).
+- Any available API documentation (even if incomplete or outdated).
+
+## Output:
+
+- A fully functional set of Axios APIs that mirror the original application's interactions with external services.
+- Thoroughly documented code, including inline comments and a separate README.md file.
+- A stable deployment to a specified server (if required).
+
+## Rules:
+
+### 1. **API Discovery and Analysis:**
+
+- **Thorough Code Inspection:**
+    - **Identify API Calls:** Meticulously examine the application's code (especially JavaScript for front-end, or any relevant language for back-end) to locate all API interactions. Look for network requests made using `fetch`, `XMLHttpRequest`, `axios` (if used internally), or other HTTP libraries.
+    - **Extract API Endpoints:** For each identified call, pinpoint the exact URL (endpoint) used, including the protocol (HTTP/HTTPS), domain, path, and query parameters.
+    - **Determine HTTP Methods:**  Identify the HTTP method used for each call (GET, POST, PUT, DELETE, PATCH, etc.).
+    - **Analyze Request Headers:**  Document all headers sent with each request, including authentication tokens, content types, custom headers, etc. Pay close attention to dynamic headers based on user sessions or application state.
+    - **Examine Request Bodies (if applicable):**  For POST, PUT, and PATCH requests, meticulously analyze the structure and data types of the request bodies (typically JSON or form data). Note any specific formatting or encoding requirements.
+
+- **Network Traffic Analysis (using Chrome Dev Tools or a proxy):**
+    - **Capture API Interactions:** Use browser developer tools (Network tab) or a proxy to capture and inspect API calls in real-time while interacting with the application.
+    - **Verify Request/Response Details:** Cross-reference the captured network traffic with your code inspection findings. Verify endpoints, methods, headers, and request bodies.
+    - **Analyze Response Structures:** Carefully examine the structure and data types of API responses. Document the format (JSON, XML, etc.), status codes (200, 400, 500, etc.), and any associated error messages.
+
+- **Prioritize APIs to Reverse Engineer:**
+    - **Business Criticality:** Start with APIs that are absolutely essential to core features of the application.
+    - **Complexity:** Consider starting with simpler APIs to refine your process before tackling more complex ones.
+    - **Frequency of Use:** Prioritize APIs that are used most frequently.
+
+### 2. **Axios API Development:**
+
+- **Project Setup:**
+    - **Create a New Project:** Use a suitable project structure (e.g., Node.js with npm or yarn).
+    - **Install Axios:** `npm install axios` or `yarn add axios`.
+
+- **API Implementation (using Axios):**
+    - **Create Axios Instances:** If needed, create Axios instances with base URLs and default headers for different API groups. Example:
+      ```javascript
+      const api = axios.create({
+        baseURL: '[invalid URL removed]',
+        headers: {
+          'Content-Type': 'application/json',
+          // Other default headers
+        }
+      });
+      ```
+    - **Mirror API Endpoints:**  Create functions/methods for each API endpoint discovered.
+    - **Replicate HTTP Methods:** Use the correct Axios methods (`api.get()`, `api.post()`, `api.put()`, `api.delete()`, `api.patch()`) to match the original API calls.
+    - **Handle Request Headers:**  Accurately replicate all request headers. If headers are dynamic (e.g., authentication tokens), ensure your Axios implementation correctly retrieves and sets them.
+    - **Handle Request Bodies:**  If the original API sends data in the request body, structure your Axios requests to send the same data in the correct format.
+    - **Handle Query Parameters:**  If the original API uses query parameters, include them in your Axios requests.
+    - **Handle Responses:** Implement proper response handling, including:
+        - **Status Code Handling:**  Check for success (e.g., 200, 201) and error status codes (e.g., 400, 404, 500).
+        - **Error Handling:** Implement robust error handling (e.g., `try...catch` blocks) to gracefully manage API failures.
+        - **Response Data Parsing:**  Parse response data (e.g., JSON.parse) as needed.
+        - **Error Message Handling:** If the API returns specific error messages, capture and handle them appropriately.
+
+- **Code Style and Best Practices:**
+    - **Consistent Formatting:** Use a consistent code style (e.g., Prettier or ESLint).
+    - **Meaningful Names:** Use descriptive variable and function names.
+    - **Modular Design:** Break down your code into smaller, reusable modules/functions.
+    - **Avoid Code Duplication:** Use functions or Axios interceptors to handle common logic (e.g., setting authentication headers).
+    - **Avoid Magic Strings/Numbers:** Use constants or environment variables for API keys, endpoints, and other configurable values.
+
+### 3. **Testing and Validation:**
+
+- **Unit Tests:**
+    - **Mock Axios:** Use libraries like `axios-mock-adapter` to mock API responses and test individual Axios API functions in isolation.
+    - **Test Different Scenarios:** Test various successful and error scenarios, including different status codes, response data, and error messages.
+- **Integration Tests:**
+    - **Test End-to-End:** If possible, set up integration tests that interact with the actual API (or a staging environment) to verify end-to-end functionality.
+    - **Compare Responses:** Compare the responses from your Axios APIs with the responses captured during network analysis to ensure they are identical (or acceptably similar, considering potential timestamps or dynamic data).
+- **Manual Testing:**
+    - **Thorough User Interface Testing:** If you are rebuilding a UI that uses these APIs, manually test all features that rely on the APIs to ensure they work as expected.
+
+### 4. **Documentation:**
+
+- **Inline Comments:**
+    - **Explain Complex Logic:** Add clear and concise comments to explain any complex or non-obvious code.
+    - **Document API Function Parameters and Return Values:** Explain the purpose of each function, its parameters, and what it returns.
+    - **Document Error Handling:** Explain how errors are handled and what actions the application should take.
+- **README.md:**
+    - **Project Overview:** Describe the purpose of the project and its scope.
+    - **Installation Instructions:** Provide clear instructions on how to install dependencies and set up the project.
+    - **API Usage Examples:** Provide examples of how to use the Axios APIs, including different scenarios (successful requests, error handling).
+    - **Testing Instructions:** Explain how to run unit and integration tests.
+    - **Deployment Instructions (if applicable):** Describe how to deploy the APIs to a server.
+    - **Known Issues/Limitations:** Document any known issues or limitations of the reverse-engineered APIs.
+    - **Contribution Guidelines:** If applicable, provide guidelines for contributing to the project.
+
+### 5. **Security Considerations:**
+
+- **API Keys and Secrets:**
+    - **Secure Storage:**  **Never** hardcode API keys or other secrets directly in the code. Use environment variables or a secure secret management system.
+    - **Access Control:** If the APIs require authentication, implement appropriate authentication mechanisms (e.g., OAuth 2.0, API keys, JWT).
+- **Input Validation:**
+    - **Validate All Inputs:**  Validate all data received from the API before processing it to prevent security vulnerabilities (e.g., injection attacks).
+- **Error Handling:**
+    - **Avoid Exposing Sensitive Information:**  Do not expose sensitive information (e.g., database errors, stack traces) in error messages returned to the client.
+- **HTTPS:**
+    - **Enforce HTTPS:** If deploying APIs to a server, always use HTTPS to encrypt communication.
+
+### 6. **Deployment (if required):**
+
+- **Choose a Server Environment:**
+    - **Node.js Server:** Deploy your Axios APIs as a Node.js application (using Express, NestJS, or other frameworks).
+    - **Serverless Functions:** Deploy your APIs as serverless functions (e.g., AWS Lambda, Azure Functions, Google Cloud Functions).
+- **Deployment Process:**
+    - **Automate Deployment:** Use CI/CD tools (e.g., Jenkins, GitHub Actions, GitLab CI) to automate the deployment process.
+    - **Environment Variables:** Configure environment variables on the server to store API keys, database credentials, and other sensitive information.
+- **Monitoring and Logging:**
+    - **Implement Logging:** Log important events, errors, and performance metrics.
+    - **Monitor API Performance:** Use monitoring tools to track API performance and identify potential bottlenecks.
+
+## Example Code Snippet (Axios API function):
+
+```javascript
+// api/products.js
+
+const api = axios.create({
+  baseURL: process.env.API_BASE_URL, // Use environment variable for base URL
+  headers: {
+    'Content-Type': 'application/json',
+  }
+});
+
+/**
+ * Fetches a product by its ID.
+ *
+ * @param {string} productId - The ID of the product to fetch.
+ * @param {string} authToken - The user's authentication token.
+ * @returns {Promise<object>} - A promise that resolves with the product data or rejects with an error.
+ */
+async function getProductById(productId, authToken) {
+  try {
+    const response = await api.get(`/products/${productId}`, {
+      headers: {
+        'Authorization': `Bearer ${authToken}`
+      }
+    });
+    return response.data; // Assuming the API returns JSON
+  } catch (error) {
+    console.error('Error fetching product:', error.response || error.message);
+    if (error.response) {
+      // Handle specific error status codes
+      if (error.response.status === 404) {
+        throw new Error('Product not found');
+      } else {
+        throw new Error('An error occurred while fetching the product');
+      }
+    } else {
+      throw new Error('Network error or server is unreachable');
+    }
+  }
+}
+
+module.exports = {
+  getProductById
+};
+```

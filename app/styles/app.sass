@@ -1,0 +1,1232 @@
+@import "ember-bootstrap/bootstrap"
+
+body, body.dark
+	transition: all 0.3s
+	--purple: #B1FF69
+	--green: #B1FF69
+	--orange: #1e281a
+	--red: #e82e72
+	--bg_color: #07090B
+	--grid_line: #181F25
+	--highlight: #131517
+	--border_color: #181F25
+	--badge_bg: #131517
+	--badge_bg_success: #2a3327
+	--badge_bg_error: #402931
+	--text_dark: #FFFFFF
+	--text_medium: #e4e4e4
+	--plus_img: url("/assets/images/plus_light.svg")
+	--pixel_img: url(/assets/images/pixel_light.svg)
+	--logo_color: #fff
+	--search_text_color: #000000
+	--search_text_color_focus: #fff2
+	--loader_a: rgba(255,255,255,0.2)
+	--loader_b: rgba(255,255,255,0.8)
+
+body.light
+	transition: all 0.3s
+	--purple: #B1FF69
+	--green: #B1FF69
+	--orange: #1e281a
+	--red: #e82e72
+	--bg_color: #FFFFFF
+	--grid_line: #575757
+	--highlight: #c6cbda
+	--border_color: #bbbed4
+	--badge_bg: #e8eaf1
+	--badge_bg_success: #e1e8db
+	--badge_bg_error: #ffeaec
+	--text_dark: #9294ad
+	--text_medium: #6b6d82
+	--plus_img: url("/assets/images/plus_dark.svg")
+	--pixel_img: url(/assets/images/pixel_dark.svg)
+	--logo_color: #9fa6c7
+	--search_text_color: var(--text_medium)
+	--search_text_color_focus: #fff
+	--loader_a: #a7aeff
+	--loader_b: var(--purple)
+
+.tooltip
+	pointer-events: none
+
+#loading
+	position: absolute
+	top: 50%
+	left: 50%
+	transform: translate(-50%, -50%)
+	z-index: 1000
+	box-shadow: 0 0 1rem 0 rgb(0 0 0 / 20%)
+	pointer-events: none
+	animation: slide-fade-in-from-top 0.3s ease-in forwards
+	&.done
+		animation: slide-fade-out-from-bottom 0.3s ease-in forwards
+
+.yielded
+	color: var(--text_medium)
+
+a
+	text-decoration: none
+	color: #A2D970
+	&:hover
+		text-decoration: none
+		color: #4952bb
+		transition: all 0.3s
+
+span.ago
+	display: inline-block
+	color: var(--text_medium)
+
+span.help
+	cursor: pointer
+	opacity: 0.5
+	fill: var(--text_dark)
+	transition: all 0.3s
+	width: 1.5rem
+	display: inline-flex
+	justify-content: center
+	height: 1rem
+	align-items: center
+	&:hover
+		transition: all 0.3s
+		opacity: 1
+	.icon-wrap
+		margin: 0.25rem 0 0 0
+		position: absolute
+		svg
+			width: 1.25rem
+			height: auto
+
+.text-gray
+	color: #efefef
+	transition: all 0.3s
+
+.badges
+	display: flex
+	justify-content: start
+	flex: 1
+	.badge:not(:last-of-type)
+		margin: 0 0.5rem 0 0
+
+.badge
+	border-radius: 0.25rem
+	display: flex
+	height: 1.4rem
+	color: var(--text_medium)
+	justify-content: center
+	align-items: center
+	background: var(--badge_bg)
+	padding: 0.4rem
+	font-size: 0.8rem
+	text-transform: uppercase
+	font-weight: normal
+	line-height: 0.8
+	&.success
+		color: var(--green)
+		background: var(--badge_bg_success)
+	&.error
+		color: var(--red)
+		background: var(--badge_bg_error)
+	&.score
+		position: relative
+		cursor: pointer
+		.top
+			position: absolute
+			display: flex
+			justify-content: start
+			align-items: center
+			top: 0
+			left: 0
+			padding: 0 0 0 0.4rem
+			height: 100%
+			overflow: hidden
+			svg
+				transition: all 0.3s
+				fill: var(--orange)
+		.bottom
+			display: flex
+			justify-content: start
+			align-items: center
+			svg
+				transition: all 0.3s
+				fill: var(--highlight)
+		svg
+			width: 1rem
+			flex-shrink: 0
+
+.box
+	display: flex
+	border-right: 1px solid var(--border_color)
+	border-left: 1px solid var(--border_color)
+	padding: 2rem
+	justify-content: center
+	align-items: stretch
+	position: relative
+	transition: all 0.3s
+	&::before
+		position: absolute
+		left: -3px
+		bottom: -3px
+		content: ""
+		width: 5px
+		height: 5px
+		z-index: 10
+		background: var(--plus_img)
+	&::after
+		position: absolute
+		right: -3px
+		bottom: -3px
+		content: ""
+		width: 5px
+		height: 5px
+		z-index: 10
+		background: var(--plus_img)
+
+	.yielded, .charts
+		opacity: 0
+		animation: slide-fade-in-from-left 0.3s ease-in forwards
+		animation-delay: var(--delay)
+
+.section
+	flex: 1
+	display: flex
+	flex-direction: column
+	.heading
+		display: flex
+		.help
+			margin: 0 0 0 0.25rem
+
+span.key
+	flex-direction: row
+	color: var(--text_dark)
+	display: inline-flex
+	justify-content: center
+	align-items: center
+	border-radius: 0.25rem
+	font-size: 0.9rem
+	transition: all 0.3s
+	max-width: 100%
+	button
+		background: transparent
+		display: flex
+		justify-content: center
+		align-items: center
+		border: none
+		svg
+			width: 1.25rem
+			fill: var(--text_medium)
+			opacity: 1
+		&:hover
+			svg
+				opacity: 0.5
+				transition: all 0.3s
+	a
+		max-width: 100%
+		text-overflow: ellipsis
+		overflow: hidden
+
+body
+	background: var(--bg_color)
+	color: var(--text_medium)
+	font-family: 'Roboto Mono', monospace
+
+header
+	border-bottom: 1px solid var(--border_color)
+	transition: all 0.3s
+	svg
+		width: 4rem
+		height: auto
+		transform: rotateY(0deg)
+		opacity: 1
+		transition: all 0.3s
+		path
+			fill: var(--logo_color)
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+		justify-content: space-between
+		align-items: center
+		ul
+			list-style: none
+			margin: 0
+			padding: 0
+			display: flex
+			border-radius: 0.25rem
+			border: 2px solid var(--highlight)
+			background: var(--highlight)
+			overflow: hidden
+			transition: all 0.3s
+			li
+				display: flex
+				background: var(--bg_color)
+				transition: all 0.3s
+				&:hover
+					background: var(--highlight)
+					transition: all 0.3s
+				a
+					color: var(--text_medium)
+					padding: 1rem
+					transition: all 0.3s
+					&:not(.active):hover
+						transform: scale(0.95)
+						transition: all 0.3s
+					&.active
+						background: rgba(190, 255, 129, 0.3)
+						color: #C2FF75
+						transition: all 0.3s
+					&:hover, &:active
+						text-decoration: none
+		.toggleWrapper
+			margin: 0 0 0 14px
+
+#search
+	display: flex
+	.box
+		padding: 0
+		form
+			flex: 1
+			input
+				padding: 1rem
+				background: var(--bg_color)
+				width: 100%
+				height: 100%
+				border: none
+				outline: none
+				flex: 1
+				transition: all 0.3s
+				color: var(--search_text_color)
+				text-overflow: ellipsis
+				&::-webkit-input-placeholder
+					color: var(--text_dark)
+				&:-ms-input-placeholder 
+					color: var(--text_dark)
+				&::placeholder
+					color: var(--text_dark)
+				&:hover
+					background: #0C1013
+					transition: all 0.3s
+				&:focus
+					color: var(--search_text_color_focus)
+					background: #0C1013
+					transition: all 0.3s
+					&::-webkit-input-placeholder
+						color: #adb3f1
+					&:-ms-input-placeholder 
+						color: #adb3f1
+					&::placeholder
+						color: #adb3f1
+#epoch
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+		em
+			font-style: normal
+			color: var(--text_medium)
+	h2
+		color: var(--purple)
+		margin: 0
+		width: fit-content
+		line-height: 2rem
+		// background: linear-gradient(90deg, rgba(118,93,243,1) 0%, rgba(93,105,243,1) 100%)
+		// -webkit-background-clip: text
+		// -webkit-text-fill-color: transparent
+	.box
+		.section
+			.heading
+				display: flex
+				.help
+					margin: 0 0 0 0.25rem
+				.badge
+					background: var(--highlight)
+					margin: -0.25rem 0 0 auto
+					svg
+						width: 0.75rem
+						height: auto
+						margin: 0 0.5rem
+						fill: var(--text_dark)
+					.next
+						color: var(--text_dark)
+			.bar
+				&.outer
+					margin: 1rem 0 0 0
+					height: 0.5rem
+					width: 100%
+					border-radius: 0.25rem
+					background: var(--highlight)
+					overflow: hidden
+					transition: all 0.3s
+				&.inner
+					width: 0%
+					height: 100%
+					background: var(--purple)
+					border-radius: 0.25rem
+
+#tokenomics
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+	h2
+		color: var(--green)
+		margin: 0
+		width: fit-content
+		line-height: 2rem
+		//background: linear-gradient(90deg, rgba(118,93,243,1) 0%, rgba(93,105,243,1) 100%)
+		//-webkit-background-clip: text
+		//-webkit-text-fill-color: transparent
+	.box
+		padding: 0
+		.top-level
+			background: var(--pixel_img)
+			background-size: 4px 4px
+			color: var(--text_medium)
+			width: 14rem
+			border-right: 1px solid var(--border_color)
+			display: flex
+			flex-direction: column
+			transition: all 0.3s
+			.supply
+				padding: 2rem 2rem 2rem 2rem
+				flex: 1
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+			.stake
+				flex: 1
+				padding: 2rem 2rem 2rem 2rem
+		.financial
+			flex: 1
+			flex-shrink: 1
+			min-width: 0
+			padding: 2rem 2rem 2rem 2rem
+			.statistics
+				display: flex
+				justify-content: space-between
+				padding: 0 0 2rem 0
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				.heading
+					display: flex
+					.badge
+						background: var(--highlight)
+						margin: 0 0 0 0.5rem
+						font-size: 0.7rem
+						line-height: 0.7rem
+						padding: 0.3rem
+						align-self: center
+			.charts
+				position: relative
+				background: var(--highlight)
+				border-radius: 0.25rem
+				margin: 2rem 0 0 0
+				transition: all 0.3s
+				.loader-wrap
+					height: 6.25rem
+					display: flex
+					justify-content: center
+					width: 100%
+					align-items: center
+				label
+					transform: translateX(-50%)
+					pointer-events: none
+					z-index: 10
+					position: absolute
+					bottom: 0
+					left: 50%
+					background: var(--bg_color)
+					color: var(--text_dark)
+					border-radius: 0.25rem
+					padding: 0.25rem
+					display: flex
+					line-height: 0.9
+					font-size: 0.8rem
+					margin: 0 0 0.25rem 0
+					transition: all 0.3s
+				.c3-line
+					stroke-width: 3px
+					stroke-linecap: round
+				.c3-xgrid-line line
+					stroke: var(--grid_line)
+					transition: all 0.3s
+				#tooltip
+					display: flex
+					flex-direction: column
+					background: var(--bg_color)
+					border-radius: 0.25rem
+					padding: 0.25rem 0.5rem
+					.title
+						font-size: 0.8rem
+						color: var(--text_dark)
+
+#tps
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+	h2
+		color: var(--orange)
+		margin: 0
+		width: fit-content
+		line-height: 2rem
+		//background: linear-gradient(90deg, rgba(118,93,243,1) 0%, rgba(93,105,243,1) 100%)
+		//-webkit-background-clip: text
+		//-webkit-text-fill-color: transparent
+	.box
+		padding: 0
+		.stats
+			transition: all 0.3s
+			background: var(--pixel_img)
+			background-size: 4px 4px
+			color: var(--text_medium)
+			width: 14rem
+			border-right: 1px solid var(--border_color)
+			display: flex
+			flex-direction: column
+			.tps
+				padding: 2rem 2rem 2rem 2rem
+				flex: 1
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+			.txs
+				flex: 1
+				padding: 2rem 2rem 2rem 2rem
+		.chart-wrap
+			flex: 1
+			flex-shrink: 1
+			min-width: 0
+			padding: 2rem 2rem 2rem 2rem
+			.statistics
+				display: flex
+				justify-content: space-between
+				padding: 0 0 2rem 0
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				.total
+					flex: 2
+			.charts
+				position: relative
+				background: var(--highlight)
+				border-radius: 0.25rem
+				margin: 2rem 0 0 0
+				transition: all 0.3s
+				.loader-wrap
+					height: 6.25rem
+					display: flex
+					justify-content: center
+					width: 100%
+					align-items: center
+				label
+					transform: translateX(-50%)
+					pointer-events: none
+					z-index: 10
+					position: absolute
+					bottom: 0
+					left: 50%
+					background: var(--bg_color)
+					color: var(--text_dark)
+					border-radius: 0.25rem
+					padding: 0.25rem
+					display: flex
+					line-height: 0.9
+					font-size: 0.8rem
+					margin: 0 0 0.25rem 0
+					transition: all 0.3s
+				.c3-line
+					stroke-width: 3px
+					stroke-linecap: round
+					transition: all 0.3s
+				.c3-xgrid-line line
+					stroke: var(--grid_line)
+					transition: all 0.3s
+				#tooltip
+					display: flex
+					flex-direction: column
+					background: var(--bg_color)
+					border-radius: 0.25rem
+					padding: 0.25rem 0.5rem
+					.title
+						font-size: 0.8rem
+						color: var(--text_dark)
+#validator-top-stats
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h6
+		color: var(--text_dark)
+		margin: 0 0 0.25rem 0
+	h2
+		color: var(--purple)
+		margin: 0
+		width: fit-content
+		line-height: 3rem
+		font-size: 2.6rem
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+		.section
+			&.versions
+				ol
+					list-style: none
+					padding: 0
+					margin: 0
+					span.version.badge
+						border-radius: 0.25rem
+						font-size: 0.75rem
+						line-height: 0.75rem
+						padding: 0.25rem 0.25rem
+						color: var(--text_medium)
+						display: inline-flex
+						margin: 0
+						justify-content: center
+						align-items: center
+					span.percent
+						color: var(--text_medium)
+			.yielded
+				opacity: 0
+				animation: slide-fade-in-from-left 0.3s ease-in forwards
+				animation-delay: var(--delay)
+#validator-list
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	.box
+		padding: 0
+		ul
+			width: 100%
+			padding: 0
+			list-style: none
+			margin: 0
+			li
+				display: flex
+				justify-content: space-between
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				width: 100%
+				content: counter(list)
+				&.heading
+					background: var(--pixel_img)
+					background-size: 4px 4px
+					text-transform: uppercase
+					white-space: nowrap
+					font-size: 0.7rem
+					color: var(--text_dark)
+					font-weight: bold
+				&.warning
+					width: 100%
+					padding: 0.5rem
+					justify-content: center
+					color: var(--green)
+					background: rgba(106, 210, 68, 0.1)
+					text-transform: uppercase
+					white-space: nowrap
+					font-size: 0.7rem
+				&:not(.heading)
+					opacity: 0
+					animation: slide-fade-in-from-top 0.3s ease-in forwards
+					animation-delay: var(--delay)
+				&:not(.heading):not(.warning)
+					counter-increment: rank
+				.validator
+					padding: 1rem
+					width: 35%
+					max-width: 35%
+					overflow: hidden
+					.heading
+						display: flex
+						align-items: center
+						margin: 0 0 0.5rem 0
+						h5
+							white-space: nowrap
+							margin: 0
+							font-size: 1rem
+							text-overflow: ellipsis
+							overflow: hidden
+						span.icon
+							margin: -0.2rem 0 -0.2rem 0.5rem
+							svg
+								fill: var(--green)
+								width: 1.25rem
+								height: auto
+								margin: -0.25rem 0 0 0
+					.tags
+						display: flex
+						span
+							margin: 0 0.5rem 0 0
+					.key
+						margin: 0 0 0 -0.4rem
+				.stake
+					padding: 1rem
+					width: 15%
+					display: flex
+					justify-content: center
+					align-items: center
+				.cumulative-stake
+					padding: 1rem
+					position: relative
+					width: 20%
+					display: flex
+					justify-content: center
+					align-items: center
+					.cumulative, .own
+						position: absolute
+						top: 0
+						left: 0
+						height: 100%
+						z-index: 1
+						background: rgba(93, 105, 243, 0.5)
+						color: #fff
+					.own
+						background: rgba(93, 105, 243, 1)
+					.percentage
+						color: #d3d7ff
+					span
+						width: 100%
+						z-index: 2
+						position: absolute
+						top: 0
+						left: 0
+						height: 100%
+						display: flex
+						padding: 1rem
+						justify-content: left
+						align-items: center
+				.commission
+					padding: 1rem
+					width: 10%
+					display: flex
+					justify-content: center
+					align-items: center
+				.skip
+					padding: 1rem
+					width: 10%
+					display: flex
+					justify-content: center
+					align-items: center
+				.vote
+					padding: 1rem
+					width: 10%
+					display: flex
+					justify-content: center
+					align-items: center
+				> a
+					display: flex
+					justify-content: space-between
+					width: 100%
+					color: var(--text_medium)
+					transition: all 0.3s
+					&:hover
+						background: var(--highlight)
+						transition: all 0.3s
+					&::before
+						content: counter(rank)
+						display: flex
+						justify-content: center
+						align-items: center
+						transition: all 0.3s
+						background: var(--highlight)
+						color: var(--text_dark)
+						width: 4rem
+
+#block-overview, #block-stats, #block-transactions, #transaction-overview, #transaction-actions, #transaction-log, #address-overview, #address-transactions, #validator-stakers
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+
+#block-overview, #transaction-overview, #address-overview, #validator-overview
+	.box
+		padding: 0
+		ul
+			color: var(--text_dark)
+			flex: 1
+			display: flex
+			flex-direction: column
+			list-style: none
+			padding: 0
+			margin: 0
+			li 
+				display: flex
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				padding: 1rem
+				span.value
+					color: var(--text_medium)
+					margin: 0 0 0 0.5rem
+				button
+					margin: 0 0 0 0.5rem
+				&:last-of-type
+					border-bottom: none
+
+#block-stats
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+
+#block-transactions, #transaction-actions, #transaction-log, #address-transactions, #validator-stakers
+	.box
+		padding: 0
+		.heading
+			background: var(--pixel_img)
+			background-size: 4px 4px
+			text-transform: uppercase
+			white-space: nowrap
+			font-size: 0.7rem
+			color: var(--text_dark)
+			font-weight: bold
+		ul
+			padding: 0
+			margin: 0
+			display: flex
+			width: 100%
+			flex-direction: column
+			list-style: none
+			li
+				display: flex
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				transition: all 0.3s
+				&:not(.heading):hover
+					background: var(--highlight)
+					transition: all 0.3s
+				> div
+					padding: 1rem
+					width: 25%
+					display: flex
+					justify-content: center
+					align-items: center
+				&:last-of-type
+					border-bottom: none
+
+#transaction-log
+	.box
+		flex-direction: column
+		.heading
+			padding: 1rem
+			text-align: center
+	.log
+		margin: 1rem
+		padding: 1rem
+		background: var(--highlight)
+		p
+			color: var(--text_medium)
+			margin: 0
+			&:not(:last-of-type)
+				margin: 0 0 1rem 0
+
+#transaction-actions .box ul li > div
+	width: 25%
+
+#validator-id
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	h2
+		color: var(--purple)
+		margin: 0
+	.box
+		flex-direction: row
+		background: var(--pixel_img)
+		background-size: 4px 4px
+		justify-content: flex-start
+		align-items: center
+		span
+			margin: 0 0 0 1rem
+#validator-overview
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+#validator-ratings, #validator-stats
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	display: flex
+	.box
+		background: var(--pixel_img)
+		background-size: 4px 4px
+	.section
+		&:not(:last-of-type)
+			margin: 0 1rem 0 0
+		.score-wrap
+			display: flex
+			margin: 0 0 1rem 0
+			justify-content: space-between
+		.chart-wrap
+			position: relative
+			background: var(--highlight)
+			border-radius: 0.25rem
+			transition: all 0.3s
+			margin: 0
+			.loader-wrap
+				height: 6.25rem
+				display: flex
+				justify-content: center
+				width: 100%
+				align-items: center
+			label
+				transform: translateX(-50%)
+				pointer-events: none
+				z-index: 10
+				position: absolute
+				bottom: 0
+				left: 50%
+				background: var(--bg_color)
+				color: var(--text_dark)
+				border-radius: 0.25rem
+				padding: 0.25rem
+				display: flex
+				line-height: 0.9
+				font-size: 0.8rem
+				margin: 0 0 0.25rem 0
+			.c3-line
+				stroke-width: 2px
+				stroke-linecap: round
+				transition: all 0.3s
+				&.c3-line-Network-Median
+					stroke-dasharray: 0.3rem 0.5rem
+			.c3-xgrid-line line
+				transition: all 0.3s
+				stroke: var(--grid_line)
+			#tooltip
+				display: flex
+				flex-direction: column
+				background: var(--bg_color)
+				border-radius: 0.25rem
+				padding: 0.25rem 0.5rem
+				box-shadow: 0 0 1rem 0 var(--highlight)
+				.label
+					border-bottom: 1px solid var(--border_color)
+					transition: all 0.3s
+					margin: 0 0 0.5rem 0
+					padding: 0 0 0.5rem 0
+				.title
+					font-size: 0.8rem
+					color: var(--text_dark)
+
+footer
+	border-top: 1px solid var(--border_color)
+	transition: all 0.3s
+	color: var(--text_dark)
+	.toggleWrapper
+		display: none
+	button
+		margin: 0 auto 1rem auto
+		border: none
+		background: var(--highlight)
+		border-radius: 0.25rem
+		color: var(--text_dark)
+		font-size: 0.9rem
+		line-height: 0.9rem
+		transform: scale(1)
+		transition: all 0.3s
+		display: flex
+		justify-content: center
+		align-items: center
+		padding: 0.5rem
+		&:hover
+			transform: scale(0.99)
+			transition: all 0.3s
+	a
+		svg
+			opacity: 1
+			fill: var(--text_dark)
+			transition: all 0.3s
+		&:hover
+			svg
+				opacity: 0.5
+				transition: all 0.3s
+	p
+		margin: 0
+		em
+			font-style: normal
+			color: var(--text_medium)
+	.box
+		&::before, &::after
+			display: none
+
+.toggleWrapper
+	padding: 0
+	width: 55px
+	height: 30px
+	margin-top: 0
+	background: transparent
+	input
+		&.mobileToggle
+			opacity: 0 // hides checkbox
+			position: absolute
+			& + label
+				cursor: pointer
+				margin: 0
+				position: relative
+				display: inline-block
+				user-select: none
+				transition: .4s ease
+				height: 30px
+				width: 50px
+				border-radius: 60px
+				&:before
+					content: ""
+					position: absolute
+					display: block
+					background: var(--highlight)
+					transition: .3s cubic-bezier(.24, 0, .5, 1)
+					height: 30px
+					width: 51px
+					top: 0
+					left: 0
+					border-radius: 30px
+				&:after
+					content: ""
+					position: absolute
+					display: block
+					transition: .3s cubic-bezier(.54, 1.60, .5, 1)
+					background: #9CFC5B
+					height: 28px
+					width: 28px
+					top: 1px
+					left: 0px
+					border-radius: 60px
+			&:checked
+				& + label:before
+					background: rgba(190, 255, 129, 0.3)
+					transition: width .2s cubic-bezier(0, 0, 0, .1)
+				& + label:after
+					left: 54px - 30px
+.ember-notify-cn
+	position: absolute
+	top: 0
+	right: 0
+	padding: 0
+	.callout.info
+		border: none
+		background: #5d69f3
+		border-radius: 0.25rem
+		a.close
+			display: inline-flex
+			text-shadow: none
+			color: rgba(0,0,0,0.5)
+			font-size: 1.5rem
+			height: 1.5rem
+			line-height: 1.5rem
+			transition: 0.5s all
+			&:hover
+				color: rgba(0,0,0,0.25)
+				transition: 0.5s all
+		.message
+			color: #fff
+
+.page-progress
+	position: fixed
+	top: 0
+	left: 0
+	z-index: 1031
+	pointer-events: none
+ 
+.page-progress .bar
+	position: fixed
+	top: 0
+	left: 0
+	width: 0
+	height: 3px
+	background: #27c4f5 linear-gradient(to right, #27c4f5, #a307ba, #fd8d32, #70c050, #27c4f5)
+	transition: none
+	animation: 2s linear infinite progress-circles
+
+.loader-wrap
+	background: var(--badge_bg)
+	border-radius: 0.25rem
+	width: 5rem
+	height: 2rem
+	display: inline-flex
+	justify-content: center
+	align-items: center
+.loader, .loader:before, .loader:after
+	border-radius: 50%
+	width: 0.5rem
+	background: transparent
+	height: 0.5rem
+	animation-fill-mode: both
+	animation: loading 1.8s infinite ease-in-out
+.loader
+	position: relative
+	animation-delay: -0.16s
+.loader:before, .loader:after
+	content: ''
+	position: absolute
+	top: 0
+.loader:before
+	left: -1.25rem
+	animation-delay: -0.32s
+.loader:after
+	left: 1.25rem
+ 
+@keyframes loading
+	0%,
+	80%,
+	100%
+		box-shadow: 0 0 0 0.1rem var(--loader_a)
+	40%
+		box-shadow: 0 0 0 0.1rem var(--loader_b)
+ 
+
+@keyframes progress-circles
+	0%
+		background-position: 0% 0
+	to
+		background-position: 125% 0
+
+@keyframes slide-fade-in-from-top
+	0%
+		opacity: 0
+		transform: translateY(-0.25rem)
+	100%
+		opacity: 1
+		transform: translateY(0)
+
+@keyframes slide-fade-in-from-left
+	0%
+		opacity: 0
+		transform: translateX(-0.25rem)
+	100%
+		opacity: 1
+		transform: translateX(0)
+
+@keyframes slide-fade-in-from-top
+	0%
+		opacity: 0
+		margin: -1rem 0 0 0
+	100%
+		opacity: 1
+		margin: 0
+
+@keyframes slide-fade-out-from-bottom
+	0%
+		opacity: 1
+		margin: 0
+	100%
+		opacity: 0
+		margin: -1rem 0 0 0
+
+@include media-breakpoint-down(sm)
+	h2
+		font-size: 1.4rem
+		line-height: 1.4rem
+	.section
+		.heading
+			h6
+				font-size: 0.9rem
+			span.help .icon-wrap
+				margin: 0
+	.box
+		padding: 1rem
+		.yielded
+			font-size: 0.9rem
+	.badges
+		flex-direction: column
+		.badge:not(:last-of-type)
+			margin: 0 0 0.5rem 0
+	header
+		svg, .toggleWrapper
+			display: none
+		ul
+			width: 100%
+			justify-content: space-between
+			li
+				flex: 1
+				a
+					width: 100%
+					text-align: center
+	#epoch
+		.box
+			flex-wrap: wrap
+		.section
+			min-width: 50%
+			&.slot, &.block
+				padding: 0 0 1rem 0
+				border-bottom: 1px solid var(--border_color)
+				transition: all 0.3s
+				margin: 0 0 1rem 0
+	#tokenomics
+		.box
+			flex-direction: column
+			.top-level
+				width: 100%
+				flex-direction: row
+				.section
+					padding: 1rem
+					border-bottom: 1px solid var(--border_color)
+					transition: all 0.3s
+					span
+						white-space: nowrap
+			.financial
+				padding: 1rem
+				.statistics
+					padding: 0 0 1rem 0
+				.charts
+					margin: 1rem 0 0 0
+	#tps
+		.box
+			flex-direction: column
+			.stats
+				width: 100%
+				flex-direction: row
+				.tps, .txs
+					padding: 1rem
+					border-bottom: 1px solid var(--border_color)
+					transition: all 0.3s
+			.chart-wrap
+				padding: 1rem
+				.statistics
+					padding: 0 0 1rem 0
+					.total
+						flex: 1
+				.charts
+					margin: 1rem 0 0 0
+	.ember-notify-default.ember-notify-cn
+		padding: 0
+		width: inherit
+	#validator-list
+		.box
+			ul
+				li
+					&:not(.heading):not(.warning)
+						&::before
+							width: 2rem
+					&.warning
+						flex-direction: column
+						text-align: center
+						white-space: break-spaces
+					.stake
+						width: 35%
+					.cumulative-stake
+						width: 20%
+					.commission, .skip, .vote
+						display: none
+					> a
+						&::before
+							display: none
+					.validator
+						width: 45%
+	#validator-id
+		.box
+			flex-direction: column
+			align-items: flex-start
+			span
+				margin: 1rem 0 0 0
+	#validator-ratings, #validator-stats
+		.box
+			flex-direction: column
+			.section:not(:last-of-type)
+				margin: 0 0 1rem 0
+	#validator-stakers
+		.box ul li > div.account, .box ul li > div.amount
+			flex: 1
+	footer
+		.toggleWrapper
+			display: block
+			margin: 1rem auto 0 auto
+		button
+			font-size: 0.7rem
+
+@include media-breakpoint-down(md)

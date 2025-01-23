@@ -1,0 +1,161 @@
+<div id="epoch">
+	<div class="container">
+		<div class="box">
+			<div class="section slot" style={{delay 1}}>
+				<h6>Slot Height</h6>
+				<YieldOnLoad @loaded={{this.slot_height}}>
+					<h2>{{this.slot_height}}</h2>
+				</YieldOnLoad>
+			</div>
+			<div class="section block" style={{delay 2}}>
+				<h6>Block Height</h6>
+				<YieldOnLoad @loaded={{this.block_height}}>
+					<h2>{{this.block_height}}</h2>
+				</YieldOnLoad>
+			</div>
+			<div class="section time" style={{delay 3}}>
+				<div class="heading">
+					<h6>
+						Slot Time
+					</h6>
+					<Tooltip @text="3 hour average"/>
+				</div>
+				<YieldOnLoad @loaded={{this.slot_time}}>
+					<h2>{{this.slot_time}}s</h2>
+				</YieldOnLoad>
+			</div>
+			<div class="section epoch" style={{delay 4}}>
+				<div class="heading">
+					<h6>Epoch <span class="d-none d-md-inline">#</span><em>{{if this.epoch_number this.epoch_number '0'}}</em></h6>
+					<span class="badge">
+						<span class="current">{{if this.seconds_remaining this.countdown '0'}}</span>
+					</span>
+				</div>
+				<YieldOnLoad @loaded={{this.epoch_progress}}>
+					<div class="bar outer">
+						<div class="bar inner" style={{this.epoch_progress}}></div>
+					</div>
+				</YieldOnLoad>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="tokenomics">
+	<div class="container">
+		<div class="box">
+			<div class="top-level">
+				<div class="section supply" style={{delay 1}}>
+					<h6>Circ. Supply</h6>
+					<YieldOnLoad @loaded={{this.circulating_supply}}>
+						<h2>{{this.circulating_supply}}B</h2>
+						<span>of {{this.total_supply}}B: {{this.circulating_percent}}%</span>
+					</YieldOnLoad>
+				</div>
+				<div class="section stake" style={{delay 1}}>
+					<h6>Active Stake</h6>
+					<YieldOnLoad @loaded={{this.active_stake}}>
+						<h2>{{this.active_stake}}B</h2>
+						<span>of {{this.total_supply}}B: {{this.staked_percent}}%</span>
+					</YieldOnLoad>
+				</div>
+			</div>
+			<div class="financial">
+				<div class="statistics">
+					<div class="section price" style={{delay 2}}>
+						<div class="heading">
+							<h6>Price</h6>
+							{{#if this.rank}}
+								<span class="badge"><span class="d-none d-md-inline-block">Rank&nbsp;</span>#{{this.rank}}</span>
+							{{/if}}
+						</div>
+						<YieldOnLoad @loaded={{this.price}}>
+							<h2>${{this.price}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section volume" style={{delay 3}}>
+						<h6>24h Volume</h6>
+						<YieldOnLoad @loaded={{this.volume_24h}}>
+							<h2 class="d-none d-md-block">${{this.volume_24h.full}}</h2>
+							<h2 class="d-block d-md-none">${{this.volume_24h.compact}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section marketcap" style={{delay 4}}>
+						<h6>Market Cap</h6>
+						<YieldOnLoad @loaded={{this.market_cap}}>
+							<h2 class="d-none d-md-block">${{this.market_cap.full}}</h2>
+							<h2 class="d-block d-md-none">${{this.market_cap.compact}}</h2>
+						</YieldOnLoad>
+					</div>
+				</div>
+				<div class="charts" style={{delay 5}}>
+					<YieldOnLoad @loaded={{this.tps_range}}>
+						<label>3 min. avg.</label>
+						<LineChart @data={{this.model.price_history}} />
+					</YieldOnLoad>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div id="tps">
+	<div class="container">
+		<div class="box">
+			<div class="stats">
+				<div class="section tps" style={{delay 1}}>
+					<h6>Current TPS</h6>
+					<YieldOnLoad @loaded={{this.current_tps}}>
+						<h2>{{this.current_tps.tps}}</h2>
+						slot {{this.current_tps.slot}}
+					</YieldOnLoad>
+				</div>
+				<div class="section txs" style={{delay 1}}>
+					<div class="heading">
+						<h6>Txs in Sample</h6>
+						<Tooltip @text="Last 60 seconds"/>
+					</div>
+					<YieldOnLoad @loaded={{this.current_num_txs}}>
+						<h2>{{this.current_num_txs.num}}</h2>
+						slot {{this.current_num_txs.slot}}
+					</YieldOnLoad>
+				</div>
+			</div>
+			<div class="chart-wrap">
+				<div class="statistics">
+					<div class="section total" style={{delay 2}}>
+						<h6 class="d-none d-md-block">Total Transactions</h6>
+						<h6 class="d-block d-md-none">Tot. Txs</h6>
+						<YieldOnLoad @loaded={{this.transactions}}>
+							<h2 class="d-none d-md-block">{{this.transactions.full}}</h2>
+							<h2 class="d-block d-md-none">{{this.transactions.compact}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section min d-none d-md-block" style={{delay 4}}>
+						<h6>TPS Min</h6>
+						<YieldOnLoad @loaded={{this.tps_range}}>
+							<h2>{{this.tps_range.min}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section avg" style={{delay 3}}>
+						<h6 class="d-none d-md-block">TPS Average</h6>
+						<h6 class="d-block d-md-none">TPS Avg.</h6>
+						<YieldOnLoad @loaded={{this.transactions}}>
+							<h2>{{this.transactions.average}}</h2>
+						</YieldOnLoad>
+					</div>
+					<div class="section max" style={{delay 5}}>
+						<h6>TPS Max</h6>
+						<YieldOnLoad @loaded={{this.tps_range}}>
+							<h2>{{this.tps_range.max}}</h2>
+						</YieldOnLoad>
+					</div>
+				</div>
+				<div class="charts" style={{delay 6}}>
+					<YieldOnLoad @loaded={{this.tps_range}}>
+						<label>3 min. avg.</label>
+						<BarChart @data={{this.model.performance_history}} />
+					</YieldOnLoad>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

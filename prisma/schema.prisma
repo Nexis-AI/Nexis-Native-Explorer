@@ -1,0 +1,139 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Transaction {
+  id        String   @id @default(uuid())
+  hash      String   @unique
+  slot      BigInt
+  timestamp DateTime
+  block     Block    @relation(fields: [blockId], references: [id])
+  blockId   String
+  from      Account  @relation("FromTransactions", fields: [fromId], references: [id])
+  fromId    String
+  to        Account  @relation("ToTransactions", fields: [toId], references: [id])
+  toId      String
+  amount    BigInt
+  fee       BigInt
+  status    String
+  type      String
+  data      Json?
+
+  nftTransfers NFTTransfer[]
+  @@index([hash])
+  @@index([slot])
+  @@index([timestamp])
+}
+
+model Block {
+  id          String        @id @default(uuid())
+  slot        BigInt        @unique
+  hash        String        @unique
+  timestamp   DateTime
+  transactions Transaction[]
+  validator   Validator     @relation(fields: [validatorId], references: [id])
+  validatorId String
+
+  @@index([slot])
+  @@index([hash])
+  @@index([timestamp])
+}
+
+model Account {
+  id               String        @id @default(uuid())
+  address         String        @unique
+  balance         BigInt
+  fromTransactions Transaction[] @relation("FromTransactions")
+  toTransactions   Transaction[] @relation("ToTransactions")
+  nftsOwned        NFT[]
+  tokens           Token[]
+
+  @@index([address])
+}
+
+model Validator {
+  id          String   @id @default(uuid())
+  votePubkey  String   @unique
+  nodePubkey  String   @unique
+  name        String?
+  website     String?
+  blocks      Block[]
+  commission  Int
+  active      Boolean  @default(true)
+  lastVote    BigInt
+
+  @@index([votePubkey])
+  @@index([nodePubkey])
+}
+
+model NFTCollection {
+  id          String   @id @default(uuid())
+  address     String   @unique
+  name        String
+  symbol      String
+  description String?
+  image       String?
+  nfts        NFT[]
+  totalVolume BigInt   @default(0)
+  floorPrice  BigInt?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([address])
+  @@index([symbol])
+}
+
+model NFT {
+  id              String        @id @default(uuid())
+  tokenId         String
+  collection      NFTCollection @relation(fields: [collectionId], references: [id])
+  collectionId    String
+  owner           Account       @relation(fields: [ownerId], references: [id])
+  ownerId         String
+  metadata        Json?
+  transfers       NFTTransfer[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  @@unique([collectionId, tokenId])
+  @@index([tokenId])
+}
+
+model NFTTransfer {
+  id            String      @id @default(uuid())
+  nft           NFT         @relation(fields: [nftId], references: [id])
+  nftId         String
+  transaction   Transaction @relation(fields: [transactionId], references: [id])
+  transactionId String
+  fromAddress   String
+  toAddress     String
+  price         BigInt?
+  createdAt     DateTime    @default(now())
+
+  @@index([nftId])
+  @@index([fromAddress])
+  @@index([toAddress])
+}
+
+model Token {
+  id          String   @id @default(uuid())
+  address     String   @unique
+  name        String
+  symbol      String
+  decimals    Int
+  totalSupply BigInt
+  holders     Account[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([address])
+  @@index([symbol])
+} 

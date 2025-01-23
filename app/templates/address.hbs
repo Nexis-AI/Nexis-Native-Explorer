@@ -1,0 +1,50 @@
+<div id="address-overview">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li>Type: <span class="value">Account</span></li>
+				<li>Address: <CopyButton @hash={{this.model.addressId}}/></li>
+				<li>Balance: <span class="value">{{from_lamport this.model.lamports}}</span></li>
+				<li>Data: <span class="value">{{this.model.data.firstObject.length}}</span></li>
+				<li>Owner: <CopyButton @route="address" @hash={{this.model.owner}}/></li>
+				<li>Executable: <span class="value">{{if this.model.executable 'Yes' 'No'}}</span></li>
+			</ul>
+		</div>
+	</div>
+</div>
+<div id="address-transactions">
+	<div class="container">
+		<div class="box">
+			<ul>
+				<li class="heading">
+					<div class="block">Block</div>
+					<div class="timestamp">Timestamp</div>
+					<div class="result">Result</div>
+					<div class="signature">Signature</div>
+				</li>
+				{{#each this.model.transactions as |t|}}
+					<li>
+						<div class="block">
+							<LinkTo @route="block" @model={{t.slot}}>
+								{{t.slot}}
+							</LinkTo>
+						</div>
+						<div class="timestamp">
+							<Timestamp @timestamp={{t.blockTime}}/>
+						</div>
+						<div class="result">
+							{{#if t.err}}
+								<span class="badge error">Error</span>
+							{{else}}
+								<span class="badge success">Success</span>
+							{{/if}}
+						</div>
+						<div class="signature">
+							<CopyButton @route="transaction" @hash={{t.signature}} @short={{true}}/>
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</div>

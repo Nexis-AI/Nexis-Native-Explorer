@@ -1,0 +1,15 @@
+{{#if @short}}
+	<span class="key">
+		<button {{action "copy" @hash}}><this.ContentCopy/></button>
+		<LinkTo @route={{@route}} @model={{@hash}}>{{shorten @hash}}</LinkTo>
+	</span>
+{{else}}
+	<span class="key d-none d-md-inline-flex">
+		<button {{action "copy" @hash}}><this.ContentCopy/></button>
+		<LinkTo @route={{@route}} @model={{@hash}}>{{@hash}}</LinkTo>
+	</span>
+	<span class="key d-inline-flex d-md-none">
+		<button {{action "copy" @hash}}><this.ContentCopy/></button>
+		<LinkTo @route={{@route}} @model={{@hash}}>{{shorten @hash}}</LinkTo>
+	</span>
+{{/if}}

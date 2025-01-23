@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <link rel="icon" type="image/x-icon" href="{{rootURL}}assets/images/favicon.ico">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Nexis">
+    <meta property="og:description" content="Block explorer and statistics for the Nexis Network blockchain.">
+    <meta property="og:image" content="{{rootURL}}assets/images/preview.png">
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Nexis">
+    <meta name="twitter:description" content="Block explorer and statistics for the Nexis Network blockchain.">
+    <meta name="twitter:image" content="{{rootURL}}assets/images/preview.png">
+
+    <title>Nexis</title>
+    <meta name="description" content="Block explorer and statistics for the Nexis Network blockchain.">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{content-for "head"}}
+
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/vendor.css">
+    <link integrity="" rel="stylesheet" href="{{rootURL}}assets/velasity.css">
+
+    <script src="https://beamanalytics.b-cdn.net/beam.min.js" data-token="74bf9850-e764-49d0-9ab2-22fb73748a46" async></script>
+
+    {{content-for "head-footer"}}
+  </head>
+  <body>
+
+    <div id="loading" class="loader-wrap"><div class="loader"></div></div>
+
+    {{content-for "body"}}
+
+    <script src="{{rootURL}}assets/vendor.js"></script>
+    <script src="{{rootURL}}assets/velasity.js"></script>
+
+    {{content-for "body-footer"}}
+  </body>
+</html>
