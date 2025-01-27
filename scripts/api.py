@@ -207,7 +207,7 @@ def get_validator_performance(vote_pubkey):
         print(f"Error getting validator performance: {str(e)}")
     return None
 
-@app.route('/v1/nexscan/search', methods=['GET'])
+@app.route('/api/v1/nexscan/search', methods=['GET'])
 def search():
     try:
         search_type = request.args.get('type')
@@ -291,7 +291,7 @@ def search():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
-@app.route('/v1/nexscan/stats', methods=['GET'])
+@app.route('/api/v1/nexscan/stats', methods=['GET'])
 def get_stats():
     try:
         # Get epoch info
