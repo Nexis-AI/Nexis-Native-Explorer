@@ -94,7 +94,7 @@ export default class IndexController extends Controller {
       return false;
     }
   }
-
+  /*
   get rank() {
     if (this.model.epoch) {
       return this.model.price.cmc_rank;
@@ -102,6 +102,7 @@ export default class IndexController extends Controller {
       return false;
     }
   }
+  */
 
   get circulating_percent() {
     if (this.circulating_supply) {
