@@ -104,14 +104,6 @@ export default class IndexController extends Controller {
   }
   */
 
-  get circulating_percent() {
-    if (this.circulating_supply) {
-      return ((this.circulating_supply / this.total_supply) * 100).toFixed(0);
-    } else {
-      return false;
-    }
-  }
-
   get staked_percent() {
     if (this.model.epoch) {
       const active_stake = this.model.validators.map((v) => Math.round(v.activated_stake / precision)).reduce((acc, curr) => acc + curr);
@@ -132,6 +124,14 @@ export default class IndexController extends Controller {
   get circulating_supply() {
     if (this.model.epoch) {
       return (Math.round(this.model.supply?.circulating) / billion).toFixed(2);
+    } else {
+      return false;
+    }
+  }
+
+  get circulating_percent() {
+    if (this.circulating_supply) {
+      return ((this.circulating_supply / this.total_supply) * 100).toFixed(0);
     } else {
       return false;
     }
