@@ -16,8 +16,8 @@ module.exports = function (environment) {
 
     APP: {
       api: {
-        stats: 'http://localhost:3001/v1/nexscan/stats',
-        search: 'http://localhost:3001/v1/nexscan/search',
+        stats: 'https://testnet.nexscan.io/api/v1/nexscan/stats',
+        search: 'https://testnet.nexscan.io/api/v1/nexscan/search',
       },
       vote_key: '4vgrbGuRrAw5XUhDn6zQzq9UX7eGTe29TFKhDwcUMoNR',
     },
