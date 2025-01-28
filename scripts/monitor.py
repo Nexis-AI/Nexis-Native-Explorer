@@ -1,106 +1,124 @@
 import subprocess
 import json
 import psycopg2
-import psycopg2.extras
+from psycopg2.extras import execute_values
 
-RPC_URL = "https://api.testnet.nexis.network"
-NEXIS_CLI = "nexis"  # Assuming nexis CLI is installed and in PATH
+# Load environment variables
+import os
+from dotenv import load_dotenv
 
-# Get data using Nexis CLI commands
-stakes = json.loads(subprocess.check_output(f"{NEXIS_CLI} stakes --output json -u {RPC_URL}", shell=True))
-production = json.loads(subprocess.check_output(f"{NEXIS_CLI} block-production --output json -u {RPC_URL} | jq '.leaders'", shell=True))
-slot = int(subprocess.check_output(f"{NEXIS_CLI} slot -u {RPC_URL}", shell=True).decode('utf-8').strip('\n'))
-validators = json.loads(subprocess.check_output(f"{NEXIS_CLI} validators --output json -u {RPC_URL}", shell=True))
-validator_info = json.loads(subprocess.check_output(f"{NEXIS_CLI} validator-info get --output json -u {RPC_URL}", shell=True))
+load_dotenv()
 
-staking = {}
+# Database configuration
+DB_NAME = os.getenv('DB_NAME')
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST', 'localhost')
+DB_PORT = os.getenv('DB_PORT', '5432')
 
-for s in stakes:
-	if "delegatedVoteAccountAddress" in s:
-		if s["delegatedVoteAccountAddress"] not in staking:
-			staking[s["delegatedVoteAccountAddress"]] = {"stakers": 0, "stake": 0}
+# Nexis CLI and RPC URL
+RPC_URL = os.getenv('RPC_ENDPOINT', 'https://api.testnet.nexis.network')
+NEXIS_CLI = "nexis"
 
-		staking[s["delegatedVoteAccountAddress"]]["stakers"] += 1
-		staking[s["delegatedVoteAccountAddress"]]["stake"] += s["delegatedStake"]
+# Helper function to run CLI commands
+def run_cli_command(command):
+    try:
+        result = subprocess.check_output(command, shell=True)
+        return json.loads(result)
+    except subprocess.CalledProcessError as e:
+        print(f"Error running command: {command}\n{e}")
+        return None
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON from command: {command}\n{e}")
+        return None
 
-rows=[]
-stakers=[]
-validator_infos=[]
-skip_rates=[]
+# Database connection
+def get_db_connection():
+    try:
+        conn = psycopg2.connect(
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=DB_PORT
+        )
+        return conn
+    except psycopg2.Error as e:
+        print(f"Database connection error: {e}")
+        return None
 
-for v in validators["validators"]:
-	row = [slot, v["lastVote"], v["rootSlot"], v["identityPubkey"], v["voteAccountPubkey"], v["commission"], v["skipRate"]]
+# Main monitoring logic
+def monitor():
+    conn = get_db_connection()
+    if not conn:
+        print("Unable to connect to the database. Exiting.")
+        return
+    
+    cursor = conn.cursor()
 
-	if v["voteAccountPubkey"] in staking:
-		row = row + list(staking[v["voteAccountPubkey"]].values())
-	else:
-		row = row + [0,0]
+    # Get data from CLI
+    stakes = run_cli_command(f"{NEXIS_CLI} stakes --output json -u {RPC_URL}")
+    production = run_cli_command(f"{NEXIS_CLI} block-production --output json -u {RPC_URL}")
+    slot = run_cli_command(f"{NEXIS_CLI} slot -u {RPC_URL}")
+    validators = run_cli_command(f"{NEXIS_CLI} validators --output json -u {RPC_URL}")
+    validator_info = run_cli_command(f"{NEXIS_CLI} validator-info get --output json -u {RPC_URL}")
 
-	for p in production:
-		if p["identityPubkey"] == v["identityPubkey"]:
-			row = row + [p["leaderSlots"], p["blocksProduced"], p["skippedSlots"]]
-			rows.append(tuple(row))
-			break
+    if not (stakes and production and slot and validators and validator_info):
+        print("Error fetching data from CLI. Exiting.")
+        return
 
-for vi in validator_info:
-	validator_stats = {}
-	info = vi["info"]
+    # Process staking data
+    staking = {}
+    for s in stakes:
+        if "delegatedVoteAccountAddress" in s:
+            staking.setdefault(s["delegatedVoteAccountAddress"], {"stakers": 0, "stake": 0})
+            staking[s["delegatedVoteAccountAddress"]]["stakers"] += 1
+            staking[s["delegatedVoteAccountAddress"]]["stake"] += s["delegatedStake"]
 
-	validator_infos.append((info.get("name", None), info.get("website", None), vi["identityPubkey"]))
+    # Prepare data for database
+    rows = []
+    for v in validators["validators"]:
+        row = [
+            slot, 
+            v["lastVote"], 
+            v["rootSlot"], 
+            v["identityPubkey"], 
+            v["voteAccountPubkey"], 
+            v["commission"], 
+            v.get("skipRate", 0)
+        ]
 
-for v in validators["validators"]:
-	skip_rates.append((v.get("skipRate", None), v["identityPubkey"]))
+        # Add staking data
+        staking_data = staking.get(v["voteAccountPubkey"], {"stakers": 0, "stake": 0})
+        row.extend([staking_data["stakers"], staking_data["stake"]])
 
-records_list_template = ','.join(['%s'] * len(rows))
+        # Add block production data
+        production_data = next((p for p in production if p["identityPubkey"] == v["identityPubkey"]), None)
+        if production_data:
+            row.extend([production_data["leaderSlots"], production_data["blocksProduced"], production_data["skippedSlots"]])
+        else:
+            row.extend([0, 0, 0])
 
-#stakes = filter(lambda stake: stake["activeStake"] != None, stakes)
-stakes = [x for x in stakes if "activeStake" in x and x["activeStake"] != None]
+        rows.append(tuple(row))
 
-for index in range(len(stakes)):
-	entry = {
-		"stakePubkey": stakes[index].get("stakePubkey"),
-		"stakeType": stakes[index].get("stakeType"),
-		"accountBalance": stakes[index].get("accountBalance"),
-		"creditsObserved": stakes[index].get("creditsObserved"),
-		"delegatedStake": stakes[index].get("delegatedStake"),
-		"delegatedVoteAccountAddress": stakes[index].get("delegatedVoteAccountAddress"),
-		"activationEpoch": stakes[index].get("activationEpoch"),
-		"staker": stakes[index].get("staker"),
-		"withdrawer": stakes[index].get("withdrawer"),
-		"rentExemptReserve": stakes[index].get("rentExemptReserve"),
-		"activeStake": stakes[index].get("activeStake"),
-		"activatingStake": stakes[index].get("activatingStake"),
-		"deactivationEpoch": stakes[index].get("deactivationEpoch"),
-		"deactivatingStake": stakes[index].get("deactivatingStake"),
-	}
+    # Insert data into the database
+    try:
+        cursor.execute("TRUNCATE TABLE stats RESTART IDENTITY")
+        insert_query = '''
+            INSERT INTO stats (
+                slot, lastVote, rootSlot, identityPubkey, voteAccountPubkey,
+                commission, skipRate, stakers, stake, leaderSlots, blocksProduced, skippedSlots
+            ) VALUES %s
+        '''
+        execute_values(cursor, insert_query, rows)
+        conn.commit()
+    except psycopg2.Error as e:
+        print(f"Database error: {e}")
+        conn.rollback()
 
-	stakes[index] = tuple(list(entry.values()))
+    # Close the connection
+    cursor.close()
+    conn.close()
 
-conn = psycopg2.connect(
-        host="",
-        database="nexscan",
-        user="nexscan",
-        password="")
-
-cursor = conn.cursor()
-
-insert_query = 'insert into stats ("slot", "lastVote", "rootSlot", "identityPubkey", "voteAccountPubkey", "commission", "skipRate", "stakers", "stake", "leaderSlots", "blocksProduced", "skippedSlots") values {}'.format(records_list_template)
-cursor.execute(insert_query, rows)
-
-erase_stakers_query = 'TRUNCATE TABLE stakers RESTART IDENTITY'
-cursor.execute(erase_stakers_query)
-
-stakers_list_template = ','.join(['%s'] * len(stakes))
-insert_stakers_query = 'insert into stakers ("stakePubkey", "stakeType", "accountBalance", "creditsObserved", "delegatedStake", "delegatedVoteAccountAddress", "activationEpoch", "staker", "withdrawer", "rentExemptReserve", "activeStake", "activatingStake", "deactivationEpoch", "deactivatingStake") values {}'.format(stakers_list_template)
-cursor.execute(insert_stakers_query, stakes)
-
-refresh_stakers_current_query = "REFRESH MATERIALIZED VIEW stakers_current"
-cursor.execute(refresh_stakers_current_query)
-#cursor.execute("SELECT active_stake, activation_epoch, staker FROM stakers_current WHERE validator_vote_account = 'eon93Yhg7bjKgdwnt79TRfeLbePqddLEFP9H1iQBufN'")
-
-cursor.executemany("UPDATE validators SET name = %s, website = %s WHERE node_pubkey = %s ", validator_infos)
-cursor.executemany("UPDATE validators SET skip_percent = %s WHERE node_pubkey = %s ", skip_rates)
-
-conn.commit()
-
-conn.close()
+if __name__ == "__main__":
+    monitor()
