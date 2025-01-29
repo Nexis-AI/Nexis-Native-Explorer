@@ -4,6 +4,7 @@ import { tracked } from '@glimmer/tracking';
 
 const precision = 1000000000;
 const billionBillion = 1000000000000000000;
+const trillion = 1000000000000;
 const billion = 1000000000;
 const million = 1000000;
 
@@ -106,13 +107,16 @@ export default class IndexController extends Controller {
   */
 
   get staked_percent() {
-    if (this.model.epoch) {
-      const active_stake = this.model.validators.map((v) => Math.round(v.activated_stake / precision)).reduce((acc, curr) => acc + curr);
-      return ((active_stake / this.model.supply?.total) * 100).toFixed(1);
-    } else {
-      return false;
+    if (this.model.epoch && this.model.supply) {
+        const active_stake = this.model.supply.effective;
+        const total_supply = this.model.supply.total;
+        
+        if (total_supply > 0) {
+            return ((active_stake / total_supply) * 100).toFixed(1);
+        }
     }
-  }
+    return false;
+}
 
   get total_supply() {
     //console.log(this.model.supply.value.total);
@@ -145,7 +149,7 @@ export default class IndexController extends Controller {
   get active_stake() {
     //console.log(this.model.supply.effective);
     if (this.model.epoch) {
-      return (this.model.supply.effective / billion).toFixed(2);
+      return (this.model.supply.effective / billion).toFixed(3);
     } else {
       return false;
     }
