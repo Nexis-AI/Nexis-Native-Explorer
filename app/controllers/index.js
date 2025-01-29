@@ -117,7 +117,6 @@ export default class IndexController extends Controller {
   get total_supply() {
     //console.log(this.model.supply.value.total);
     if (this.model.epoch) {
-      //return (Math.round(this.model.supply?.total) / billion).toFixed(2);
       const total = parseFloat(this.model.supply?.total);
       return (total / billionBillion).toFixed(3);
     } else {
@@ -128,7 +127,6 @@ export default class IndexController extends Controller {
   get circulating_supply() {
     //console.log(this.model.supply.value.circulating);
     if (this.model.epoch) {
-      //return (Math.round(this.model.supply?.circulating) / billion).toFixed(2);
       const circulating = parseFloat(this.model.supply?.circulating);
       return (circulating / billionBillion).toFixed(3);
     } else {

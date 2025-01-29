@@ -146,24 +146,24 @@ def get_supply_info():
     """Get detailed supply information including circulating, total, and max supply"""
     supply_info = make_rpc_request("getSupply", [{"excludeNonCirculatingAccountsList": True}])
     inflation_info = make_rpc_request("getInflationRate")
+    vote_accounts = make_rpc_request("getVoteAccounts")  # Fetch validator stake info
 
     print("Supply Info Response:", supply_info)  # DEBUGGING
+    print("Vote Accounts Response:", vote_accounts)  # DEBUGGING
 
     if supply_info and "value" in supply_info:
         total = int(supply_info["value"].get("total", 0))
         circulating = int(supply_info["value"].get("circulating", 0))
         non_circulating = int(supply_info["value"].get("nonCirculating", 0))
 
-        active_stake = make_rpc_request("getTotalSupply")
-        print("Total Supply (Active Stake) Response:", active_stake)  # DEBUGGING
-
-        effective = active_stake if active_stake else total
+        # Sum all activatedStake values from the "current" validators
+        total_active_stake = sum(v.get("activatedStake", 0) for v in vote_accounts.get("current", [])) if vote_accounts else 0
 
         return {
             "total": total,
             "circulating": circulating,
             "non_circulating": non_circulating,
-            "effective": effective,
+            "effective": total_active_stake,  # Use actual staking amount
             "inflation": inflation_info if inflation_info else {
                 "total": 0,
                 "validator": 0,
@@ -172,6 +172,7 @@ def get_supply_info():
             }
         }
     return None
+
 
 
 def get_validator_performance(vote_pubkey):
