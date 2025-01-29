@@ -149,6 +149,32 @@ async def store_epoch_info(epoch_data):
     epoch_data['transaction_count'])
     await conn.close()
 
+async def get_validator_info(vote_pubkey):
+    conn = await asyncpg.connect(
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+    row = await conn.fetchrow('SELECT * FROM validators WHERE vote_pubkey = $1', vote_pubkey)
+    await conn.close()
+    return dict(row) if row else None
+
+async def get_validator_performance_history(vote_pubkey, limit=10):
+    conn = await asyncpg.connect(
+        user=DB_USER,
+        password=DB_PASSWORD,
+        database=DB_NAME,
+        host=DB_HOST,
+        port=DB_PORT
+    )
+    rows = await conn.fetch(
+        'SELECT * FROM validator_performance WHERE vote_pubkey = $1 ORDER BY epoch DESC LIMIT $2', 
+        vote_pubkey, limit)
+    await conn.close()
+    return [dict(row) for row in rows]
+
 def make_rpc_request(method, params=None):
     headers = {'Content-Type': 'application/json'}
     data = {
@@ -160,14 +186,125 @@ def make_rpc_request(method, params=None):
     response = requests.post(RPC_ENDPOINT, headers=headers, json=data)
     return response.json().get('result')
 
+def get_supply_info():
+    """Get detailed supply information including circulating, total, and max supply"""
+    supply_info = make_rpc_request("getSupply", [{"excludeNonCirculatingAccountsList": True}])
+    
+    inflation_info = make_rpc_request("getInflationRate")
+    
+    if supply_info:
+        total = int(supply_info.get('total', 0))
+        circulating = int(supply_info.get('circulating', 0))
+        non_circulating = int(supply_info.get('nonCirculating', 0))
+        active_stake = make_rpc_request("getTotalSupply")
+        effective = active_stake if active_stake else total
+        
+        return {
+            "total": total,
+            "circulating": circulating,
+            "non_circulating": non_circulating,
+            "effective": effective,
+            "inflation": inflation_info if inflation_info else {
+                "total": 0,
+                "validator": 0,
+                "foundation": 0,
+                "epoch": 0
+            }
+        }
+    return None
+
+def get_validator_performance(vote_pubkey):
+    """Get detailed validator performance metrics"""
+    try:
+        vote_accounts = make_rpc_request("getVoteAccounts")
+        validator = next((v for v in vote_accounts.get('current', []) if v.get('votePubkey') == vote_pubkey), None)
+        
+        if validator:
+            epoch_info = make_rpc_request("getEpochInfo")
+            slots_in_epoch = epoch_info.get('slotsInEpoch', 0)
+            credits_start = validator.get('epochCredits', [[0, 0, 0]])[-2][1]
+            credits_end = validator.get('epochCredits', [[0, 0, 0]])[-1][1]
+            skip_rate = (slots_in_epoch - (credits_end - credits_start)) / slots_in_epoch if slots_in_epoch > 0 else 0
+
+            return {
+                "skip_rate": skip_rate,
+                "epoch_credits": validator.get('epochCredits', []),
+                "last_vote": validator.get('lastVote'),
+                "root_slot": validator.get('rootSlot'),
+                "credits": validator.get('epochCredits', [])
+            }
+    except Exception as e:
+        print(f"Error getting validator performance: {str(e)}")
+    return None
+
+@app.route('/api/v1/nexscan/search', methods=['GET'])
+def search():
+    try:
+        search_type = request.args.get('type')
+        search_value = request.args.get('search')
+
+        if not search_type or not search_value:
+            return jsonify({"error": "Missing type or search parameter"}), 400
+
+        if search_type == 'block':
+            block_info = make_rpc_request("getBlock", [int(search_value)])
+            if block_info:
+                return jsonify({"result": block_info})
+
+        elif search_type == 'transaction':
+            tx_info = make_rpc_request("getTransaction", [search_value])
+            if tx_info:
+                return jsonify({"result": tx_info})
+
+        elif search_type == 'address':
+            account_info = make_rpc_request("getAccountInfo", [search_value])
+            balance = make_rpc_request("getBalance", [search_value])
+            return jsonify({"result": {"account": account_info, "balance": balance}})
+
+        elif search_type == 'validator':
+            validators = make_rpc_request("getVoteAccounts")
+            validator = next((v for v in validators.get('current', []) if v.get('votePubkey') == search_value), None)
+            if validator:
+                performance = make_rpc_request("getValidatorPerformance", [search_value])
+                return jsonify({"result": {"validator": validator, "performance": performance}})
+
+        return jsonify({"error": "Not found"}), 404
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 @app.route('/api/v1/nexscan/stats', methods=['GET'])
 def get_stats():
     try:
-        # Example logic for fetching stats
         epoch_info = make_rpc_request("getEpochInfo")
-        return jsonify({"epoch": epoch_info})
+        validators_info = make_rpc_request("getVoteAccounts")
+        supply_info = make_rpc_request("getSupply")
+        performance = make_rpc_request("getRecentPerformanceSamples")
+
+        validators = [
+            {
+                "identityPubkey": v.get('nodePubkey'),
+                "voteAccountPubkey": v.get('votePubkey'),
+                "commission": v.get('commission'),
+                "lastVote": v.get('lastVote'),
+                "rootSlot": v.get('rootSlot'),
+                "activated_stake": v.get('activatedStake'),
+                "delinquent": v.get('delinquent', False),
+                "performance": make_rpc_request("getValidatorPerformance", [v.get('votePubkey')])
+            }
+            for v in validators_info.get('current', [])
+        ]
+
+        return jsonify({
+            "epoch": epoch_info,
+            "supply": supply_info,
+            "validators": validators,
+            "performance_history": performance
+        })
+
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     asyncio.run(init_db())
