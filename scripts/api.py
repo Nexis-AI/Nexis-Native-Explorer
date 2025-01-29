@@ -145,19 +145,20 @@ def make_rpc_request(method, params=None):
 def get_supply_info():
     """Get detailed supply information including circulating, total, and max supply"""
     supply_info = make_rpc_request("getSupply", [{"excludeNonCirculatingAccountsList": True}])
-    
-    # Get inflation rate for APY calculation
     inflation_info = make_rpc_request("getInflationRate")
-    
-    if supply_info:
-        total = int(supply_info.get('total', 0))
-        circulating = int(supply_info.get('circulating', 0))
-        non_circulating = int(supply_info.get('nonCirculating', 0))
-        
-        # Calculate effective supply (used for staking)
+
+    print("Supply Info Response:", supply_info)  # DEBUGGING
+
+    if supply_info and "value" in supply_info:
+        total = int(supply_info["value"].get("total", 0))
+        circulating = int(supply_info["value"].get("circulating", 0))
+        non_circulating = int(supply_info["value"].get("nonCirculating", 0))
+
         active_stake = make_rpc_request("getTotalSupply")
+        print("Total Supply (Active Stake) Response:", active_stake)  # DEBUGGING
+
         effective = active_stake if active_stake else total
-        
+
         return {
             "total": total,
             "circulating": circulating,
@@ -171,6 +172,7 @@ def get_supply_info():
             }
         }
     return None
+
 
 def get_validator_performance(vote_pubkey):
     """Get detailed validator performance metrics"""
