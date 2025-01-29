@@ -3,6 +3,7 @@ import { htmlSafe } from '@ember/template';
 import { tracked } from '@glimmer/tracking';
 
 const precision = 1000000000;
+const billionBillion = 1000000000000000000;
 const billion = 1000000000;
 const million = 1000000;
 
@@ -114,16 +115,20 @@ export default class IndexController extends Controller {
   }
 
   get total_supply() {
+    //console.log(this.model.supply.value.total);
     if (this.model.epoch) {
-      return (Math.round(this.model.supply?.total) / billion).toFixed(2);
+      const total = parseFloat(this.model.supply.value.total);
+      return (total / billionBillion).toFixed(3);
     } else {
       return false;
     }
   }
 
   get circulating_supply() {
+    //console.log(this.model.supply.value.circulating);
     if (this.model.epoch) {
-      return (Math.round(this.model.supply?.circulating) / billion).toFixed(2);
+      const circulating = parseFloat(this.model.supply.value.circulating);
+      return (circulating / billionBillion).toFixed(3);
     } else {
       return false;
     }
@@ -138,6 +143,7 @@ export default class IndexController extends Controller {
   }
 
   get active_stake() {
+    //console.log(this.model.supply.effective);
     if (this.model.epoch) {
       return (this.model.supply.effective / billion).toFixed(2);
     } else {
