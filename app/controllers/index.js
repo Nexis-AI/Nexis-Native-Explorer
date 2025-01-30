@@ -96,15 +96,22 @@ export default class IndexController extends Controller {
       return false;
     }
   }
-  /*
+
   get rank() {
+    /*
     if (this.model.epoch) {
       return this.model.price.cmc_rank;
     } else {
       return false;
     }
+    */
+    const price = 917;
+    return(price)
   }
-  */
+
+  get price_history() {
+    return(100)
+  }
 
   get staked_percent() {
     if (this.model.epoch && this.model.supply) {
@@ -156,14 +163,20 @@ export default class IndexController extends Controller {
   }
 
   get price() {
+    /*
     if (this.model.epoch) {
       return parseFloat(this.model.price?.price).toFixed(3);
     } else {
       return false;
     }
+    */
+    const price = 0.02;
+    return(price)
   }
 
+
   get volume_24h() {
+    /*
     if (this.model.epoch) {
       return {
         full: Math.round(this.model.price?.volume_24h).toLocaleString(),
@@ -172,9 +185,16 @@ export default class IndexController extends Controller {
     } else {
       return false;
     }
+    */
+   const volume = 43000;
+    return {
+      full: Math.round(volume).toLocaleString(),
+      compact: (volume / million).toFixed(1) + 'M',
+    }
   }
 
   get market_cap() {
+    /*
     if (this.model.epoch) {
       return {
         full: Math.round(this.model.price?.market_cap).toLocaleString(),
@@ -182,6 +202,12 @@ export default class IndexController extends Controller {
       };
     } else {
       return false;
+    }
+    */
+    const price = 20;
+    return {
+      full: price + 'm',
+      compact: price + 'm',
     }
   }
 

@@ -61,7 +61,6 @@
 			</div>
 			<div class="financial">
 				<div class="statistics">
-					<!--
 					<div class="section price" style={{delay 2}}>
 						<div class="heading">
 							<h6>Price</h6>
@@ -73,7 +72,6 @@
 							<h2>${{this.price}}</h2>
 						</YieldOnLoad>
 					</div>
-					-->
 					<div class="section volume" style={{delay 3}}>
 						<h6>24h Volume</h6>
 						<YieldOnLoad @loaded={{this.volume_24h}}>
@@ -89,10 +87,18 @@
 						</YieldOnLoad>
 					</div>
 				</div>
+				<!--
 				<div class="charts" style={{delay 5}}>
 					<YieldOnLoad @loaded={{this.tps_range}}>
 						<label>3 min. avg.</label>
 						<LineChart @data={{this.model.price_history}} />
+					</YieldOnLoad>
+				</div>
+				-->
+				<div class="charts" style={{delay 6}}>
+					<YieldOnLoad @loaded={{this.tps_range}}>
+						<label>3 min. avg.</label>
+						<BarChart @data={{this.model.performance_history}} />
 					</YieldOnLoad>
 				</div>
 			</div>
