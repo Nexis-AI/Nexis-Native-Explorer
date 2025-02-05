@@ -1,5 +1,13 @@
 # nexscan
 
+## To run API
+```bash
+python3 -m venv path/to/venv  
+source path/to/venv/bin/activate
+python3 -m pip install -r requirements.txt
+python3 api.py 
+```
+
 This README outlines the details of collaborating on this Ember application.
 A short introduction of this app could easily go here.
 

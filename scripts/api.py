@@ -7,6 +7,8 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import aiosqlite
 import asyncio
+import base64
+import base58
 
 # Load environment variables
 load_dotenv()
@@ -140,7 +142,17 @@ def make_rpc_request(method, params=None):
         'params': params or []
     }
     response = requests.post(RPC_ENDPOINT, headers=headers, json=data)
-    return response.json().get('result')
+    try:
+        response_json = response.json()
+        result = response_json.get('result')
+
+        if result is None:
+            print(f"RPC Error for {method}: {response_json}")  # DEBUGGING
+
+        return result
+    except Exception as e:
+        print(f"RPC Request Failed for {method}: {str(e)}")  # DEBUGGING
+        return None
 
 def get_supply_info():
     """Get detailed supply information including circulating, total, and max supply"""
@@ -148,31 +160,22 @@ def get_supply_info():
     inflation_info = make_rpc_request("getInflationRate")
     vote_accounts = make_rpc_request("getVoteAccounts")
 
-    #print("Supply Info Response:", supply_info)  # DEBUGGING
-    #print("Vote Accounts Response:", vote_accounts)  # DEBUGGING
+    if not supply_info or "value" not in supply_info:
+        return None
 
-    if supply_info and "value" in supply_info:
-        total = int(supply_info["value"].get("total", 0))
-        circulating = int(supply_info["value"].get("circulating", 0))
-        non_circulating = int(supply_info["value"].get("nonCirculating", 0))
+    total = int(supply_info["value"].get("total", 0))
+    circulating = int(supply_info["value"].get("circulating", 0))
+    non_circulating = int(supply_info["value"].get("nonCirculating", 0))
+    total_active_stake = sum(v.get("activatedStake", 0) for v in vote_accounts.get("current", []) if v.get("activatedStake")) if vote_accounts else 0
 
-        total_active_stake = sum(v.get("activatedStake", 0) for v in vote_accounts.get("current", [])) if vote_accounts else 0
-
-        return {
-            "total": total,
-            "circulating": circulating,
-            "non_circulating": non_circulating,
-            "effective": total_active_stake,
-            "inflation": inflation_info if inflation_info else {
-                "total": 0,
-                "validator": 0,
-                "foundation": 0,
-                "epoch": 0
-            }
-        }
+    return {
+        "total": total,
+        "circulating": circulating,
+        "non_circulating": non_circulating,
+        "effective": total_active_stake,
+        "inflation": inflation_info if inflation_info else {"total": 0, "validator": 0, "foundation": 0, "epoch": 0}
+    }
     return None
-
-
 
 def get_validator_performance(vote_pubkey):
     """Get detailed validator performance metrics"""
@@ -180,12 +183,12 @@ def get_validator_performance(vote_pubkey):
         # Get validator's vote account info
         vote_accounts = make_rpc_request("getVoteAccounts")
         validator = None
-        
+
         for v in vote_accounts.get('current', []):
             if v.get('votePubkey') == vote_pubkey:
                 validator = v
                 break
-                
+
         if validator:
             # Calculate skip rate
             epoch_info = make_rpc_request("getEpochInfo")
@@ -194,10 +197,10 @@ def get_validator_performance(vote_pubkey):
             credits_end = validator.get('epochCredits', [[0, 0, 0]])[-1][1]
             credits_expected = slots_in_epoch
             skip_rate = 0
-            
+
             if credits_expected > 0:
                 skip_rate = (credits_expected - (credits_end - credits_start)) / credits_expected
-            
+
             return {
                 "skip_rate": skip_rate,
                 "epoch_credits": validator.get('epochCredits', []),
@@ -247,35 +250,56 @@ def search():
                 })
 
         elif search_type == 'address':
-            # Get account information
-            account_info = make_rpc_request("getAccountInfo", [search_value])
+            print(f"Using Base58 Address for RPC: {search_value}")  # DEBUGGING
+
+            # Call getAccountInfo with base64 encoding
+            account_info = make_rpc_request("getAccountInfo", [search_value, {"encoding": "base64"}])
             balance = make_rpc_request("getBalance", [search_value])
-            if account_info or balance:
-                return jsonify({
-                    "result": {
-                        "value": {
-                            "data": account_info.get("data", []),
-                            "executable": account_info.get("executable", False),
-                            "lamports": balance.get("value", 0),
-                            "owner": account_info.get("owner"),
-                            "rentEpoch": account_info.get("rentEpoch")
-                        }
+
+            print("Account Info Response:", account_info)  # DEBUGGING
+            print("Balance Response:", balance)  # DEBUGGING
+
+            if account_info is None:
+                return jsonify({"error": "getAccountInfo returned None (address may not exist or RPC issue)"}), 500
+            if balance is None:
+                return jsonify({"error": "getBalance returned None"}), 500
+
+            return jsonify({
+                "result": {
+                    "value": {
+                        "data": account_info.get("data", ["", "base64"])[0],  # Ensure data is always a string
+                        "executable": account_info.get("executable", False),
+                        "lamports": balance.get("value", 0),
+                        "owner": account_info.get("owner", "N/A"),
+                        "rentEpoch": account_info.get("rentEpoch", "N/A")
                     }
-                })
+                }
+            })
 
         elif search_type == 'validator':
             # Get validator information
             validators = make_rpc_request("getVoteAccounts")
             validator = None
-            
+
+            print(f"Searching for validator (votePubkey or nodePubkey): {search_value}")  # DEBUGGING
+
             for v in validators.get('current', []):
-                if v.get('votePubkey') == search_value:
+                print(f"Checking validator: votePubkey={v.get('votePubkey')}, nodePubkey={v.get('nodePubkey')}")  # DEBUGGING
+                if v.get("votePubkey") == search_value or v.get("nodePubkey") == search_value:
                     validator = v
                     break
-                    
+
             if validator:
-                # Get additional validator performance data
-                performance = make_rpc_request("getValidatorPerformance", [search_value])
+                # Get validator performance manually
+                performance = get_validator_performance(validator.get("votePubkey"))
+
+                if performance:
+                    skip_rate = performance.get("skip_rate", 0)
+                    if isinstance(skip_rate, str):
+                        skip_rate = float(skip_rate.replace("%", "")) / 100  # Convert to number
+                else:
+                    skip_rate = 0
+
                 return jsonify({
                     "result": {
                         "identity": validator.get("nodePubkey"),
@@ -284,9 +308,13 @@ def search():
                         "activated_stake": validator.get("activatedStake"),
                         "last_vote": validator.get("lastVote"),
                         "root_slot": validator.get("rootSlot"),
+                        "skip_percent": round(skip_rate * 100, 2),
                         "performance": performance
                     }
                 })
+            else:
+                print("Validator not found in getVoteAccounts response")  # DEBUGGING
+                return jsonify({"error": "Validator not found"}), 404
 
         return jsonify({"error": "Not found"}), 404
 
