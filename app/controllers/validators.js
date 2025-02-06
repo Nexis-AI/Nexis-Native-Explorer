@@ -22,11 +22,8 @@ export default class ValidatorsController extends Controller {
   }
 
   get validators() {
-    console.log("Validators Data:", this.model.validators);
-    //console.log("Validators Model Data:", this.model.validators); // DEBUGGING
     if (this.model.validators) {
       const count = this.model.validators.length;
-      //console.log("Total Validators Count:", count); // DEBUGGING
       const validator_scores = this.validator_scores();
 
       let validators = this.model.validators;
@@ -43,37 +40,19 @@ export default class ValidatorsController extends Controller {
 
       validators = validators.sort((a, b) => (a.activated_stake < b.activated_stake ? 1 : -1));
 
-      const cumulative_sum = ((sum) => (value) => sum += value)(0);
-      const cumulative_stake = validators.map((e, index) => {
-          let stake = e.activated_stake || 0;
-          if (index === 0) return stake;
-          return cumulative_stake[index - 1] + stake;
-      });
-      
-      const total_stake = validators.reduce((acc, curr) => {
-        let stake = curr.activated_stake;
-        if (typeof stake === "string") {
-            stake = parseInt(stake.replace(/,/g, ""), 10);
-        }
-        return acc + (isNaN(stake) ? 0 : stake);
-      }, 0);
+      const cumulative_sum = ((sum) => (value) => (sum += value))(0);
+      const cumulative_stake = validators.map((e) => e.activated_stake).map(cumulative_sum);
+      const total_stake = validators.map((e) => e.activated_stake).reduce((acc, curr) => acc + curr);
 
       for (var j = 0; j < validators.length; j++) {
         // assign calculated properties
-        validators[j].vote_pubkey = validators[j].vote_pubkey || validators[j].voteAccountPubkey || "N/A";
         validators[j].score = validator_scores[validators[j].vote_pubkey];
-
-        if (typeof validators[j].activated_stake !== "number" || isNaN(validators[j].activated_stake)) {
-          validators[j].activated_stake = 0;
-        } else {
-            validators[j].activated_stake = Math.round(validators[j].activated_stake / 1000000000);
-        }
-        validators[j].last_vote = validators[j].performance?.last_vote || validators[j].lastVote || "N/A";
-        validators[j].activated_stake_percent = Math.round(((typeof validators[j].activated_stake === "string" ? parseInt(validators[j].activated_stake.replace(/,/g, ""), 10) : validators[j].activated_stake) / total_stake) * 100) || 0;
-        validators[j].cumulative_stake = cumulative_stake[j] || 0;
-        validators[j].cumulative_stake_percent = Math.round((cumulative_stake[j] / total_stake) * 100) || 0;
+        validators[j].activated_stake_percent = Math.round((validators[j].activated_stake / total_stake) * 100);
+        validators[j].cumulative_stake = cumulative_stake[j];
+        validators[j].cumulative_stake_percent = Math.round((cumulative_stake[j] / total_stake) * 100);
+        validators[j].activated_stake = validators[j].activated_stake.toLocaleString();
+        validators[j].last_vote = validators[j].last_vote.toLocaleString();
         validators[j].cumulative_width = this.safe_width(validators[j].cumulative_stake_percent);
-
         validators[j].own_width_w_offset = this.safe_width_w_offset(
           validators[j].activated_stake_percent,
           Math.abs(validators[j].activated_stake_percent - validators[j].cumulative_stake_percent)
@@ -81,10 +60,8 @@ export default class ValidatorsController extends Controller {
         validators[j].halt_warning = false;
         validators[j].style = halt_warning_set ? this.safe_delay(j + 2) : this.safe_delay(j + 1);
 
-        if (typeof validators[j].skip_percent === "string") {
-          validators[j].skip_percent = parseFloat(validators[j].skip_percent.replace("%", "")) / 100;
-        } else if (typeof validators[j].skip_percent !== "number" || isNaN(validators[j].skip_percent)) {
-            validators[j].skip_percent = 0;
+        if (validators[j].skip_percent) {
+          validators[j].skip_percent = validators[j].skip_percent.toFixed(2);
         }
 
         // set halt warning
@@ -134,36 +111,26 @@ export default class ValidatorsController extends Controller {
   }
 
   get yield() {
-    if (!this.model.supply || !this.model.supply.total || !this.model.supply.effective) {
-        console.log("Staking APR: Missing supply data", this.model.supply);
-        return { apy: "N/A", apy_adjusted: "N/A" };
+    if (this.model.inflation && this.model.validators) {
+      const inflation = this.model.inflation.total;
+      const total_supply = this.model.supply.total;
+      const activated_stake = this.model.supply.activating + this.model.supply.effective;
+      const apy = (inflation * total_supply) / activated_stake;
+      const apy_adjusted = apy - inflation;
+
+      return {
+        apy: (apy * 100).toFixed(1),
+        apy_adjusted: (apy_adjusted * 100).toFixed(1),
+      };
+    } else {
+      return false;
     }
-
-    const inflation = this.model.supply?.inflation?.total || 0;
-    const total_supply = this.model.supply.total || 0;
-    const activated_stake = this.model.supply.effective || 0;
-
-    if (activated_stake === 0 || total_supply === 0) {
-        console.log("Staking APR: Invalid values", { total_supply, activated_stake });
-        return { apy: "N/A", apy_adjusted: "N/A" };
-    }
-
-    const apy = (inflation * total_supply) / activated_stake;
-    const apy_adjusted = apy - inflation;
-
-    console.log("Staking APR Calculated:", { apy, apy_adjusted });
-
-    return {
-        apy: (apy).toFixed(2),
-        apy_adjusted: (apy_adjusted).toFixed(2)
-    };
   }
 
   validator_scores() {
     if (this.model.validator_performance) {
       const performance = this.validator_performance();
       let output = [];
-      console.log("Validator Performance:", performance);
 
       for (const [key, value] of Object.entries(performance)) {
         const cluster_median_vote_distance = value.reduce((acc, curr) => acc + parseInt(curr.cluster_median_vote_distance), 0);
@@ -199,10 +166,9 @@ export default class ValidatorsController extends Controller {
           total: total_score,
         };
       }
-      console.log("Final Scores:", output); // Debugging line
+
       return output;
     } else {
-      console.log("No validator performance data found"); // Debugging line
       return false;
     }
   }

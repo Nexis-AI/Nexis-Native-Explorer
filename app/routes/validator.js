@@ -21,22 +21,10 @@ export default class ValidatorRoute extends Route {
           this.router.transitionTo('index');
         }
 
-        const result = response.data.result || {}; // Ensure result exists
-        return {
-          activated_stake: result.activated_stake || 0,
-          commission: result.commission || 0,
-          identity: result.identity || "N/A",
-          last_vote: result.last_vote || "N/A",
-          root_slot: result.root_slot || "N/A",
-          vote_key: result.vote_key || "N/A",
-          performance: result.performance || {},
-          skip_percent: result.skip_percent || 0
-        };
+        return response.data;
       })
-      .catch((error) => {
-        console.error("Validator Fetch Error:", error);
+      .catch(() => {
         return false;
       });
   }
-
 }
